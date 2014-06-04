@@ -268,12 +268,15 @@ namespace Stratageme15.Core.Transaltion
         {
             string name = expression.Identifier.ValueText;
             Type localVarType = null;
-            foreach (var variable in context.CurrentClassContext.CurrentFunction.LocalVariables.AllVariables)
+            if (context.CurrentClassContext.CurrentFunction != null)
             {
-                if (variable.VariableName==name)
+                foreach (var variable in context.CurrentClassContext.CurrentFunction.LocalVariables.AllVariables)
                 {
-                    localVarType = variable.VariableType;
-                    break;
+                    if (variable.VariableName == name)
+                    {
+                        localVarType = variable.VariableType;
+                        break;
+                    }
                 }
             }
             if (localVarType != null) return localVarType;

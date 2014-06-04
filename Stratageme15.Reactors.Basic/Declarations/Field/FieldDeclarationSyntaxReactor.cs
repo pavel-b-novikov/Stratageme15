@@ -12,6 +12,7 @@ namespace Stratageme15.Reactors.Basic.Declarations.Field
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             context.SetTranslated(context.CurrentClassContext.FieldsDefinitionBlock);
+            context.CurrentClassContext.OutOfContext();
             
         }
 
@@ -19,6 +20,7 @@ namespace Stratageme15.Reactors.Basic.Declarations.Field
         {
             base.OnAfterChildTraversal(context, originalNode);
             context.RestoreTranslated();
+            context.CurrentClassContext.ReturnToContext();
         }
     }
 }

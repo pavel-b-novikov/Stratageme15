@@ -52,9 +52,25 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
             function.CollectSymbol(FieldsDefinitionBlock);
         }
 
+        private bool _outOfContext = false;
+        /// <summary>
+        /// Temporary disables access to function context due to going out of method translation
+        /// </summary>
+        public void OutOfContext()
+        {
+            _outOfContext = true;
+        }
+
+        /// <summary>
+        /// Enables access to function context after OutOfContext call
+        /// </summary>
+        public void ReturnToContext()
+        {
+            _outOfContext = false;
+        }
         public FunctionTranslationContext CurrentFunction
         {
-            get { return _functionsStack.Peek(); }
+            get { return _outOfContext?null: _functionsStack.Peek(); }
         }
 
         public void PushFunction(SyntaxNode originalNode,string name = null)

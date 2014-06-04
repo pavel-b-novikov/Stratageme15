@@ -32,17 +32,14 @@ namespace Stratageme15.Boudoir
             bool b = false;
             bool c = true;
             var obj = new {A = "asdfasdf", B = new {C = 0, D = 1}};
-
-            var obj2 = new VeryMagicTest();
-
-            obj2.GetHashCode();
-
-            obj2.GetType();
         }
+
+        private int _dependantField;
         private int _x, _y;
-        private float _privateFloatValue;
+       // private float _privateFloatValue = new float(); todo type syntax identifiers
         private bool _privateBoolField;
         private bool _privateInitializedBooField = true;
+        private VeryMagicTest _veryTest = new VeryMagicTest();
         public void OnSomethingElse(object sender,EventArgs e)
         {
             double doubleVariable;

@@ -1,10 +1,11 @@
 function Stratageme15Boudoir$VeryMagicTest() {
         this._privateVariable = null;
+        this._dependantField = 0;
         this._y = 0;
         this._x = 0;
-        this._privateFloatValue = 0;
         this._privateBoolField = false;
         this._privateInitializedBooField = true;
+        this._veryTest = new Stratageme15Boudoir$VeryMagicTest();
     }
 
 Stratageme15Boudoir$VeryMagicTest.prototype.ReturnSomeString = function () { return Empty; };
@@ -29,9 +30,6 @@ Stratageme15Boudoir$VeryMagicTest.prototype.OnButtonClick = function (sender, e)
                 D: 1
             }
         };
-        var obj2 = new Stratageme15Boudoir$VeryMagicTest();
-        obj2.GetHashCode();
-        obj2.GetType();
     };
 
 Stratageme15Boudoir$VeryMagicTest.prototype.OnSomethingElse = function (sender, e) {
