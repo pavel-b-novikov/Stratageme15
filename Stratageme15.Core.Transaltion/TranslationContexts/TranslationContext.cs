@@ -5,6 +5,10 @@ using Stratageme15.Core.Transaltion.Repositories;
 
 namespace Stratageme15.Core.Transaltion.TranslationContexts
 {
+    /// <summary>
+    /// Performes access for temporary translation data.
+    /// Translation context holds current class context, translated nodes, translation stack etc.
+    /// </summary>
     public class TranslationContext
     {
         public TranslationContext(ReactorRepository reactors, AssemblyRepository arep, JsProgram root,
@@ -31,18 +35,47 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
         public Stack<SyntaxNode> TranslationStack { get; private set; }
         #endregion
 
-        public SyntaxTreeNodeBase PreviosTranslatedNode { get; private set; }
+        /// <summary>
+        /// Current translated node.
+        /// All child nodes should be placed inside current translated node via TranslatedNode.CollectSymbol method
+        /// To change current translated node use Push/PopTranslated or Set/RestorTranslated
+        /// </summary>
         public SyntaxTreeNodeBase TranslatedNode { get; private set; }
-        public void PushTranslated(SyntaxTreeNodeBase node)
+
+        private SyntaxTreeNodeBase _backup;
+        /// <summary>
+        /// Preserves current translated node state and sets the Translated node to passed argument
+        /// </summary>
+        /// <param name="node">New translated node</param>
+        public void SetTranslated(SyntaxTreeNodeBase node)
         {
-            node.Parent = TranslatedNode;
-            PreviosTranslatedNode = TranslatedNode;
+            _backup = TranslatedNode;
             TranslatedNode = node;
         }
 
+        /// <summary>
+        /// Restores current translated node from backup after SetTranslatedNode call
+        /// </summary>
+        public void RestoreTranslated()
+        {
+            TranslatedNode = _backup;
+        }
+
+        /// <summary>
+        /// Sets the current translation node
+        /// Warning! This method does not perform parent node collection. 
+        /// It only sets parent node for passed argument
+        /// </summary>
+        /// <param name="node">New current translation node</param>
+        public void PushTranslated(SyntaxTreeNodeBase node)
+        {
+            node.Parent = TranslatedNode;
+            TranslatedNode = node;
+        }
+
+
         public void PopTranslated()
         {
-            PreviosTranslatedNode = TranslatedNode;
             TranslatedNode = TranslatedNode.Parent;
         }
         public SyntaxNode SourceNode { get; internal set; }
@@ -53,7 +86,8 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
         {
             get { return _classContextsStack.Peek(); }
         }
-        
+
+       
         private string _currentTypeName;
         public string CurrentTypeName
         {
@@ -64,7 +98,7 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
         {
             return (TCtc) _classContextsStack.Peek();
         }
-
+       
         public void PushClass(ClassTranslationContext ctc)
         {
             _currentTypeName = ctc.Type.Name;

@@ -88,17 +88,7 @@ namespace Stratageme15.Core.Transaltion
 
                 if ((strategy == TranslationStrategy.TraverseChildrenAndNotifyMe || strategy == TranslationStrategy.TraverseChildren) && !manualStack)
                 {
-                    //very dirty hack
-                    IEnumerable<SyntaxNode> children;
-                    if (cnode is ClassDeclarationSyntax)
-                    {
-                        children = cnode.ChildNodes().Skip(skipChildren).OrderByDescending(c => c is ConstructorDeclarationSyntax).Reverse();
-                    }
-                    else
-                    {
-                        children = cnode.ChildNodes().Skip(skipChildren).Reverse();
-                    }
-
+                    IEnumerable<SyntaxNode> children = cnode.ChildNodes().Skip(skipChildren).Reverse();
                     bool any = false;
                     foreach (var source in children)
                     {

@@ -13,7 +13,7 @@ namespace Stratageme15.Reactors.Basic.Declarations
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             var typeName = context.JavascriptCurrentTypeName();
             context.CurrentClassContext.PushFunction(node,typeName);
-            context.CurrentClassContext.Constructor = context.CurrentClassContext.CurrentFunction.Function;
+            context.CurrentClassContext.CreateConstructor(context.CurrentClassContext.CurrentFunction.Function);
             context.TranslatedNode.CollectSymbol(context.CurrentClassContext.Constructor);
 
             context.PushTranslated(context.CurrentClassContext.CurrentFunction.Function);

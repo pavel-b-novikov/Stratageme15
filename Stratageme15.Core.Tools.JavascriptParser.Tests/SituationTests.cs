@@ -194,7 +194,7 @@ function (factory) {
 ";
             var program = Parse(testCase);
             var f = program.CodeElements[0] as FunctionDefExpression;
-            Assert.IsTrue(f.Code.Statements[0] is UseStrict);
+            Assert.IsTrue(f.Code.Statements.First.Value is UseStrict);
         }
 
         [TestMethod]
@@ -261,8 +261,8 @@ function() {
             var program = Parse(testCase);
 
             var fStatements = ((FunctionDefExpression) program.CodeElements[0]).Code.Statements;
-            Assert.IsTrue(fStatements[0].GetType()==typeof(VariableDefStatement));
-            Assert.IsTrue(fStatements[1].GetType() == typeof(CallStatement));
+            Assert.IsTrue(fStatements.First.Value.GetType()==typeof(VariableDefStatement));
+            Assert.IsTrue(fStatements.First.Next.Value.GetType() == typeof(CallStatement));
             
             const string testCase2 =
                    @"

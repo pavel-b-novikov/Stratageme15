@@ -56,6 +56,7 @@
     <Compile Include="Markers\IBinaryExpression.cs" />
     <Compile Include="Markers\IDictionaryKey.cs" />
     <Compile Include="Markers\IHierarchical.cs" />
+    <Compile Include="Markers\IOrderedCollector.cs" />
     <Compile Include="OperatorConverter.cs" />
     <Compile Include="Operators.cs" />
     <Compile Include="CodeBlock.cs" />

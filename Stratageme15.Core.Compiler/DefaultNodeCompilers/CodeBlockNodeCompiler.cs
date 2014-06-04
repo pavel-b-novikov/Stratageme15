@@ -26,16 +26,16 @@ namespace Stratageme15.Core.Compiler.DefaultNodeCompilers
         }
         protected override void CompileStatement(TextWriter output, CodeBlock node)
         {
-            while (node.Statements.Count == 1 && node.Statements[0] is CodeBlock)
+            while (node.Statements.Count == 1 && node.Statements.First.Value is CodeBlock)
             {
-                node = (CodeBlock)node.Statements[0];
+                node = (CodeBlock)node.Statements.First.Value;
             }
             if (node.Statements.Count == 0)
             {
                 output.Write("{ }"); return;
             }
 
-            var stm = node.Statements[0];
+            var stm = node.Statements.First.Value;
             if (node.Statements.Count == 1 &&
                     !(
                         (stm is SwitchStatement)
@@ -50,7 +50,7 @@ namespace Stratageme15.Core.Compiler.DefaultNodeCompilers
             {
                 
                 output.Write("{ ");
-                CompileStatement(output, node.Statements[0],false);
+                CompileStatement(output, node.Statements.First.Value,false);
                 output.Write(" }");
                 return;
             }

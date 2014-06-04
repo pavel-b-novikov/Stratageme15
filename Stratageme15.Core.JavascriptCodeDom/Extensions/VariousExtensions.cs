@@ -8,7 +8,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Extensions
         {
             CodeBlock c = new CodeBlock();
             c.Parent = ((SyntaxTreeNodeBase)s).Parent;
-            c.Statements.Add(s);
+            c.Statements.AddLast(s);
             return c;
         }
 
@@ -16,7 +16,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Extensions
         {
             CodeBlock c = new CodeBlock();
             c.Parent = s.Parent;
-            c.Statements.Add((IStatement) s);
+            c.Statements.AddLast((IStatement)s);
             s.Parent = c;
             return c;
         }

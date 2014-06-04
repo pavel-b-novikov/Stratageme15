@@ -17,7 +17,6 @@ namespace Stratageme15.Core.Transaltion.Repositories
         /// </summary>
         private readonly Dictionary<Type, Type> _reactors;
         private readonly Dictionary<Type, List<Type>> _situationReactors;
-        private readonly Dictionary<Type, List<Type>> _standaloneReactors;
         private readonly Dictionary<Guid, IReactor> _reactorInstances;
         private readonly Dictionary<Guid, List<ISituationReactor>> _situationReactorInstances;
         private readonly Dictionary<Guid, object> _allReactorsInstancesByReactorTypeId;
@@ -27,94 +26,14 @@ namespace Stratageme15.Core.Transaltion.Repositories
             _situationReactors = new Dictionary<Type, List<Type>>();
             _reactorInstances = new Dictionary<Guid, IReactor>();
             _situationReactorInstances = new Dictionary<Guid, List<ISituationReactor>>();
-            _standaloneReactors = new Dictionary<Type, List<Type>>();
             _allReactorsInstancesByReactorTypeId = new Dictionary<Guid, object>();
         }
 
-        #region Standalone reactors API
-
-        public ReadOnlyCollection<IStandaloneReactor<TInput>> GetStandaloneReactors<TInput>(Type tInput, TranslationContext ctx = null) where TInput : SyntaxNode
-
-        {
-            if (!_standaloneReactors.ContainsKey(tInput)) return null;
-            var allStandalone = _standaloneReactors[tInput];
-
-            List<IStandaloneReactor<TInput>> candidates = new List<IStandaloneReactor<TInput>>();
-            bool needSuitabilityCheck = ctx != null;
-            foreach (var type in allStandalone)
-            {
-                IStandaloneReactor<TInput> reactor;
-                if (!_allReactorsInstancesByReactorTypeId.ContainsKey(type.GUID))
-                {
-                    reactor = (IStandaloneReactor<TInput>)Activator.CreateInstance(type);
-                    _allReactorsInstancesByReactorTypeId.Add(type.GUID, reactor);
-                }
-                else
-                {
-                    reactor = (IStandaloneReactor<TInput>)_allReactorsInstancesByReactorTypeId[type.GUID];
-                }
-
-                if (needSuitabilityCheck)
-                {
-                    if (type.IsAssignableFrom(typeof(ISituationReactor)))
-                    {
-// ReSharper disable SuspiciousTypeConversion.Global
-                        var situationCasted = (ISituationReactor)reactor;
-// ReSharper restore SuspiciousTypeConversion.Global
-                        if (situationCasted.IsAcceptable(ctx))
-                        {
-                            candidates.Add(reactor);
-                        }
-                    }
-                }
-                else
-                {
-                    candidates.Add(reactor);
-                }
-            }
-            return new ReadOnlyCollection<IStandaloneReactor<TInput>>(candidates);
-        }
-
-
-        public IStandaloneReactor<TInput> GetStandaloneReactor<TInput>(Type tInput, TranslationContext ctx = null) where TInput : SyntaxNode
-
-        {
-            var candidates = GetStandaloneReactors<TInput>(tInput, ctx);
-            if (candidates.Count == 0) return null;
-            return candidates[0];
-        }
-
-        public void RegisterStandaloneReactor(Type standaloneReactorType)
-        {
-            var ti = standaloneReactorType.GetInterface("IStandaloneReactor`1");
-            if (ti != null)
-            {
-                var generics = ti.GetGenericArguments();
-                if (!_standaloneReactors.ContainsKey(generics[0]))
-                {
-                    _standaloneReactors[generics[0]] = new List<Type>();
-                }
-                _standaloneReactors[generics[0]].Add(standaloneReactorType);
-            }
-            else
-            {
-                throw new ArgumentException("standaloneReactorType");
-            }
-        }
-
-        #endregion
 
         #region Registration API
         public void RegisterCommonReactor(Type tNode, Type tReactor)
         {
-            bool isStandalone = false;
-            if (tReactor.GetInterface("IStandaloneReactor`1") != null)
-            {
-                RegisterStandaloneReactor(tReactor);
-                isStandalone = true;
-            }
-
-            if (!typeof(SyntaxNode).IsAssignableFrom(tNode) && !isStandalone) throw new ArgumentException("tNode");
+            if (!typeof(SyntaxNode).IsAssignableFrom(tNode)) throw new ArgumentException("tNode");
 
             if (typeof(ISituationReactor).IsAssignableFrom(tReactor))
             {
@@ -132,7 +51,7 @@ namespace Stratageme15.Core.Transaltion.Repositories
                 }
                 else
                 {
-                    if (!isStandalone) throw new ArgumentException("tReactor");
+                    throw new ArgumentException("tReactor");
                 }
             }
 

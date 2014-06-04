@@ -35,7 +35,7 @@ namespace Stratageme15.Core.Tools.JavascriptParser.Tests
             
             FunctionDefExpression fun = program.CodeElements[0] as FunctionDefExpression;
             Assert.IsNotNull(fun);
-            var doWhile = fun.Code.Statements[0] as DoWhileStatement;
+            var doWhile = fun.Code.Statements.First.Value as DoWhileStatement;
             Assert.IsNotNull(doWhile);
             Assert.AreEqual(typeof(ParenthesisExpression),doWhile.WhileExpression.GetType());
         }

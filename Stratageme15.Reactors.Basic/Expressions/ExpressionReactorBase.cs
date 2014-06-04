@@ -9,7 +9,7 @@ using Stratageme15.Core.Transaltion.TranslationContexts;
 namespace Stratageme15.Reactors.Basic.Expressions
 {
     public abstract class ExpressionReactorBase<TExpressionSyntax, TOutput>
-        : ReactorBase<TExpressionSyntax>, IStandaloneReactor<TExpressionSyntax>
+        : ReactorBase<TExpressionSyntax>
         where TExpressionSyntax : SyntaxNode
         where TOutput : SyntaxTreeNodeBase
     {
@@ -40,17 +40,6 @@ namespace Stratageme15.Reactors.Basic.Expressions
             Collect(translated, context);
         }
 
-        protected Expression TranslateChildExpression(ExpressionSyntax exprSyntax, TranslationContext context)
-        {
-            var reactor = context.Reactors.GetStandaloneReactor<ExpressionSyntax>(exprSyntax.GetType());
-            return (Expression)reactor.TranslateNode(exprSyntax, context);
-        }
-
         public abstract TOutput TranslateNodeInner(TExpressionSyntax node, TranslationContext context, TranslationResult result);
-
-        public SyntaxTreeNodeBase TranslateNode(SyntaxNode node, TranslationContext context)
-        {
-            return TranslateNodeInner((TExpressionSyntax)node, context, null);
-        }
     }
 }

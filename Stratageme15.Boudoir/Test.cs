@@ -5,12 +5,7 @@ namespace Stratageme15.Boudoir
     public class VeryMagicTest
     {
         public string Variable { get; set; }
-
-        public VeryMagicTest()
-        {
-            int i, j, k;
-        }
-
+       
         private string ReturnSomeString()
         {
             return string.Empty;
@@ -30,7 +25,8 @@ namespace Stratageme15.Boudoir
                 Console.WriteLine("inside finally");
             }
         }
-
+        private string _privateVariable = null;
+        
         public void OnButtonClick(object sender, EventArgs e)
         {
             bool b = false;
@@ -43,7 +39,10 @@ namespace Stratageme15.Boudoir
 
             obj2.GetType();
         }
-
+        private int _x, _y;
+        private float _privateFloatValue;
+        private bool _privateBoolField;
+        private bool _privateInitializedBooField = true;
         public void OnSomethingElse(object sender,EventArgs e)
         {
             double doubleVariable;

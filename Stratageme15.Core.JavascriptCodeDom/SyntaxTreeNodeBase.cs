@@ -9,23 +9,28 @@ using Stratageme15.Core.JavascriptCodeDom.Markers;
 
 namespace Stratageme15.Core.JavascriptCodeDom
 {
+    /// <summary>
+    /// Syntax tree node base. provides basic functionality for Javascript syntax tree nodes.
+    /// All javascript syntax tree nodes are derived from this class
+    /// </summary>
     public abstract class SyntaxTreeNodeBase : IHierarchical
     {
-        public string Role
-        {
-            get { return _role; }
-            set
-            {
-                
-                //if (!string.IsNullOrEmpty(_role))
-                //{
-                //    if (_role.Equals(value)) return;
-                //    throw new RoleChangedException(this,_role,value);
-                //}
-                _role = value;
-            }
-        }
+        /// <summary>
+        /// Information about symbol role describing where it was collected
+        /// Must not affect compilation/translation process
+        /// </summary>
+        public string Role { get; set; }
 
+        /// <summary>
+        /// Helper method for collecting syntax nodes in corresponding properties
+        /// After successfully call of Collect, the property cpecified with "child" parameter contains casted collected node
+        /// </summary>
+        /// <typeparam name="TThis">Type of node performing collection</typeparam>
+        /// <typeparam name="TChild">Type of node being collected</typeparam>
+        /// <typeparam name="TIfNodeType">Only perform collection if symbol is of this node type</typeparam>
+        /// <param name="child">Expression speciying property in which the result should be placed</param>
+        /// <param name="symbol">Symbol is being collected</param>
+        /// <returns>Result of collection. True if symbol was successfullt collected, False otherwise</returns>
         protected bool Collect<TThis, TChild, TIfNodeType>(Expression<Func<TThis, TChild>> child, SyntaxTreeNodeBase symbol) where TChild:SyntaxTreeNodeBase
         {
             if (Is<TIfNodeType>(symbol))
@@ -49,6 +54,14 @@ namespace Stratageme15.Core.JavascriptCodeDom
             return false;
         }
 
+        /// <summary>
+        /// Shortcut for Collect allowing not to specify TIfNodeType directly assuming TIfNodeType = TChild
+        /// </summary>
+        /// <typeparam name="TThis">Type of node performing collection</typeparam>
+        /// <typeparam name="TChild">Type of node being collected</typeparam>
+        /// <param name="child">Expression speciying property in which the result should be placed</param>
+        /// <param name="symbol">Symbol is being collected</param>
+        /// <returns>Result of collection. True if symbol was successfullt collected, False otherwise</returns>
         protected bool CollectExact<TThis,TChild>(Expression<Func<TThis, TChild>> child, SyntaxTreeNodeBase symbol) where TChild:SyntaxTreeNodeBase
         {
             return Collect<TThis, TChild, TChild>(child, symbol);
@@ -61,6 +74,10 @@ namespace Stratageme15.Core.JavascriptCodeDom
 
         public SyntaxTreeNodeBase Parent { get; set; }
         
+        /// <summary>
+        /// Wraps symbol in CodeBlock if it is statement
+        /// </summary>
+        /// <param name="symbol">Syntax node</param>
         protected void WrapIfStatement(ref SyntaxTreeNodeBase symbol)
         {
             if (Is<IStatement>(symbol))
@@ -68,11 +85,22 @@ namespace Stratageme15.Core.JavascriptCodeDom
                 symbol = symbol.WrapInCodeBlock();
             }
         }
+
+        /// <summary>
+        /// In overriden class performs the collection.
+        /// Collection means taking passed symbol (Syntax Node) and attaching it as children node and placing it in corresponding property of syntax node
+        /// </summary>
+        /// <param name="symbol">Syntax node is being collected</param>
         public virtual void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
             if (!TryAutoCollectSymbolViaReflection(symbol)) throw new UnexpectedException(symbol,this);
         }
 
+        /// <summary>
+        /// Tries automatically collect symbol if there isonly one property of symbol's type present
+        /// </summary>
+        /// <param name="symbol">Syntax tree node</param>
+        /// <returns>True if collection succeeded. False otherwise.</returns>
         protected bool TryAutoCollectSymbolViaReflection(SyntaxTreeNodeBase symbol)
         {
             var t = symbol.GetType();
@@ -143,7 +171,6 @@ namespace Stratageme15.Core.JavascriptCodeDom
         }
 
         protected static SyntaxTreeNodeBase[] Empty = new SyntaxTreeNodeBase[0];
-        private string _role;
 
         protected abstract IEnumerable<SyntaxTreeNodeBase> EnumerateChildNodes();
 
@@ -152,9 +179,5 @@ namespace Stratageme15.Core.JavascriptCodeDom
 
         public bool IsScolonNeeded { get; set; }
 
-        public virtual void CollectSymbolFirst(SyntaxTreeNodeBase symbol)
-        {
-            
-        }
     }
 }

@@ -1,4 +1,11 @@
-function Stratageme15Boudoir$VeryMagicTest() { var i,j,k; }
+function Stratageme15Boudoir$VeryMagicTest() {
+        this._privateVariable = null;
+        this._y = 0;
+        this._x = 0;
+        this._privateFloatValue = 0;
+        this._privateBoolField = false;
+        this._privateInitializedBooField = true;
+    }
 
 Stratageme15Boudoir$VeryMagicTest.prototype.ReturnSomeString = function () { return Empty; };
 

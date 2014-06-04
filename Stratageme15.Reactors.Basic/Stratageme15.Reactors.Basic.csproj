@@ -50,6 +50,8 @@
     <Compile Include="Declarations\BlockSyntaxReactor.cs" />
     <Compile Include="Declarations\ClassDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\ConstructorDeclarationSyntaxReactor.cs" />
+    <Compile Include="Declarations\Field\FieldDeclarationSyntaxReactor.cs" />
+    <Compile Include="Declarations\Field\FieldVariableDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\MethodDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\NamespaceDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\ParameterListSyntaxReactor.cs" />

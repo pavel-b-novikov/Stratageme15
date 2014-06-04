@@ -7,7 +7,7 @@ using Stratageme15.Core.Transaltion.TranslationContexts;
 
 namespace Stratageme15.Reactors.Basic.Declarations
 {
-    class ParameterListSyntaxReactor : ReactorBase<ParameterListSyntax>, IStandaloneReactor<ParameterListSyntax>
+    class ParameterListSyntaxReactor : ReactorBase<ParameterListSyntax>
     {
         protected override void HandleNode(ParameterListSyntax node, TranslationContext context, TranslationResult result)
         {

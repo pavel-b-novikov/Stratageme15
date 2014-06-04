@@ -30,6 +30,36 @@ namespace Stratageme15.Core.Transaltion
             {"object", typeof(object)},
             {"bool", typeof(bool)}
             };
+        public static bool IsPredefinedNumeric(this Type t)
+        {
+            return t == typeof (byte)
+                   || t == typeof (sbyte)
+                   || t == typeof (ushort)
+                   || t == typeof (short)
+                   || t == typeof (uint)
+                   || t == typeof (int)
+                   || t == typeof (ulong)
+                   || t == typeof (long)
+                   || t == typeof (float)
+                   || t == typeof (double)
+                   || t == typeof (decimal);
+        }
+
+        public static LiteralExpressionSyntax GetDefaultValueSyntax(this Type t)
+        {
+            if ((!t.IsValueType) || (t==typeof(char)))
+                return Syntax.LiteralExpression(SyntaxKind.NullLiteralExpression);
+            if (IsPredefinedNumeric(t))
+            {
+                return Syntax.LiteralExpression(SyntaxKind.NumericLiteralExpression,Syntax.Literal(Syntax.TriviaList(),@"0",0,Syntax.TriviaList()));
+            }
+            if (t == typeof(bool))
+            {
+                return Syntax.LiteralExpression(SyntaxKind.FalseLiteralExpression);
+            }
+            throw new Exception("unknown type for default expression");
+        }
+
 
         public static Type GetTypeFromContext(TypeSyntax typeName, TranslationContext context)
         {
