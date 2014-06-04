@@ -4,22 +4,23 @@ Stratageme15
 It is my own opensource translator from C# to Javascript project build on C# Roslyn and Coco/R a little. 
 Now it's being under active development by single project member.
 
-The main goal is extandable design allowing to create translation/compilation modules rapidly.
+The main goal is extendable design allowing to create translation/compilation modules rapidly.
 
 
 
 Approx. milestone:
+============
 
-Easy Extensions Pack
+- Easy Extensions Pack
 
-.NET Collections support
+- .NET Collections support
 
-LINQ
+- LINQ
 
-HTML Core DOM interfaces (partially from MDN)
+- HTML Core DOM interfaces (partially from MDN)
 
-jQuery integration
+- jQuery integration
 
-Knockout.js integration
+- Knockout.js integration
 
-AngularJS integration
+- AngularJS integration
