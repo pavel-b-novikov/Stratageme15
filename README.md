@@ -24,3 +24,8 @@ Approx. milestone:
 - Knockout.js integration
 
 - AngularJS integration
+
+
+I want to feel the results right now!
+============
+Clone, build, run Stratageme15.Boudoir. It will translate Test.cs into Test.js
