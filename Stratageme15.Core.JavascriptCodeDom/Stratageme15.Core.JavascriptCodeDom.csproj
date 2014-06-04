@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{826D2CC0-01FF-46EB-94F0-92CEE9679DBE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stratageme15.Core.JavascriptCodeDom</RootNamespace>
+    <AssemblyName>Stratageme15.Core.JavascriptCodeDom</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Exceptions\RoleChangedException.cs" />
+    <Compile Include="Exceptions\UnexpectedException.cs" />
+    <Compile Include="Expressions\Primary\CallExpression.cs" />
+    <Compile Include="Expressions\Primary\FieldAccessExpression.cs" />
+    <Compile Include="Expressions\Primary\IdentExpression.cs" />
+    <Compile Include="Expressions\Primary\IndexerExpression.cs" />
+    <Compile Include="Expressions\Primary\IndexExpression.cs" />
+    <Compile Include="Expressions\Primary\ObjectFieldDef.cs" />
+    <Compile Include="Expressions\Primary\ParenthesisExpression.cs" />
+    <Compile Include="Expressions\Primary\PostfixIncrementDecrementExpression.cs" />
+    <Compile Include="Expressions\Primary\PrefixIncrementDecrementExpression.cs" />
+    <Compile Include="Expressions\SequenceExpression.cs" />
+    <Compile Include="Extensions\VariousExtensions.cs" />
+    <Compile Include="FactParameterList.cs" />
+    <Compile Include="Markers\IBinaryExpression.cs" />
+    <Compile Include="Markers\IDictionaryKey.cs" />
+    <Compile Include="Markers\IHierarchical.cs" />
+    <Compile Include="OperatorConverter.cs" />
+    <Compile Include="Operators.cs" />
+    <Compile Include="CodeBlock.cs" />
+    <Compile Include="Expressions\ArrayCreationExpression.cs" />
+    <Compile Include="Expressions\Binary\AssignmentBinaryExpression.cs" />
+    <Compile Include="Expressions\Binary\BinaryExpression.cs" />
+    <Compile Include="Expressions\Binary\BitwiseBinaryExpression.cs" />
+    <Compile Include="Expressions\Binary\ComparisonBinaryExpression.cs" />
+    <Compile Include="Expressions\Binary\LogicalBinaryExpression.cs" />
+    <Compile Include="Expressions\Binary\MathBinaryExpression.cs" />
+    <Compile Include="Expressions\Expression.cs" />
+    <Compile Include="Expressions\Primary\FunctionDefExpresion.cs" />
+    <Compile Include="Expressions\Literals\KeywordLiterals\BooleanKeywordLiteralExpression.cs" />
+    <Compile Include="Expressions\Literals\KeywordLiterals\FalseBooleanKeywordLiteralExpression.cs" />
+    <Compile Include="Expressions\Literals\KeywordLiterals\KeywordLiteralExpression.cs" />
+    <Compile Include="Expressions\Literals\KeywordLiterals\NullKeywordLiteralExpression.cs" />
+    <Compile Include="Expressions\Literals\KeywordLiterals\ThisKeywordLiteralExpression.cs" />
+    <Compile Include="Expressions\Literals\KeywordLiterals\TrueBooleanKeywordLiteralExpression.cs" />
+    <Compile Include="Expressions\Literals\LiteralExpression.cs" />
+    <Compile Include="Expressions\Literals\NumberLiteral.cs" />
+    <Compile Include="Expressions\Literals\RegexLiteral.cs" />
+    <Compile Include="Expressions\Literals\StringLiteral.cs" />
+    <Compile Include="Expressions\Primary\NewInvokationExpression.cs" />
+    <Compile Include="Expressions\Primary\ObjectDefinitionExpression.cs" />
+    <Compile Include="Expressions\Primary\PrimaryExpression.cs" />
+    <Compile Include="Expressions\Primary\TypeofExpression.cs" />
+    <Compile Include="Expressions\UnaryExpression.cs" />
+    <Compile Include="Expressions\Primary\VoidExpression.cs" />
+    <Compile Include="FormalParametersList.cs" />
+    <Compile Include="JsProgram.cs" />
+    <Compile Include="Markers\IRootCodeElement.cs" />
+    <Compile Include="Markers\IStatement.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Statements\AssignmentStatement.cs" />
+    <Compile Include="Statements\BreakStatement.cs" />
+    <Compile Include="Statements\CallStatement.cs" />
+    <Compile Include="Statements\CaseClause.cs" />
+    <Compile Include="Statements\CatchClause.cs" />
+    <Compile Include="Statements\ContinueStatement.cs" />
+    <Compile Include="Statements\DebuggerStatement.cs" />
+    <Compile Include="Statements\DefaultClause.cs" />
+    <Compile Include="Statements\DeleteStatement.cs" />
+    <Compile Include="Statements\DoWhileStatement.cs" />
+    <Compile Include="Statements\EmptyStatement.cs" />
+    <Compile Include="Statements\FinallyClause.cs" />
+    <Compile Include="Statements\ForInStatement.cs" />
+    <Compile Include="Statements\ForInStatementVariableDeclaration.cs" />
+    <Compile Include="Statements\ForOfStatement.cs" />
+    <Compile Include="Statements\ForStatement.cs" />
+    <Compile Include="Statements\IfStatement.cs" />
+    <Compile Include="Statements\ReturnStatement.cs" />
+    <Compile Include="Statements\StatementLabel.cs" />
+    <Compile Include="Statements\SwitchStatement.cs" />
+    <Compile Include="Statements\TernaryStatement.cs" />
+    <Compile Include="Statements\ThrowStatement.cs" />
+    <Compile Include="Statements\TryCatchFinallyStatement.cs" />
+    <Compile Include="Statements\UseStrict.cs" />
+    <Compile Include="Statements\VariableDefStatement.cs" />
+    <Compile Include="Statements\VarLetModifier.cs" />
+    <Compile Include="Statements\WhileStatement.cs" />
+    <Compile Include="SyntaxTreeNodeBase.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,1 @@
+coco JavaScript.atg -namespace "Stratageme15.Core.Tools.JavascriptParser"

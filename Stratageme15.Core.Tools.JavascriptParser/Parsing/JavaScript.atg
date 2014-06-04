@@ -1,0 +1,622 @@
+COMPILER JS
+CHARACTERS
+  tab                = '\u0009'. /*  9 = tabulator */
+  eol                = '\u000a'. /* 10 = line feed */
+  cr                 = '\u000d'. /* 13 = carriage return */
+  newLine            = cr + eol. /* Line separator character (U+2028) + Paragraph separator character (U+2029) */
+
+  startLetter        = '$' + 'A' .. 'Z' + 'a' .. 'z' + '_' + '\u00aa' + '\u00b5' + '\u00ba' + '\u00c0' .. '\u00d6' + '\u00d8' .. '\u00f6' + '\u00f8' .. '\u00ff'.
+  partLetter         = '$' + '0' .. '9' + 'A' .. 'Z' + 'a' .. 'z' + '_' + '\u0080' + '\u00a0' .. '\u00b3' + '\u00b5' + '\u00ba' + '\u00c0' .. '\u00d6' + '\u00d8' .. '\u00f6' + '\u00f8' .. '\u00ff'.
+  alha				 = 'A' .. 'Z' + 'a' .. 'z' .
+  digit              = "0123456789".
+  hexDigit           = digit + "ABCDEFabcdef".
+  notDigit           = ANY - digit.
+
+  char               = ANY - "'" - '\\' - newLine.
+  doubleQuoteChar 	 = ANY - '\"' - '\\' - newLine.
+  strEscapeChar		 = ANY - newLine.
+
+  singleQuoteChar 	 = ANY - '\'' - '\\' - newLine.
+  
+  verbatimStringChar = ANY - '"'.
+  regularStringChar  = ANY - '"' - '\\' - newLine.
+  notNewLine         = ANY - newLine .
+  ws                 = " " + tab + '\u000b' + '\u000c'. /* Any character with Unicode class Zs */
+  
+  blockComCh         = ANY - '*' - '/'.
+//---- Regular expressions essentials
+  lRexNonTerminator	 = ANY - newLine. 
+  meta1 = lRexNonTerminator - '*' - '\\' - '/' - ']'. 
+  metarx = lRexNonTerminator - '\\' - '/'.
+  rg	= 'g'.
+  ri	= 'i'.
+  rm	= 'm'.
+  rxws = ws + eol + cr.
+  regexContext = ','.
+	
+	rexNL = '\r' + '\n'.
+	rexNt = ANY - rexNL.
+	rexFirst = ANY - rexNL - '*' - '\\' - '/' - '['.
+	rexCC = ANY - rexNL - '\\' - ']'.
+	rexSC = ANY - rexNL - '\\' - '/' - '['.
+TOKENS
+	ident =
+		( startLetter )   { partLetter }.
+
+	regexL = '/'
+				(
+					
+					'[' (rexCC | '\\' rexNt) {(rexCC | '\\' rexNt)} ']' { '[' (rexCC | '\\' rexNt) {(rexCC | '\\' rexNt)} ']'  }
+					| ('\\' rexNt)
+					| rexFirst 
+				) 
+				{ 
+					(rexSC
+					| ('\\' rexNt)
+					| '[' (rexCC | '\\' rexNt) {(rexCC | '\\' rexNt)} ']' { '[' (rexCC | '\\' rexNt) {(rexCC | '\\' rexNt)} ']'  }
+					)
+				} '/' {partLetter} CONTEXT({ws} [regexContext]).
+
+
+	
+	numberL =  ( 
+				   (
+						"." digit {digit} 				
+						| 	digit | digit {digit} 
+							(	[ "." [ (digit| digit {digit})]	])
+							
+				   )
+			   ) [ ("e" | "E" ) ["+" | "-"] digit | digit | {digit}]		
+			 | ( "0" ( "x" | "X" ) (hexDigit | hexDigit {hexDigit}) )
+	.
+	
+	stringL = 
+			('\"'
+				[ 
+
+					( doubleQuoteChar
+						| '\\' ( strEscapeChar 
+								| 'x' hexDigit hexDigit 
+								| 'u' hexDigit hexDigit hexDigit hexDigit 
+								| 'U' hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit 
+								)) 
+					| 
+						( doubleQuoteChar
+							| '\\' ( strEscapeChar 
+								| 'x' hexDigit hexDigit 
+								| 'u' hexDigit hexDigit hexDigit hexDigit 
+								| 'U' hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit 
+								)) 
+						{
+							( 
+							 doubleQuoteChar |
+								'\\' ( strEscapeChar 
+								| 'x' hexDigit hexDigit 
+								| 'u' hexDigit hexDigit hexDigit hexDigit 
+								| 'U' hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit 
+								)) 
+						}
+				] 
+			'\"') 
+			| 
+			( '\''
+				[ 
+
+					( singleQuoteChar
+						| '\\' ( strEscapeChar 
+								| 'x' hexDigit hexDigit 
+								| 'u' hexDigit hexDigit hexDigit hexDigit 
+								| 'U' hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit 
+								)) 
+					| 
+						( singleQuoteChar
+							| '\\' ( strEscapeChar 
+								| 'x' hexDigit hexDigit 
+								| 'u' hexDigit hexDigit hexDigit hexDigit 
+								| 'U' hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit 
+								)) 
+						{
+							( 
+							 singleQuoteChar |
+								'\\' ( strEscapeChar 
+								| 'x' hexDigit hexDigit 
+								| 'u' hexDigit hexDigit hexDigit hexDigit 
+								| 'U' hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit 
+								)) 
+						}
+				] 
+			'\'' ).
+		
+	
+
+	break	 = "break".
+	case	 = "case".
+	catch	 = "catch".
+	continue = "continue".
+	debugger = "debugger".
+	default	 = "default".
+	delete	 = "delete".
+	do		 = "do".
+	else	 = "else".
+	finally	 = "finally".
+	for		 = "for".
+	function = "function".
+	if		 = "if".
+	in		 = "in".
+	instanceof	 = "instanceof".
+	new		 = "new".
+	of		 = "of".
+	return	 = "return".
+	switch	 = "switch".
+	this	 = "this".
+	throw	 = "throw".
+	try		 = "try".
+	typeof	 = "typeof".
+	trueW	 = "true".
+	falseW	 = "false".
+	var		 = "var".
+	void	 = "void".
+	while	 = "while".
+	with	 = "with".
+	/*----- operators and special characters needed in LL(1) resolvers --------------*/
+  
+	/*----- unary operators --------------*/
+	inc        = "++".
+	dec        = "--".
+	/* binary operators */
+	times      = "*".
+	div		   = "/".
+	mod		   = "%".
+	plus       = "+".
+	minus      = "-".
+	
+	aminus 	= "-=". 
+	aplus  	= "+=".  
+	atimes 	= "*=".
+	adiv	= "/=".
+	amod	= "%=".
+	abor	= "|=".
+	aband	= "&=".
+	abxor	= "^=".
+	alsh	= "<<=".
+	arsh	= ">>=".
+	arush	= ">>>=".
+
+	/* bitwise*/
+	rshift         = ">>".
+	lshift         = "<<".
+	urshift        = ">>>".
+	bnot		 = "~".
+	band		 = "&".
+	bor     	 = "|".
+	bxor     	 = "^".
+	/* logical */
+	gt         = ">".
+	gteq       = ">=".
+	lt         = "<".
+	lteq       = "<=".
+	and			= "&&".
+	or     		= "||".
+	xor     	= "^^".
+	not         = "!".
+	eq          = "==".
+	seq         = "===".
+	neq         = "!=".
+	nseq        = "!==".
+	/* other */
+	assgn      = "=".
+	colon      = ":".
+	scolon     = ";".
+	comma      = ",".  
+	dot        = ".".
+	question   = "?".
+	/* block */  
+	lbrace     = "{".
+	lbrack     = "[".
+	lpar       = "(".
+		
+	rbrace     = "}".
+	rbrack     = "]".
+	rpar       = ")".  
+
+COMMENTS FROM "/*" TO "*/"
+COMMENTS FROM "//" TO eol
+
+IGNORE eol + cr + tab + cr
+PRODUCTIONS
+JS =  RootStatements { RootStatements } (. EatColon(); .).
+
+ParenthesisExpression
+=
+"(" (. Push<ParenthesisExpression>(); .)
+	Expression 	
+")" (. Pop(); .)
+.
+
+FormalParameterList (. Push<FormalParametersList>(); .)
+=  ident (. Ident(); .)	{"," ident (. Ident(); .) }
+(. Pop(); .).
+
+/* variable definition*/
+VariableDef (. Push<VariableDefStatement>(); .)
+= 
+"var" VarList 
+(. Pop(); .).
+
+VarList (. var nn = Peek(1);.)	// here we need to distinguish case when var a,b = 0
+=	
+	( IF (nn.kind==_comma) ident (. Ident(); .) "," VarList )
+	| ( IF (!assgnOps[nn.kind]) (.  Push<AssignmentStatement>(); .) ident (. Ident(); .) (. Pop(); .) )
+	| (AssignStm {"," AssignStm})
+.
+
+ObjectDef (. Push<ObjectDefinitionExpression>(); .)
+= 
+	"{" ( 
+			"}" 
+			| ObjectFieldDef { "," [ObjectFieldDef] } "}" 
+		)
+(. Pop(); .) .
+
+KeywordOrIdent 
+=
+	( "break" | "case" | "catch" | "continue" | "debugger" 
+	| "default" | "delete" | "do" | "else" | "finally" | "for" 
+	| "function" | "if" | "in" | "instanceof" | "new" | "of" | "return" 
+	| "switch" | "this" | "throw" | "try" | "typeof" | "var" | "void" 
+	| "while" | "with" | ident ) (. Ident(); .)
+.
+
+ObjectFieldDef 
+=
+	(Literal| KeywordOrIdent ) ":" NonSequenceExpression
+.
+
+//---------Expressions
+
+FactParameterList (. Push<FactParameterList>(); .)
+= 	
+	NonSequenceExpression { "," NonSequenceExpression }
+(. Pop(); .).
+NonSequenceExpression (. Push<UnaryExpression>(); .)
+=                    
+  (	Unary 
+	( 
+		IF (IsAssignment())	AssignmentOperator (. Clarify<AssignmentBinaryExpression>(); .) NonSequenceExpression
+		| OrExpr [ TernaryPartStm ]
+	) 
+  )
+(. NeedScolon(); Pop(); .).
+
+Expression (. Push<UnaryExpression>(); .)
+=                    
+  (	
+	Unary 
+	( 
+		IF (IsAssignment()) AssignmentOperator (. Clarify<AssignmentBinaryExpression>(); .) NonSequenceExpression
+		| (.  FixUpRegexLookahead(); .) OrExpr [ TernaryPartStm ]
+	)	["," (. Converge<SequenceExpression>(); .) NonSequenceExpression { "," NonSequenceExpression } ]
+  )
+(. NeedScolon(); Pop(); .).
+
+OrExpr
+= AndExpr { "||" (. Converge<LogicalBinaryExpression>(); Logical();  .) (. Push<UnaryExpression>(); .) Unary  AndExpr (. PopDrop(); .) }
+.
+
+AndExpr
+= SystemExpr { "&&" (. Converge<LogicalBinaryExpression>(); Logical();  .) (. Push<UnaryExpression>(); .) Unary  SystemExpr (. PopDrop(); .) }
+.
+
+SystemExpr
+= BitOrExpr { ( "in" | "instanceof" ) (. Converge<LogicalBinaryExpression>(); Logical();  .) (. Push<UnaryExpression>(); .) Unary  BitOrExpr (. PopDrop(); .) }
+.
+
+BitOrExpr
+= BitXorExpr { "|" (. Converge<BitwiseBinaryExpression>(); Bitwise(); .) (. Push<UnaryExpression>(); .) Unary  BitXorExpr (. PopDrop(); .) }
+.
+
+BitXorExpr
+= BitAndExpr { "^" (. Converge<BitwiseBinaryExpression>(); Bitwise(); .)  (. Push<UnaryExpression>(); .) Unary  BitAndExpr (. PopDrop(); .) }
+.
+
+BitAndExpr
+= EqlExpr { "&" (. Converge<BitwiseBinaryExpression>(); Bitwise(); .) (. Push<UnaryExpression>(); .) Unary  EqlExpr (. PopDrop(); .) }
+.
+
+EqlExpr
+= RelExpr { ( "!=" | "==" | "===" | "!==" ) (. Converge<ComparisonBinaryExpression>();  Comparison(); .) (. Push<UnaryExpression>(); .) Unary  RelExpr (. PopDrop(); .) }
+.
+
+RelExpr
+= ShiftExpr
+  { ( "<" | ">" | "<=" | ">=" ) (. Converge<ComparisonBinaryExpression>();  Comparison(); .) (. Push<UnaryExpression>(); .) Unary  ShiftExpr (. PopDrop(); .)  }
+.
+
+ShiftExpr
+= AddExpr
+  { ( "<<" | ">>" | ">>>" ) (. Converge<BitwiseBinaryExpression>(); Bitwise();  .) (. Push<UnaryExpression>(); .) Unary AddExpr (. PopDrop(); .) }
+.
+
+AddExpr
+= MulExpr { ( "+" | "-" ) (. Converge<MathBinaryExpression>(); Math(); .) (. Push<UnaryExpression>(); .) Unary MulExpr (. PopDrop(); .) }
+.
+
+MulExpr (.  FixUpRegexLookahead(); .)  
+=	
+	{ 	
+		(
+			
+			( "*" | "/" | "%" ) (.  FixUpRegexLookahead(); .)
+			(. Converge<MathBinaryExpression>(); Math(); .) 
+			Unary (.  FixUpRegexLookahead(); .)  
+		)
+	}
+.
+
+Unary (. Push<UnaryExpression>(); .)
+=
+	(
+		( 
+		 		"+"   (. UnaryOp(); .) Unary
+				|"-"  (. UnaryOp(); .) Unary
+				|"!"  (. UnaryOp(); .) Unary
+				|"~"  (. UnaryOp(); .) Unary
+				|"++" (. Clarify<PrefixIncrementDecrementExpression>(); IncDec(); .) Unary
+				|"--" (. Clarify<PrefixIncrementDecrementExpression>(); UnaryOp(); .) Unary
+		)
+		| Primary
+	)
+
+	
+(. Pop(); .).
+FunctionDef (. Push<FunctionDefExpression>(); .)
+=
+	"function" [ident (. Ident(); .)] 
+	"(" [FormalParameterList] ")" 
+	Block		
+	(. NeedScolon(); Pop(); .) 
+.
+
+ArrayDef (. Push<ArrayCreationExpression>(); .)
+=
+
+	"[" [OnlyParenthesisIfSequence {"," OnlyParenthesisIfSequence} ] "]"
+
+(. Pop(); .) .
+FieldAccessExpression =
+(. Push<FieldAccessExpression>(); .) 
+	KeywordOrIdent { "." FieldAccessExpression } 
+(. Pop(); .).
+
+Primary 
+=
+	( 
+
+		RegexOrLiteral
+		| ObjectDef
+		| FunctionDef
+		| "(" (. Push<ParenthesisExpression>(); .) Expression (. Pop(); .) ")"   
+		| ArrayDef			
+		| "this"								(. Terminal<ThisKeywordLiteralExpression>(); .)
+		| "null"								(. Terminal<NullKeywordLiteralExpression>(); .)
+		| DeleteStm
+		| VoidStm
+		| ( 
+			"new" 
+			(. Push<NewInvokationExpression>(); .) 
+				[ "this" (. Terminal<ThisKeywordLiteralExpression>(); .) "." ]
+				[ FieldAccessExpression ]
+				["(" [FactParameterList] ")"] 
+		    (. Pop(); .)
+		  )
+		| "typeof" (. Push<TypeofExpression>(); .)  Primary (. Pop(); .)	
+		| ident									(. Ident(); .)
+	) 	{ ExpressionPostfix	}
+.
+
+ExpressionPostfix
+=
+	"++"		(. Converge<PostfixIncrementDecrementExpression>(); IncDec(); .)
+	| "--"		(. Converge<PostfixIncrementDecrementExpression>(); IncDec(); .)
+	| "["		(. Converge<IndexerExpression>(); Push<IndexExpression>(); .) OnlyParenthesisIfSequence (. Pop(); .) "]"
+	| ( "."		
+		(. Converge<FieldAccessExpression>(); .) 
+			KeywordOrIdent { "." (. Converge<FieldAccessExpression>(); .) KeywordOrIdent }		
+		)
+	| "("		(. Converge<CallExpression>(); .) [FactParameterList] ")"
+.
+
+RegexOrLiteral
+=
+		regexL (. TerminalArg<RegexLiteral>(); .)
+		| Literal
+.
+Literal
+=
+	stringL		(. TerminalArg<StringLiteral>(); .)
+	| numberL	(. TerminalArg<NumberLiteral>(); .)
+	|"true"		(. Terminal<TrueBooleanKeywordLiteralExpression>(); .)
+	|"false"	(. Terminal<FalseBooleanKeywordLiteralExpression>(); .)
+.
+
+AssignmentOperator (.  FixUpRegexLookahead(); .)
+=
+  ( "="		
+  | "+="	
+  | "-="	
+  | "*="	
+  | "/="	
+  | "<<="	
+  | ">>="
+  | "%="		
+  | ">>>=" 
+  | "|="  
+  | "&=" 
+  | "^="
+  ) (. Assignment(); .)
+.
+//---------End Expressions
+
+OnlyParenthesisIfSequence
+=
+	IF (IsParenthesedSequence()) "(" (. Push<ParenthesisExpression>(); Push<SequenceExpression>(); .) NonSequenceExpression { "," NonSequenceExpression } (. Pop(); Pop(); .) ")"
+	| NonSequenceExpression
+.
+TernaryPartStm
+=
+"?" (. Converge<TernaryStatement>(); .) OnlyParenthesisIfSequence ":" OnlyParenthesisIfSequence
+.
+
+//--------- statements	
+RootStatements
+=	(. EatLabel(); .)
+	(
+		";" (. Terminal<EmptyStatement>(); .)
+		| VariableDef (. EatColon(); .)
+		| IfStm 
+		| WhileStm 
+		| DoWhileStm
+		| ForStm
+		| TryCatchFinallyStm	
+		| SwitchStm	
+		| ( 
+			IF (la.kind==_lbrace) 
+			  (
+				( IF (IsObjectDef()) Expression (. EatColon(); .) )
+				| Block (. EatColon(); .)
+			  )
+		  )
+		| "debugger" (. EatColon(); Terminal<DebuggerStatement>(); .)
+		// below we greedely parsering expression-statements ("a=b;", "a==b;", "+a==b", "-1=="undefined")
+		// if it will not be a allowed language construction - then NodeCompiler throws when
+		// collecting nonterminals into tree
+	
+		| Expression (. EatColon(); .)
+	)
+.
+
+Statement 
+=  	
+	(. EatLabel(); .)
+	(
+		";" (. Terminal<EmptyStatement>(); .)
+		| VariableDef (. EatColon(); .)
+		| ReturnStatement 
+		| IfStm 
+		| WhileStm 
+		| DoWhileStm
+		| BreakStm
+		| ContinueStm
+		| ForStm
+		| ThrowStm	
+		| TryCatchFinallyStm	
+		| SwitchStm	
+		| ( 
+			IF (la.kind==_lbrace) 
+			  (
+				( IF (IsObjectDef()) Expression (. EatColon(); .) )
+				| Block (. EatColon(); .)
+			  )
+		  )
+		| "debugger" (. EatColon(); Terminal<DebuggerStatement>(); .)
+		// below we greedely parsering expression-statements ("a=b;", "a==b;", "+a==b", "-1=="undefined")
+		// if it will not be a allowed language construction - then NodeCompiler throws when
+		// collecting nonterminals into tree	
+		| Expression (. EatColon(); .)
+	)
+.
+
+ReturnStatement  (. Push<ReturnStatement>(); .)
+= 
+	"return" [Expression] (. EatColon(); .)
+(. Pop(); .) .
+
+AssignStm (. Push<AssignmentStatement>(); .)
+=	
+	(. Push<UnaryExpression>(); .) Primary (. Pop(); .) [ AssignmentOperator NonSequenceExpression ]
+(. Pop(); .).
+
+IfStm		(. Push<IfStatement>(); .)
+= 
+	"if" ParenthesisExpression ( Block | Statement (. EatColon(); .) )
+	{ IF (IsElseIf()) "else" "if" ParenthesisExpression( Block | Statement (. EatColon(); .) ) }
+	[ "else" ( Block | Statement (. EatColon(); .) ) ]
+	(. EatColon(); .)
+(. Pop(); .).
+
+WhileStm	(. Push<WhileStatement>(); .)
+=	
+	"while" ParenthesisExpression 
+	( 
+		";"
+		| ( Block | Statement )	(. EatColon(); .)
+	)
+(. Pop(); .).
+
+DoWhileStm	(. Push<DoWhileStatement>(); .)
+=	"do" ( Block | Statement ) "while" ParenthesisExpression (. EatColon(); .)
+(. Pop(); .).
+
+BreakStm	(. Push<BreakStatement>(); .)
+=
+	"break" [ident (. Ident(); .)] (. EatColon(); .)
+(. Pop(); .).
+
+ContinueStm	(. Push<ContinueStatement>(); .)
+=
+	"continue" [ident (. Ident(); .)] (. EatColon(); .)
+(. Pop(); .).
+
+DeleteStm	(. Push<DeleteStatement>(); .)
+=
+	"delete" Expression (. EatColon(); .)
+(. Pop(); .).
+
+VoidStm		(. Push<VoidExpression>(); .)
+=
+	"void" OnlyParenthesisIfSequence
+(. Pop(); .).
+ForStm 
+=
+	"for" "(" 
+	(
+		( IF (IsForin()) (. Push<ForInStatement>(); Push<ForInStatementVariableDeclaration>(); .)  ["var"|"let"] (. TerminalArg<VarLetModifier>(); .)   ident (. Ident(); .) (. Pop(); .) "in" Expression  ")" ) 
+		| ( IF (IsForof())(. Push<ForOfStatement>(); Push<ForInStatementVariableDeclaration>(); .)  ["var"|"let"] (. TerminalArg<VarLetModifier>(); .)   ident (. Ident(); .) (. Pop(); .) "of" Expression  ")" ) 
+		| (. Push<ForStatement>(); .)	( [ VariableDef | Expression ] ";" [Expression] ";" [Expression]")" )
+	)
+	( 
+		";"
+		| ( Block | Statement )	(. EatColon(); .)
+	)
+(. Pop(); .).
+
+ThrowStm (. Push<ThrowStatement>(); .)
+=
+"throw" Expression (. EatColon(); .)
+(. Pop(); .).
+
+SwitchStm (. Push<SwitchStatement>(); .)
+=
+	"switch" ParenthesisExpression "{"
+		  "case" (. Push<CaseClause>(); .) Expression ":" [ Block | Statement {Statement} ] (. Pop(); .)
+		{ "case" (. Push<CaseClause>(); .) Expression ":" [ Block | Statement {Statement} ] (. Pop(); .) }
+		[ "default" (. Push<DefaultClause>(); .) ":" [ Block | Statement {Statement} ] (. Pop(); .)  ]
+		{ "case" (. Push<CaseClause>(); .) Expression ":" [ Block | Statement {Statement} ] (. Pop(); .) }
+
+	"}" (. EatColon(); .)
+(. Pop(); .).
+
+TryCatchFinallyStm (. Push<TryCatchFinallyStatement>(); .)
+=
+"try" Block
+[ "catch" (. Push<CatchClause>(); .) "(" [ident (. Ident(); .) ] ")" Block (. Pop(); .) ]
+[ "finally" (. Push<FinallyClause>(); .) Block (. Pop(); .) ]
+(. Pop(); .).
+
+//--------- end statements
+
+Block (. Push<CodeBlock>(); .)
+= "{" { Statement } "}"
+(. Pop(); .).
+
+END JS.

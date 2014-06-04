@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B9BBCBC5-1256-4A58-9999-2EB80A1D3EBA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stratageme15.Core.Compiler</RootNamespace>
+    <AssemblyName>Stratageme15.Core.Compiler</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DefaultNodeCompilers\CodeBlockNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\ArrayCreationExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Binary\BinaryExpressionNodeCompilerBase.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\DebuggerNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\ExpressionNodeCompilerBase.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Literals\LiteralNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Literals\StringLiteralNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\FieldAccessExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\IndexerExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\CallExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\FunctionDefExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\IdentExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\IndexExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\NewInvokationExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\ObjectDefinitionExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\ObjectFieldDefNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\ParenthesisExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\PostfixIncrementDecrementExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\PrefixIncrementDecrementExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\TypeofExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\Primary\VoidExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\SequenceExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Expressions\UnaryExpressionNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\FactParameterListNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\FormalParametersListNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\AssignmentStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\BreakStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\CallStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\CaseClauseNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\CatchClauseNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\ContinueStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\DefaultClauseNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\DeleteStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\DoWhileStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\EmptyStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\FinallyClauseNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\ForInStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\ForOfStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\ForStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\IfStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\ReturnStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\StatementNodeCompilerBase.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\SwitchStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\TernaryStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\ThrowStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\TryCatchFinallyStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\UseStrictNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\VariableDefStatementNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\VarLetModifierNodeCompiler.cs" />
+    <Compile Include="DefaultNodeCompilers\Statements\WhileStatementNodeCompiler.cs" />
+    <Compile Include="JavascriptCompilation.cs" />
+    <Compile Include="Exceptions\CompilerExceptions.cs" />
+    <Compile Include="INodeCompiler.cs" />
+    <Compile Include="JsCompiler.cs" />
+    <Compile Include="NodeCompilerBase.cs" />
+    <Compile Include="NodeCompilersRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stratageme15.Core.JavascriptCodeDom\Stratageme15.Core.JavascriptCodeDom.csproj">
+      <Project>{826d2cc0-01ff-46eb-94f0-92cee9679dbe}</Project>
+      <Name>Stratageme15.Core.JavascriptCodeDom</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
