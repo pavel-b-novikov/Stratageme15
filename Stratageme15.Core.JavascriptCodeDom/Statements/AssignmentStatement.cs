@@ -17,32 +17,10 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<IdentExpression>(symbol))
-            {
-                if (Identifier==null)
-                {
-                    Identifier = (IdentExpression) symbol;
-                    return;
-                }
-            }
-            if (Is<IndexerExpression>(symbol))
-            {
-                if (Indexer == null)
-                {
-                    Indexer = (IndexerExpression) symbol;
-                    return;
-                }
-            }
-
-            if (Is<Expression>(symbol))
-            {
-                if (AssignmentExpression == null)
-                {
-                    AssignmentExpression = (Expression) symbol;
-                    return;
-                }
-            }
-
+            if (CollectExact<AssignmentStatement,IdentExpression>(c=>c.Identifier,symbol)) return;
+            if (CollectExact<AssignmentStatement, IndexerExpression>(c => c.Indexer, symbol)) return;
+            if (CollectExact<AssignmentStatement, Expression>(c => c.AssignmentExpression, symbol)) return;
+            
             base.CollectSymbol(symbol);
         }
 

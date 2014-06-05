@@ -1,12 +1,15 @@
-function Stratageme15Boudoir$VeryMagicTest() {
-        this._privateVariable = null;
-        this._dependantField = 0;
-        this._y = 0;
-        this._x = 0;
-        this._privateBoolField = false;
-        this._privateInitializedBooField = true;
-        this._veryTest = new Stratageme15Boudoir$VeryMagicTest();
-        this._variable = null;
+function Stratageme15Boudoir$VeryMagicTest(variable) {
+        {
+            this._privateVariable = null;
+            this._dependantField = 0;
+            this._y = 0;
+            this._x = 0;
+            this._privateBoolField = false;
+            this._privateInitializedBooField = true;
+            this._veryTest = new Stratageme15Boudoir$VeryMagicTest(null);
+            this._variable = null;
+        }
+        _variable = variable;
     }
 
 Stratageme15Boudoir$VeryMagicTest.prototype.setVariable = function (value) { _variable = value; };

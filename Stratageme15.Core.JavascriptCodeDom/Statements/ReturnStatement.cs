@@ -9,11 +9,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
         public Expression ReturnExpression { get; set; }
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<Expression>(symbol))
-            {
-                ReturnExpression = (Expression) symbol;
-                return;
-            }
+            if (CollectExact<ReturnStatement, Expression>(c => c.ReturnExpression, symbol)) return;
             base.CollectSymbol(symbol);
         }
 

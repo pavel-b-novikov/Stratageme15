@@ -362,7 +362,7 @@ Unary (. Push<UnaryExpression>(); .)
 				|"!"  (. UnaryOp(); .) Unary
 				|"~"  (. UnaryOp(); .) Unary
 				|"++" (. Clarify<PrefixIncrementDecrementExpression>(); IncDec(); .) Unary
-				|"--" (. Clarify<PrefixIncrementDecrementExpression>(); UnaryOp(); .) Unary
+				|"--" (. Clarify<PrefixIncrementDecrementExpression>(); IncDec(); .) Unary
 		)
 		| Primary
 	)
@@ -385,7 +385,7 @@ ArrayDef (. Push<ArrayCreationExpression>(); .)
 (. Pop(); .) .
 FieldAccessExpression =
 (. Push<FieldAccessExpression>(); .) 
-	KeywordOrIdent { "." FieldAccessExpression } 
+	KeywordOrIdent { "." (. Converge<FieldAccessExpression>(); .) KeywordOrIdent } 
 (. Pop(); .).
 
 Primary 
@@ -403,9 +403,10 @@ Primary
 		| VoidStm
 		| ( 
 			"new" 
-			(. Push<NewInvokationExpression>(); .) 
-				[ "this" (. Terminal<ThisKeywordLiteralExpression>(); .) "." ]
-				[ FieldAccessExpression ]
+			(. Push<NewInvokationExpression>();  .) 
+				(. Push<FieldAccessExpression>(); .)
+					[ FieldAccessExpression ]
+				(. Pop(); .) 
 				["(" [FactParameterList] ")"] 
 		    (. Pop(); .)
 		  )

@@ -14,37 +14,11 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<IStatement>(symbol))
-            {
-                symbol = symbol.WrapInCodeBlock();
-            }
-
-            if (Is<CodeBlock>(symbol))
-            {
-                if (TryBlock==null)
-                {
-                    TryBlock = (CodeBlock) symbol;
-                    return;
-                }
-            }
-
-            if (Is<CaseClause>(symbol))
-            {
-                if (CatchClause==null)
-                {
-                    CatchClause = (CatchClause) symbol;
-                    return;
-                }
-            }
-
-            if (Is<FinallyClause>(symbol))
-            {
-                if (FinallyBlock==null)
-                {
-                    FinallyBlock = (FinallyClause) symbol;
-                    return;
-                }
-            }
+            
+            WrapIfStatement(ref symbol);
+            if (CollectExact<TryCatchFinallyStatement, CodeBlock>(c => c.TryBlock, symbol)) return;
+            if (CollectExact<TryCatchFinallyStatement, CatchClause>(c => c.CatchClause, symbol)) return;
+            if (CollectExact<TryCatchFinallyStatement, FinallyClause>(c => c.FinallyBlock, symbol)) return;
             base.CollectSymbol(symbol);
         }
 

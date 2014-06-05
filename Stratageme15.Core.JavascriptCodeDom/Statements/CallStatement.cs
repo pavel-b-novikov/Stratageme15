@@ -11,12 +11,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<CallExpression>(symbol))
-            {
-                CallExpression = (CallExpression)symbol;
-                return;
-            }
-           
+            if (CollectExact<CallStatement, CallExpression>(c => c.CallExpression, symbol)) return;
             base.CollectSymbol(symbol);
         }
 

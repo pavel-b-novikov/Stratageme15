@@ -20,30 +20,16 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<ParenthesisExpression>(symbol))
-            {
-                if (SwitchExpression==null)
-                {
-                    SwitchExpression = (ParenthesisExpression)symbol;
-                    return;
-                }
-            }
-
+            if (CollectExact<SwitchStatement, ParenthesisExpression>(c => c.SwitchExpression, symbol)) return;
+           
             if (Is<CaseClause>(symbol))
             {
                 Cases.Add((CaseClause) symbol);
+                symbol.Parent = this;
                 return;
             }
 
-            if (Is<DefaultClause>(symbol))
-            {
-                if (Default==null)
-                {
-                    Default = (DefaultClause) symbol;
-                    return;
-                }
-
-            }
+            if (CollectExact<SwitchStatement, DefaultClause>(c => c.Default, symbol)) return;
             base.CollectSymbol(symbol);
         }
 

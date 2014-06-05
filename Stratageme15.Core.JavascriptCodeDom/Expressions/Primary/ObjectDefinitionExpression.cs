@@ -21,7 +21,8 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
         {
             if (Is<ObjectFieldDef>(symbol))
             {
-                ObjectFields.Add((ObjectFieldDef) symbol);
+                ObjectFields.Add((ObjectFieldDef)symbol);
+                symbol.Parent = this;
                 return;
             }
 
@@ -32,6 +33,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
                     symbol.Role = "Key";
                     _cache = (IDictionaryKey) symbol;
                     isCollectingKey = false;
+                    symbol.Parent = this;
                     return;
                 }
             }else
@@ -45,6 +47,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
                     ofd.Parent = this;
                     ObjectFields.Add(ofd);
                     isCollectingKey = true;
+                    symbol.Parent = this;
                     return;
                 }
             }

@@ -13,16 +13,20 @@ namespace Stratageme15.Core.Compiler.DefaultNodeCompilers
         {
             if (newLine) NewLine(output);
             CompileChild(output, (SyntaxTreeNodeBase)stm);
-            if (!(
-                    (stm is SwitchStatement)
-                    || (stm is ForStatement)
-                    || (stm is IfStatement)
-                    || (stm is ForOfStatement)
-                    || (stm is ForInStatement)
-                    || (stm is TryCatchFinallyStatement)
-                    || (stm is WhileStatement)
-                ))
-            Scolon(output);
+            if (NeedColon(stm)) Scolon(output);
+        }
+        private bool NeedColon(IStatement stm)
+        {
+            return !(
+                        (stm is SwitchStatement)
+                        || (stm is ForStatement)
+                        || (stm is IfStatement)
+                        || (stm is ForOfStatement)
+                        || (stm is ForInStatement)
+                        || (stm is TryCatchFinallyStatement)
+                        || (stm is WhileStatement)
+                        || (stm is CodeBlock)
+                    );
         }
         protected override void CompileStatement(TextWriter output, CodeBlock node)
         {
@@ -36,17 +40,7 @@ namespace Stratageme15.Core.Compiler.DefaultNodeCompilers
             }
 
             var stm = node.Statements.First.Value;
-            if (node.Statements.Count == 1 &&
-                    !(
-                        (stm is SwitchStatement)
-                        || (stm is ForStatement)
-                        || (stm is IfStatement)
-                        || (stm is ForOfStatement)
-                        || (stm is ForInStatement)
-                        || (stm is TryCatchFinallyStatement)
-                        || (stm is WhileStatement)
-                    )
-                )
+            if (node.Statements.Count == 1 && NeedColon(stm))
             {
                 
                 output.Write("{ ");

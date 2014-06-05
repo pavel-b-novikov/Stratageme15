@@ -59,6 +59,7 @@ namespace Stratageme15.Core.JavascriptCodeDom
             {
                 symbol.Role = "Statement";
                 Add(symbol,addFirst);
+                symbol.Parent = this;
                 return;
             }
             if (Is<ParenthesisExpression>(symbol))
@@ -72,6 +73,7 @@ namespace Stratageme15.Core.JavascriptCodeDom
                     pe.InnerExpression.Parent = cstm;
                     cstm.Role = "Statement";
                     Add(cstm,addFirst);
+                    symbol.Parent = this;
                     return;
                 }
                 if (Is<IStatement>(pe.InnerExpression))
@@ -79,6 +81,7 @@ namespace Stratageme15.Core.JavascriptCodeDom
                     pe.InnerExpression.Parent = this;
                     pe.InnerExpression.Role = "Statement";
                     Add(pe.InnerExpression,addFirst);
+                    symbol.Parent = this;
                     return;
                 }
             }
@@ -89,6 +92,7 @@ namespace Stratageme15.Core.JavascriptCodeDom
                 var afterof = Statements.Count > 0 ? Statements.Last.Previous.Value : null;
                 Tuple<IStatement, IdentExpression> strangeTuple = new Tuple<IStatement, IdentExpression>(afterof, (IdentExpression)symbol);
                 StrangeIdents.Add(strangeTuple);
+                symbol.Parent = this;
                 return;
             }
 
@@ -101,6 +105,7 @@ namespace Stratageme15.Core.JavascriptCodeDom
                     us.Parent = this;
                     us.Role = "UseStrictDirective";
                     Add(us,addFirst);
+                    symbol.Parent = this;
                     return;
                 }
             }

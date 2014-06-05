@@ -20,15 +20,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
                 return;
             }
 
-            if (Is<CodeBlock>(symbol))
-            {
-                if (DefaultBlock == null)
-                {
-                    DefaultBlock = (CodeBlock)symbol;
-                    return;
-                }
-            }
-
+            if (CollectExact<DefaultClause, CodeBlock>(c => c.DefaultBlock, symbol)) return;
             base.CollectSymbol(symbol);
         }
 

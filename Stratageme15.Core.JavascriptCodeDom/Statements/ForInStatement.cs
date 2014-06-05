@@ -14,34 +14,12 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<ForInStatementVariableDeclaration>(symbol))
-            {
-                if (IteratorVariable==null)
-                {
-                    IteratorVariable = (ForInStatementVariableDeclaration)symbol;
-                    return;
-                }
-            }
-
-            if (Is<Expression>(symbol))
-            {
-                if (IterationExpression==null)
-                {
-                    IterationExpression = (Expression)symbol;
-                    return;
-                }
-            }
-
+            if (CollectExact<ForInStatement, ForInStatementVariableDeclaration>(c => c.IteratorVariable, symbol)) return;
+            if (CollectExact<ForInStatement, Expression>(c => c.IterationExpression, symbol)) return;
+           
             WrapIfStatement(ref symbol);
 
-            if (Is<CodeBlock>(symbol))
-            {
-                if (CodeBlock==null)
-                {
-                    CodeBlock = (CodeBlock) symbol;
-                    return;
-                }
-            }
+            if (CollectExact<ForInStatement, CodeBlock>(c => c.CodeBlock, symbol)) return;
             base.CollectSymbol(symbol);
         }
 

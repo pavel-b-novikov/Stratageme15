@@ -12,11 +12,13 @@ namespace Stratageme15.Reactors.Basic.Declarations
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             var typeName = context.JavascriptCurrentTypeName();
-            context.CurrentClassContext.PushFunction(node,typeName);
-            context.CurrentClassContext.CreateConstructor(context.CurrentClassContext.CurrentFunction.Function);
-            context.TranslatedNode.CollectSymbol(context.CurrentClassContext.Constructor);
 
+            // constructors always are translated firstly
+            context.CurrentClassContext.CreateConstructor(typeName);
+            context.TranslatedNode.CollectSymbol(context.CurrentClassContext.Constructor);
+            context.CurrentClassContext.PushFunction(node,context.CurrentClassContext.Constructor);
             context.PushTranslated(context.CurrentClassContext.CurrentFunction.Function);
+
         }
 
         public override void OnAfterChildTraversal(TranslationContext context, ConstructorDeclarationSyntax originalNode)
@@ -24,7 +26,7 @@ namespace Stratageme15.Reactors.Basic.Declarations
             base.OnAfterChildTraversal(context, originalNode);
             context.CurrentClassContext.PopFunction();
             context.PopTranslated();
-            
+
         }
     }
 }

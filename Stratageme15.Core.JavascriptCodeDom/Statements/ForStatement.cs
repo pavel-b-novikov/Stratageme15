@@ -20,15 +20,8 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<VariableDefStatement>(symbol))
-            {
-                if (InitializationStatement == null)
-                {
-                    InitializationStatement = (VariableDefStatement) symbol;
-                    return;
-                }
-            }
-
+            if (CollectExact<ForStatement, VariableDefStatement>(c => c.InitializationStatement, symbol)) return;
+          
             if (Is<Expression>(symbol))
             {
                 if (InitializationExpression == null && InitializationStatement == null)
@@ -61,17 +54,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
             }
 
             WrapIfStatement(ref symbol);
-
-            if (Is<CodeBlock>(symbol))
-            {
-                if (CodeBlock == null)
-                {
-                    CodeBlock = (CodeBlock) symbol;
-                    return;
-                }
-            }
-
-            
+            if (CollectExact<ForStatement, CodeBlock>(c => c.CodeBlock, symbol)) return;
             base.CollectSymbol(symbol);
         }
 

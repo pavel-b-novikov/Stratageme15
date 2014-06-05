@@ -13,26 +13,9 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<ParenthesisExpression>(symbol))
-            {
-                if (WhileCondition==null)
-                {
-                    WhileCondition = (ParenthesisExpression) symbol;
-                    return;
-                }
-            }
-            if (Is<CodeBlock>(symbol))
-            {
-                if (WhileBlock==null)
-                {
-                    WhileBlock = (CodeBlock) symbol;
-                    return;
-                }
-            }
-            if (Is<IStatement>(symbol))
-            {
-                symbol = symbol.WrapInCodeBlock();
-            }
+            WrapIfStatement(ref symbol);
+            if (CollectExact<WhileStatement,ParenthesisExpression>(c=>c.WhileCondition,symbol)) return;
+            if (CollectExact<WhileStatement, CodeBlock>(c => c.WhileBlock, symbol)) return;
 
             base.CollectSymbol(symbol);
         }

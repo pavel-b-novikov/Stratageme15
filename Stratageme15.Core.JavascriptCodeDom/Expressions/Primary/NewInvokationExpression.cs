@@ -32,13 +32,15 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
                 {
                     IdentifierChain = new FieldAccessExpression();
                     _root = IdentifierChain;
-                    IdentifierChain.Accessee = (Expression) symbol;
+                    IdentifierChain.Accessee = (Expression)symbol;
+                    symbol.Parent = this;
                     return;
                 }else
                 {
                     if (IdentifierChain.Member==null)
                     {
-                        IdentifierChain.Member = (IdentExpression) symbol;
+                        IdentifierChain.Member = (IdentExpression)symbol;
+                        symbol.Parent = this;
                         return;
                     }else
                     {
@@ -46,6 +48,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
                         nidc.Accessee = IdentifierChain;
                         nidc.Member = (IdentExpression) symbol;
                         IdentifierChain = nidc;
+                        symbol.Parent = this;
                         return;
                     }
                 }
@@ -58,11 +61,13 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
                     IdentifierChain = new FieldAccessExpression();
                     _root = IdentifierChain;
                     IdentifierChain.Accessee = (Expression)symbol;
+                    symbol.Parent = this;
                     return;
                 }
                 if (_root!=null && _root.Accessee==null)
                 {
-                    _root.Accessee = (Expression) symbol;
+                    _root.Accessee = (Expression)symbol;
+                    symbol.Parent = this;
                     return;
                 }
             }

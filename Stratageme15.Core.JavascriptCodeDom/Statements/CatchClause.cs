@@ -22,7 +22,8 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
             {
                 if (Identifier==null)
                 {
-                    Identifier = (IdentExpression) symbol;
+                    Identifier = (IdentExpression)symbol;
+                    symbol.Parent = this;
                     return;
                 }
             }
@@ -31,7 +32,8 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
             {
                 if (Handler==null)
                 {
-                    Handler = (CodeBlock) symbol;
+                    Handler = (CodeBlock)symbol;
+                    symbol.Parent = this;
                     return;
                 }
             }

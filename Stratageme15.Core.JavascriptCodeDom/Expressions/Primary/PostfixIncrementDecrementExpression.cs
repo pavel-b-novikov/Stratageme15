@@ -28,14 +28,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<Expression>(symbol))
-            {
-                if (Callee == null)
-                {
-                    Callee = (Expression)symbol;
-                    return;
-                }
-            }
+            if (CollectExact<PostfixIncrementDecrementExpression,Expression>(c=>c.Callee,symbol)) return;
             base.CollectSymbol(symbol);
         }
     }

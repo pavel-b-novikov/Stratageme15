@@ -532,7 +532,7 @@ public partial class Parser {
 			}
 			case 35: {
 				Get();
-				Clarify<PrefixIncrementDecrementExpression>(); UnaryOp(); 
+				Clarify<PrefixIncrementDecrementExpression>(); IncDec(); 
 				Unary();
 				break;
 			}
@@ -820,15 +820,12 @@ public partial class Parser {
 		}
 		case 20: {
 			Get();
-			Push<NewInvokationExpression>(); 
-			if (la.kind == 24) {
-				Get();
-				Terminal<ThisKeywordLiteralExpression>(); 
-				Expect(75);
-			}
+			Push<NewInvokationExpression>();  
+			Push<FieldAccessExpression>(); 
 			if (StartOf(8)) {
 				FieldAccessExpression();
 			}
+			Pop(); 
 			if (la.kind == 79) {
 				Get();
 				if (StartOf(2)) {
@@ -919,7 +916,8 @@ public partial class Parser {
 		KeywordOrIdent();
 		while (la.kind == 75) {
 			Get();
-			FieldAccessExpression();
+			Converge<FieldAccessExpression>(); 
+			KeywordOrIdent();
 		}
 		Pop(); 
 	}

@@ -4,6 +4,13 @@ namespace Stratageme15.Boudoir
 {
     public class VeryMagicTest
     {
+        private string _privateVariable = null;
+        
+        public VeryMagicTest(string variable)
+        {
+            _variable = variable;
+        }
+
         public string Variable
         {
             get { return _variable; }
@@ -29,8 +36,7 @@ namespace Stratageme15.Boudoir
                 Console.WriteLine("inside finally");
             }
         }
-        private string _privateVariable = null;
-        
+     
         public void OnButtonClick(object sender, EventArgs e)
         {
             bool b = false;
@@ -43,7 +49,7 @@ namespace Stratageme15.Boudoir
        // private float _privateFloatValue = new float(); todo type syntax identifiers
         private bool _privateBoolField;
         private bool _privateInitializedBooField = true;
-        private VeryMagicTest _veryTest = new VeryMagicTest();
+        private VeryMagicTest _veryTest = new VeryMagicTest(null);
         private string _variable;
 
         public void OnSomethingElse(object sender,EventArgs e)

@@ -18,24 +18,19 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
                 if (Accessee==null)
                 {
                     Accessee = (Expression) symbol;
+                    symbol.Parent = this;
                     return;
                 }
                 if (Member == null)
                 {
-                    Member = (IdentExpression) symbol;
+                    Member = (IdentExpression)symbol;
+                    symbol.Parent = this;
                     return;
                 }
             }
 
-            if (Is<Expression>(symbol))
-            {
-                if (Accessee == null)
-                {
-                    Accessee = (Expression) symbol;
-                    return;
-                }
-            }
-
+            if (CollectExact<FieldAccessExpression,Expression>(c=>c.Accessee,symbol)) return;
+            
             base.CollectSymbol(symbol);
         }
 

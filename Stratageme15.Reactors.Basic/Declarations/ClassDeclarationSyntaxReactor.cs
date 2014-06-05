@@ -31,7 +31,7 @@ namespace Stratageme15.Reactors.Basic.Declarations
 
             if (!node.Members.Any(c=>c is ConstructorDeclarationSyntax))
             {
-                context.CurrentClassContext.CreateConstructor(new FunctionDefExpression(){Name = type.JavascriptTypeName().Ident()});
+                context.CurrentClassContext.CreateConstructor(type.JavascriptTypeName());
                 context.TranslatedNode.CollectSymbol(context.CurrentClassContext.Constructor);
             }
         }

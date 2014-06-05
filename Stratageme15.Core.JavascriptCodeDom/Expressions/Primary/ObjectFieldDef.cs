@@ -14,18 +14,13 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
             {
                 if (Key==null)
                 {
-                    Key = (IDictionaryKey) symbol;
+                    Key = (IDictionaryKey)symbol;
+                    symbol.Parent = this;
                     return;
                 }
             }
-            if (Is<Expression>(symbol))
-            {
-                if (Value == null)
-                {
-                    Value = (Expression)symbol;
-                    return;
-                }
-            }
+
+            if (CollectExact<ObjectFieldDef,Expression>(c=>c.Value,symbol)) return;
             base.CollectSymbol(symbol);
         }
 

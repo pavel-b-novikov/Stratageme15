@@ -11,6 +11,14 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
     {
         private readonly Stack<CodeBlock> _blocksStack = new Stack<CodeBlock>();
 
+        public FunctionTranslationContext(SyntaxNode originalNode, FunctionDefExpression function)
+        {
+            OriginalDeclaringNode = originalNode;
+            LocalVariables = new VariablesContext();
+            Function = function;
+            Function.IsScolonNeeded = true;
+        }
+
         public FunctionTranslationContext(SyntaxNode originalNode,string functionName = null)
         {
             OriginalDeclaringNode = originalNode;
@@ -38,8 +46,15 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
             if (Function.Code==null)
             {
                 Function.Code = blk;
+                _blocksStack.Push(blk);
+            }else
+            {
+                if (_blocksStack.Count==0)
+                {
+                    _blocksStack.Push(Function.Code);
+                }
             }
-            _blocksStack.Push(new CodeBlock());
+            
             LocalVariables.PushContext();
         }
 
@@ -52,7 +67,11 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
             }
             else
             {
-                Function.Code = blk;
+                if (Function.Code==null)
+                {
+                    Function.Code = blk;    
+                }
+                
             }
             LocalVariables.PopContext();
         }

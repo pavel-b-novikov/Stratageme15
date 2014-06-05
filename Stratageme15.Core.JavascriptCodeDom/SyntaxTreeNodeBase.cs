@@ -48,6 +48,7 @@ namespace Stratageme15.Core.JavascriptCodeDom
                     symbol.Role = pi.Name;
                     TChild tc = (TChild) symbol;
                     pi.SetValue(this,tc);
+                    symbol.Parent = this;
                     return true;
                 }
             }
@@ -114,6 +115,7 @@ namespace Stratageme15.Core.JavascriptCodeDom
                 {
                     props[0].SetValue(this, symbol);
                     symbol.Role = props[0].Name;
+                    symbol.Parent = this;
                     return true;
                 }
             }

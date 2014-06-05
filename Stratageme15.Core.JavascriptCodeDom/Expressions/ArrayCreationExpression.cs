@@ -17,7 +17,8 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions
             if (symbol is Expression)
             {
                 symbol.Role = "ArrayElement";
-                ArrayElements.Add((Expression) symbol);
+                ArrayElements.Add((Expression)symbol);
+                symbol.Parent = this;
                 return;
             }
             base.CollectSymbol(symbol);

@@ -9,15 +9,8 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
         public Expression ThrowExpression { get; set; }
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<Expression>(symbol))
-            {
-                if (ThrowExpression==null)
-                {
-                    ThrowExpression = (Expression) symbol;
-                    return;
-                }
-            }
-
+            if (CollectExact<ThrowStatement, Expression>(c=>c.ThrowExpression,symbol)) return;
+            
             if (Is<CallStatement>(symbol))
             {
                 if (ThrowExpression == null)

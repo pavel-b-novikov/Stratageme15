@@ -11,14 +11,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
         public IndrementDecrementOperator Operator { get; set; }
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<Expression>(symbol))
-            {
-                if (Callee==null)
-                {
-                    Callee = (Expression) symbol;
-                    return;
-                }
-            }
+            if (CollectExact<PrefixIncrementDecrementExpression, Expression>(c => c.Callee, symbol)) return;
             base.CollectSymbol(symbol);
         }
 

@@ -8,11 +8,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
         public IdentExpression BreakLabel { get; set; }
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<IdentExpression>(symbol))
-            {
-                BreakLabel = (IdentExpression) symbol;
-                return;
-            }
+            if (CollectExact<BreakStatement, IdentExpression>(c => c.BreakLabel, symbol)) return;
             base.CollectSymbol(symbol);
 
         }

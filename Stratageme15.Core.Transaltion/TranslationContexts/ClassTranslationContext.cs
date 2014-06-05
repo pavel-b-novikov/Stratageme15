@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Roslyn.Compilers.CSharp;
 using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
+using Stratageme15.Core.Transaltion.Builders;
 
 namespace Stratageme15.Core.Transaltion.TranslationContexts
 {
@@ -44,12 +45,15 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
         /// </summary>
         public CodeBlock FieldsDefinitionBlock { get; private set; }
 
-        public void CreateConstructor(FunctionDefExpression function)
+        public void CreateConstructor(string typeName)
         {
-            if (function == null) throw new ArgumentException("function");
-            Constructor = function;
+            var fn = new FunctionDefExpression() {Name = typeName.Ident()};
+            var cf = new CodeBlock();
+            fn.CollectSymbol(cf);
             FieldsDefinitionBlock = new CodeBlock();
-            function.CollectSymbol(FieldsDefinitionBlock);
+            cf.CollectSymbol(FieldsDefinitionBlock);
+            FieldsDefinitionBlock.Parent = cf;
+            Constructor = fn;
         }
 
         private bool _outOfContext = false;
@@ -76,6 +80,11 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
         public void PushFunction(SyntaxNode originalNode,string name = null)
         {
             _functionsStack.Push(new FunctionTranslationContext(originalNode,name));
+        }
+
+        public void PushFunction(SyntaxNode originalNode,FunctionDefExpression existing)
+        {
+            _functionsStack.Push(new FunctionTranslationContext(originalNode,existing));
         }
 
         public void PopFunction()

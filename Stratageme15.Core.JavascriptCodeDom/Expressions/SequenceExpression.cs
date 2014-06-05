@@ -18,7 +18,8 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions
             if (Is<Expression>(symbol))
             {
                 symbol.Role = "SequencedStatement";
-                Sequence.Add((Expression) symbol);
+                Sequence.Add((Expression)symbol);
+                symbol.Parent = this;
                 return;
             }
             if (Is<CallStatement>(symbol))
@@ -27,6 +28,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions
                 cs.CallExpression.Parent = this;
                 cs.CallExpression.Role = "SequencedStatement";
                 Sequence.Add(cs.CallExpression);
+                symbol.Parent = this;
                 return;
             }
             base.CollectSymbol(symbol);

@@ -8,15 +8,8 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
             WrapIfStatement(ref symbol);
-
-            if (Is<CodeBlock>(symbol))
-            {
-                if (FinallyBlock == null)
-                {
-                    FinallyBlock = (CodeBlock)symbol;
-                    return;
-                }
-            }
+            if (CollectExact<FinallyClause, CodeBlock>(c => c.FinallyBlock, symbol)) return;
+            
             base.CollectSymbol(symbol);
         }
 
