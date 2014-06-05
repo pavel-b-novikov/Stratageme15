@@ -6,7 +6,12 @@ function Stratageme15Boudoir$VeryMagicTest() {
         this._privateBoolField = false;
         this._privateInitializedBooField = true;
         this._veryTest = new Stratageme15Boudoir$VeryMagicTest();
+        this._variable = null;
     }
+
+Stratageme15Boudoir$VeryMagicTest.prototype.setVariable = function (value) { _variable = value; };
+
+Stratageme15Boudoir$VeryMagicTest.prototype.getVariable = function () { return _variable; };
 
 Stratageme15Boudoir$VeryMagicTest.prototype.ReturnSomeString = function () { return Empty; };
 

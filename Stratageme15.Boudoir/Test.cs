@@ -4,8 +4,12 @@ namespace Stratageme15.Boudoir
 {
     public class VeryMagicTest
     {
-        public string Variable { get; set; }
-       
+        public string Variable
+        {
+            get { return _variable; }
+            set { _variable = value; }
+        }
+
         private string ReturnSomeString()
         {
             return string.Empty;
@@ -40,6 +44,8 @@ namespace Stratageme15.Boudoir
         private bool _privateBoolField;
         private bool _privateInitializedBooField = true;
         private VeryMagicTest _veryTest = new VeryMagicTest();
+        private string _variable;
+
         public void OnSomethingElse(object sender,EventArgs e)
         {
             double doubleVariable;

@@ -140,9 +140,9 @@ namespace Stratageme15.Boudoir
         public void RoslynConstruction()
         {
             var allPrimitive = typeof (object).Assembly.GetTypes().Where(c => c.IsPrimitive);
-            var tree = SyntaxTree.ParseText("public void Test() { try { 1/0; } catch(Exception) { i++; }");
+            var tree = SyntaxTree.ParseText("class C { public string Property {get;set;} }");
             var root = tree.GetRoot();
-            TraverseRoot(root, typeof(CatchDeclarationSyntax));
+            TraverseRoot(root, typeof(AccessorDeclarationSyntax));
         }
 
 

@@ -2,6 +2,7 @@
 using Stratageme15.Core.Transaltion.Reactors;
 using Stratageme15.Reactors.Basic.Declarations;
 using Stratageme15.Reactors.Basic.Declarations.Field;
+using Stratageme15.Reactors.Basic.Declarations.Property;
 using Stratageme15.Reactors.Basic.Expressions;
 using Stratageme15.Reactors.Basic.Statements;
 using Stratageme15.Reactors.Basic.Statements.For;
@@ -28,6 +29,7 @@ namespace Stratageme15.Reactors.Basic
                 RegisterReactor<FieldDeclarationSyntaxReactor, FieldDeclarationSyntax>();
                 RegisterReactor<FieldVariableDeclarationSyntaxReactor, VariableDeclarationSyntax>();
                 #endregion
+                RegisterReactor<PropertyDeclarationSyntaxReactor, PropertyDeclarationSyntax>();
             #endregion
 
                 #region Expressions

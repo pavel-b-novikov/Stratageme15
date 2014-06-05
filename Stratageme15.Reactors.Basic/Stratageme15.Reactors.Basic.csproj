@@ -55,6 +55,7 @@
     <Compile Include="Declarations\MethodDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\NamespaceDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\ParameterListSyntaxReactor.cs" />
+    <Compile Include="Declarations\Property\PropertyDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\StatementBlockSyntaxReactor.cs" />
     <Compile Include="Declarations\UsingDirectiveSyntaxReactor.cs" />
     <Compile Include="Expressions\AnonymousObjectCreationExpressionSyntaxReactor.cs" />
