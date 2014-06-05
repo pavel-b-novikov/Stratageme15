@@ -11,7 +11,7 @@ The main goal is extendable design allowing to create translation/compilation mo
 Approx. milestone:
 ============
 
-- Properties and fields
+~~- Properties and fields~~
 
 - Easy Extensions Pack
 
