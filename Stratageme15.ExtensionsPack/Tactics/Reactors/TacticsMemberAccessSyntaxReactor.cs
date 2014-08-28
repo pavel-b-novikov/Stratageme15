@@ -29,6 +29,7 @@ namespace Stratageme15.ExtensionsPack.Tactics.Reactors
                 {
                     case MemberTypes.Property:
                         tc.ImperativeInstancePropertyAccess(node, context);
+                        break;
                 }    
             }
             
