@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 
@@ -10,9 +6,10 @@ namespace Stratageme15.Core.Transaltion.Builders.Function
 {
     public class FunctionDefExpressionBuilder : ISyntaxBuilder<FunctionDefExpression>
     {
-        private string _fname;
-        private LinkedList<string> _argumentNames;
+        private readonly LinkedList<string> _argumentNames;
+        private readonly string _fname;
         private CodeBlock _code;
+
         private FunctionDefExpressionBuilder(string fname)
         {
             _code = null;
@@ -22,8 +19,27 @@ namespace Stratageme15.Core.Transaltion.Builders.Function
 
         private FunctionDefExpressionBuilder()
         {
-            
         }
+
+        #region ISyntaxBuilder<FunctionDefExpression> Members
+
+        public FunctionDefExpression Build()
+        {
+            var fde = new FunctionDefExpression();
+            if (_fname != null) fde.Name = _fname.Ident();
+            fde.Parameters = _argumentNames.FormalParameters();
+            if (_code == null)
+            {
+                fde.Code = new CodeBlock();
+            }
+            else
+            {
+                fde.Code = _code;
+            }
+            return fde;
+        }
+
+        #endregion
 
         public static FunctionDefExpressionBuilder Function()
         {
@@ -45,22 +61,6 @@ namespace Stratageme15.Core.Transaltion.Builders.Function
         {
             _code = code;
             return this;
-        }
-
-        public FunctionDefExpression Build()
-        {
-            FunctionDefExpression fde = new FunctionDefExpression();
-            if (_fname!=null) fde.Name = _fname.Ident();
-            fde.Parameters = _argumentNames.FormalParameters();
-            if (_code == null)
-            {
-                fde.Code = new CodeBlock();
-            }
-            else
-            {
-                fde.Code = _code;
-            }
-            return fde;
         }
     }
 }

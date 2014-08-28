@@ -16,5 +16,10 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
         {
             if (InnerExpression != null) yield return InnerExpression;
         }
+
+        public override string ToString()
+        {
+            return "(...)";
+        }
     }
 }

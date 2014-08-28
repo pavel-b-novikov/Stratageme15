@@ -42,32 +42,29 @@
     <Compile Include="NodeInfo.cs" />
     <Compile Include="NodeInfoTree.cs" />
     <Compile Include="NodeTreeCompiler.cs" />
-    <Compile Include="ParseringException.cs" />
-    <Compile Include="ParseringIssueDescription.cs" />
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="ParserExtensions.cs" />
     <Compile Include="Parsing\Scanner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="Parsing\Frames\Parser.frame" />
+    <None Include="Parsing\Frames\Scanner.frame" />
     <None Include="Parsing\generate.bat" />
-    <None Include="Parsing\JavaScript.atg" />
-    <None Include="Parsing\Parser.frame" />
-    <None Include="Parsing\Scanner.frame" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Parsing\Coco.exe" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stratageme15.Core.JavascriptCodeDom\Stratageme15.Core.JavascriptCodeDom.csproj">
       <Project>{826d2cc0-01ff-46eb-94f0-92cee9679dbe}</Project>
       <Name>Stratageme15.Core.JavascriptCodeDom</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Stratageme15.Core.Tools.ParsingErrors\Stratageme15.Core.Tools.ParsingErrors.csproj">
+      <Project>{cf7bb1c0-2614-4837-9f79-df269de84d84}</Project>
+      <Name>Stratageme15.Core.Tools.ParsingErrors</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>$(ProjectDir)\Parsing\coco.exe $(ProjectDir)\Parsing\JavaScript.atg -namespace "$(ProjectName)"</PreBuildEvent>
+    <PreBuildEvent>$(ProjectDir)Parsing\generate.bat</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

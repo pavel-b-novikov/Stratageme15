@@ -4,11 +4,6 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
 {
     public class VariableDescription
     {
-        public Type VariableType { get; internal set;}
-        public string VariableName { get; private set; }
-        public bool IsFunctionParameter { get; private set; }
-        internal int StackLevel { get; private set; }
-
         internal VariableDescription(Type variableType, string variableName, bool isFunctionParameter)
         {
             VariableType = variableType;
@@ -24,5 +19,10 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
             IsFunctionParameter = isFunctionParameter;
             StackLevel = stackLevel;
         }
+
+        public Type VariableType { get; internal set; }
+        public string VariableName { get; private set; }
+        public bool IsFunctionParameter { get; private set; }
+        internal int StackLevel { get; private set; }
     }
 }

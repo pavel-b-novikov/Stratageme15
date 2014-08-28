@@ -1,5 +1,8 @@
+using System;
 using System.Linq;
-using Roslyn.Compilers.CSharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.Transaltion;
 using Stratageme15.Core.Transaltion.Reactors;
 using Stratageme15.Core.Transaltion.TranslationContexts;
@@ -8,60 +11,73 @@ namespace Stratageme15.Reactors.Basic.Declarations.Property
 {
     public class PropertyDeclarationSyntaxReactor : ReactorBase<PropertyDeclarationSyntax>
     {
-        protected override void HandleNode(PropertyDeclarationSyntax node, TranslationContext context, TranslationResult result)
+        protected override void HandleNode(PropertyDeclarationSyntax node, TranslationContext context,
+                                           TranslationResult result)
         {
+            if (node.Modifiers.Any(SyntaxKind.StaticKeyword))
+                throw new Exception("Static properties are not supported");
             result.Strategy = TranslationStrategy.TraverseChildren;
             result.PrepareForManualPush(context);
             bool isAuto = node.AccessorList.Accessors.All(c => c.Body == null);
-            var backingAccessor =Syntax.MemberAccessExpression(
-                SyntaxKind.MemberAccessExpression,
-                Syntax.ThisExpression(),
-                Syntax.IdentifierName(
+            MemberAccessExpressionSyntax backingAccessor = SyntaxFactory.MemberAccessExpression(
+                SyntaxKind.SimpleMemberAccessExpression,
+                SyntaxFactory.ThisExpression(),
+                SyntaxFactory.IdentifierName(
                     string.Format("_{0}", node.Identifier.ValueText)));
-            foreach (var accessorDeclarationSyntax in node.AccessorList.Accessors)
+            foreach (AccessorDeclarationSyntax accessorDeclarationSyntax in node.AccessorList.Accessors)
             {
-                string accPrefix = accessorDeclarationSyntax.Kind == SyntaxKind.GetAccessorDeclaration ? "get" : "set";
+                string accPrefix = accessorDeclarationSyntax.CSharpKind() == SyntaxKind.GetAccessorDeclaration
+                                       ? "get"
+                                       : "set";
                 string accName = string.Format("{0}{1}", accPrefix, node.Identifier.ValueText);
                 MethodDeclarationSyntax method = null;
-                if (accessorDeclarationSyntax.Kind == SyntaxKind.SetAccessorDeclaration)
+                if (accessorDeclarationSyntax.CSharpKind() == SyntaxKind.SetAccessorDeclaration)
                 {
-                    method = Syntax.MethodDeclaration(Syntax.PredefinedType(
-                            Syntax.Token(
-                                SyntaxKind.VoidKeyword)), accName)
+                    method = SyntaxFactory.MethodDeclaration(SyntaxFactory.PredefinedType(
+                        SyntaxFactory.Token(
+                            SyntaxKind.VoidKeyword)), accName)
                         .WithModifiers(node.Modifiers)
-                        .WithParameterList(Syntax.ParameterList(
-                        Syntax.SeparatedList<ParameterSyntax>(Syntax.Parameter(Syntax.Identifier("value"))
-                                                                  .WithType(node.Type))));
+                        .WithParameterList(SyntaxFactory.ParameterList(
+                            SyntaxFactory.SeparatedList(new[]
+                                                            {
+                                                                SyntaxFactory.Parameter(SyntaxFactory.Identifier("value"))
+                                                                    .WithType(node.Type)
+                                                            })));
                 }
                 else
                 {
-                    method = Syntax.MethodDeclaration(node.Type, accName).
+                    method = SyntaxFactory.MethodDeclaration(node.Type, accName).
                         WithModifiers(
                             node.Modifiers);
                 }
-               
+
                 if (!isAuto)
                 {
                     method = method.WithBody(accessorDeclarationSyntax.Body);
-                }else
+                }
+                else
                 {
-                    if (accessorDeclarationSyntax.Kind == SyntaxKind.GetAccessorDeclaration)
+                    if (accessorDeclarationSyntax.CSharpKind() == SyntaxKind.GetAccessorDeclaration)
                     {
                         method = method.WithBody(
-                            Syntax.Block(
-                                Syntax.List<StatementSyntax>(
-                                    Syntax.ReturnStatement(backingAccessor))));
-                    }else
+                            SyntaxFactory.Block(
+                                SyntaxFactory.List<StatementSyntax>(
+                                    new[] {SyntaxFactory.ReturnStatement(backingAccessor)})));
+                    }
+                    else
                     {
                         method = method.WithBody(
-                            Syntax.Block(
-                                Syntax.List<StatementSyntax>(
-                                    Syntax.ExpressionStatement(
-                                        Syntax.BinaryExpression(
-                                            SyntaxKind.AssignExpression,
-                                            backingAccessor,
-                                            Syntax.IdentifierName(
-                                                @"value"))))));
+                            SyntaxFactory.Block(
+                                SyntaxFactory.List<StatementSyntax>(new[]
+                                                                        {
+                                                                            SyntaxFactory.ExpressionStatement(
+                                                                                SyntaxFactory.BinaryExpression(
+                                                                                    SyntaxKind.
+                                                                                        SimpleAssignmentExpression,
+                                                                                    backingAccessor,
+                                                                                    SyntaxFactory.IdentifierName(
+                                                                                        @"value")))
+                                                                        })));
                     }
                 }
 
@@ -71,15 +87,22 @@ namespace Stratageme15.Reactors.Basic.Declarations.Property
             if (isAuto)
             {
                 //backing field
-                var bf = Syntax.FieldDeclaration(
-                    Syntax.VariableDeclaration(node.Type)
-                        .WithVariables(Syntax.SeparatedList(Syntax.VariableDeclarator(Syntax.Identifier(string.Format("_{0}", node.Identifier.ValueText))))))
-                        .WithModifiers(Syntax.TokenList(Syntax.Token(SyntaxKind.PrivateKeyword)));
+                FieldDeclarationSyntax bf = SyntaxFactory.FieldDeclaration(
+                    SyntaxFactory.VariableDeclaration(node.Type)
+                        .WithVariables(
+                            SyntaxFactory.SeparatedList(new[]
+                                                            {
+                                                                SyntaxFactory.VariableDeclarator(
+                                                                    SyntaxFactory.Identifier(string.Format("_{0}",
+                                                                                                           node.
+                                                                                                               Identifier
+                                                                                                               .
+                                                                                                               ValueText)))
+                                                            })))
+                    .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PrivateKeyword)));
 
                 context.TranslationStack.Push(bf);
             }
-
-
         }
     }
 }

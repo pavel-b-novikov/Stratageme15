@@ -1,1 +1,1 @@
-coco JavaScript.atg -namespace "Stratageme15.Core.Tools.JavascriptParser"
+%~dp0\..\..\CocoR\coco.exe %~dp0\..\..\CocoR\JavaScript.atg -o %~dp0 -frames %~dp0\Frames -namespace "Stratageme15.Core.Tools.JavascriptParser"

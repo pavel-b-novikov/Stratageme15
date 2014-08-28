@@ -1,5 +1,5 @@
-using System;
-using Roslyn.Compilers.CSharp;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Transaltion;
 using Stratageme15.Core.Transaltion.Reactors;
@@ -12,13 +12,13 @@ namespace Stratageme15.Reactors.Basic.Statements.If
         protected override void HandleNode(IfStatementSyntax node, TranslationContext context, TranslationResult result)
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
-            node = node.WithCondition(Syntax.ParenthesizedExpression(node.Condition));
+            node = node.WithCondition(SyntaxFactory.ParenthesizedExpression(node.Condition));
             result.PrepareForManualPush(context);
-            IfStatement fs = new IfStatement();
+            var fs = new IfStatement();
             context.TranslatedNode.CollectSymbol(fs);
             context.PushTranslated(fs);
-            
-            if (node.Else!=null)
+
+            if (node.Else != null)
             {
                 context.TranslationStack.Push(node.Else);
             }
@@ -31,6 +31,5 @@ namespace Stratageme15.Reactors.Basic.Statements.If
             base.OnAfterChildTraversal(context, originalNode);
             context.PopTranslated();
         }
-
     }
 }

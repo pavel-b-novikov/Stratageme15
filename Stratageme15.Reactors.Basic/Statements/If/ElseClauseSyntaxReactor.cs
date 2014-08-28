@@ -1,5 +1,5 @@
-﻿using System;
-using Roslyn.Compilers.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.Transaltion;
 using Stratageme15.Core.Transaltion.Reactors;
 using Stratageme15.Core.Transaltion.TranslationContexts;
@@ -10,17 +10,17 @@ namespace Stratageme15.Reactors.Basic.Statements.If
     {
         protected override void HandleNode(ElseClauseSyntax node, TranslationContext context, TranslationResult result)
         {
-            
             if (node.Statement is IfStatementSyntax) // handle elseifs
             {
                 result.Strategy = TranslationStrategy.DontTraverseChildren;
                 result.PrepareForManualPush(context);
-                var ifst = (IfStatementSyntax)node.Statement;
-                ifst = ifst.WithCondition(Syntax.ParenthesizedExpression(ifst.Condition));
-                if (ifst.Else!=null) context.TranslationStack.Push(ifst.Else);
+                var ifst = (IfStatementSyntax) node.Statement;
+                ifst = ifst.WithCondition(SyntaxFactory.ParenthesizedExpression(ifst.Condition));
+                if (ifst.Else != null) context.TranslationStack.Push(ifst.Else);
                 context.TranslationStack.Push(ifst.Statement);
                 context.TranslationStack.Push(ifst.Condition);
-            }else
+            }
+            else
             {
                 result.Strategy = TranslationStrategy.DontTraverseChildren;
                 result.PrepareForManualPush(context);

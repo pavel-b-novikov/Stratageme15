@@ -30,7 +30,7 @@ namespace Stratageme15.Core.JavascriptCodeDom
 
         public override string ToString()
         {
-            return string.Join(", ", Arguments.Select(c => c.ToString()));
+            return string.Format("({0})",string.Join(", ", Arguments.Select(c => c.ToString())));
         }
     }
 }

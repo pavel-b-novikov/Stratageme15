@@ -1,5 +1,4 @@
-﻿using System;
-using Roslyn.Compilers.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Transaltion;
 using Stratageme15.Core.Transaltion.Reactors;
@@ -9,10 +8,11 @@ namespace Stratageme15.Reactors.Basic.Statements.Try
 {
     public class FinallyClauseSyntaxReactor : ReactorBase<FinallyClauseSyntax>
     {
-        protected override void HandleNode(FinallyClauseSyntax node, TranslationContext context, TranslationResult result)
+        protected override void HandleNode(FinallyClauseSyntax node, TranslationContext context,
+                                           TranslationResult result)
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
-            FinallyClause fb = new FinallyClause();
+            var fb = new FinallyClause();
             context.TranslatedNode.CollectSymbol(fb);
             context.PushTranslated(fb);
         }

@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Literals;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
+using Stratageme15.Core.Tools.ParsingErrors;
 
 namespace Stratageme15.Core.Tools.JavascriptParser.Tests
 {
@@ -31,19 +32,25 @@ namespace Stratageme15.Core.Tools.JavascriptParser.Tests
         protected JsProgram ParseFile(string fileName)
         {
             FileInfo fi = new FileInfo(fileName);
+#if DEBUG
             using (var logFs = new FileStream(string.Format(@"J:\TestLogs\parseDebug_{0}.txt", fi.Name), FileMode.OpenOrCreate, FileAccess.Write))
             {
                 using (TextWriter tw = new StreamWriter(logFs))
                 {
+
+
                     NodeInfoTree._debugWriter = tw;
-                    using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-                    {
-                        return ParseCore(fs,fi.Name);
-                    }
+#endif
+            using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            {
+                return ParseCore(fs, fi.Name);
+            }
+#if DEBUG
 
                 }
 
             }
+#endif
         }
 
         protected JsProgram Parse(string s)
@@ -57,7 +64,7 @@ namespace Stratageme15.Core.Tools.JavascriptParser.Tests
 
         }
 
-        private JsProgram ParseCore(Stream s,string fileName=null)
+        private JsProgram ParseCore(Stream s, string fileName = null)
         {
             if (string.IsNullOrEmpty(fileName)) fileName = TestContext.TestName;
             var scanner = new Scanner(s);
@@ -68,14 +75,16 @@ namespace Stratageme15.Core.Tools.JavascriptParser.Tests
             }
             catch (ParseringException e)
             {
-               
+
                 _parseringDebugSw.Flush();
                 using (var fse = new FileStream(string.Format(@"J:\TestLogs\ERROR_{0}.txt", fileName), FileMode.OpenOrCreate, FileAccess.Write))
                 {
                     using (TextWriter tw = new StreamWriter(fse))
                     {
+#if DEBUG
                         NodeInfoTree._debugWriter = tw;
-                        e.TreePart.DebugPrint();
+                         ((NodeInfoTree)e.TreePart).DebugPrint();
+#endif
                         tw.WriteLine(e.Message);
                         tw.Flush();
                     }
@@ -93,7 +102,9 @@ namespace Stratageme15.Core.Tools.JavascriptParser.Tests
             _fs = new FileStream(string.Format(@"J:\TestLogs\parseDebug_{0}.txt", TestContext.TestName), FileMode.OpenOrCreate, FileAccess.Write);
 
             _parseringDebugSw = new StreamWriter(_fs);
+#if DEBUG
             NodeInfoTree._debugWriter = _parseringDebugSw;
+#endif
         }
 
         protected void TestRegex(string regex)

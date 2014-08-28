@@ -29,5 +29,10 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
             if (Key != null) yield return (SyntaxTreeNodeBase) Key;
             if (Value != null) yield return Value;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0} : {1}", Key.ToString(), Value);
+        }
     }
 }

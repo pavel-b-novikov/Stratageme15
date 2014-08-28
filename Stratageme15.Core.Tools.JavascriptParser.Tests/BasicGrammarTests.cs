@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Binary;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
+using Stratageme15.Core.Tools.ParsingErrors;
 
 namespace Stratageme15.Core.Tools.JavascriptParser.Tests
 {
@@ -15,7 +16,7 @@ namespace Stratageme15.Core.Tools.JavascriptParser.Tests
             try
             {
                 var result = Parse(string.Empty);
-            }catch(ParseringException pe)
+            }catch(ParseringException)
             {
                 return;
             }
@@ -86,18 +87,22 @@ namespace Stratageme15.Core.Tools.JavascriptParser.Tests
         [TestMethod]
         public void ForInForOf()
         {
+#pragma warning disable 168
             const string testCase1 =
                 @"for (var d of a) { d() };";
             var program = Parse(testCase1);
             const string testCase2 =
                 @"for (let d of a) { d() };";
             program = Parse(testCase2);
+
             const string testCase3 =
+
                 @"for (var d in a) { d() };";
-            program = Parse(testCase1);
+            program = Parse(testCase3);
             const string testCase4 =
                 @"for (let d in a) { d() };";
-            program = Parse(testCase2);
+            program = Parse(testCase4);
+#pragma warning restore 168
         }
 
         [TestMethod]

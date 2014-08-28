@@ -7,8 +7,12 @@ namespace Stratageme15.Core.Compiler.DefaultNodeCompilers.Statements
     {
         protected override void CompileStatement(TextWriter output, ReturnStatement node)
         {
-            output.Write("return ");
-            CompileChild(output,node.ReturnExpression);
+            output.Write("return");
+            if (node.ReturnExpression!=null)
+            {
+                output.Write(" ");
+                CompileChild(output,node.ReturnExpression);
+            }
         }
     }
 }

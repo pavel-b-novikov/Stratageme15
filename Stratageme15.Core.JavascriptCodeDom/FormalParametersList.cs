@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 
 namespace Stratageme15.Core.JavascriptCodeDom
@@ -30,6 +31,11 @@ namespace Stratageme15.Core.JavascriptCodeDom
         protected override IEnumerable<SyntaxTreeNodeBase> EnumerateChildNodes()
         {
             return ArgumentNames;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("({0})", string.Join(", ", ArgumentNames.Select(c => c.ToString())));
         }
     }
 }

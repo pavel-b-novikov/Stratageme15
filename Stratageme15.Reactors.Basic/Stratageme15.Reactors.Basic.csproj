@@ -30,14 +30,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Roslyn.Compilers">
-      <HintPath>..\packages\Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>..\lib\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
-    <Reference Include="Roslyn.Compilers.CSharp">
-      <HintPath>..\packages\Roslyn.Compilers.CSharp.1.2.20906.2\lib\net45\Roslyn.Compilers.CSharp.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>..\lib\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\lib\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Reflection.Metadata">
+      <HintPath>..\lib\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,6 +64,9 @@
     <Compile Include="Declarations\Property\PropertyDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\StatementBlockSyntaxReactor.cs" />
     <Compile Include="Declarations\UsingDirectiveSyntaxReactor.cs" />
+    <Compile Include="Delegation\AnonymousMethodExpressionSyntaxReactor.cs" />
+    <Compile Include="Delegation\ParenthesizedLambdaExpressionSyntaxReactor.cs" />
+    <Compile Include="Delegation\SimpleLambdaExpressionSyntaxReactor.cs" />
     <Compile Include="Expressions\AnonymousObjectCreationExpressionSyntaxReactor.cs" />
     <Compile Include="Expressions\AnonymousObjectMemberDeclaratorSyntaxReactor.cs" />
     <Compile Include="Expressions\ArrayCreationExpressionSyntaxReactor.cs" />
@@ -78,6 +87,7 @@
     <Compile Include="Expressions\ThisExpressionSyntaxReactor.cs" />
     <Compile Include="Extensions\SyntaxKindExtensions.cs" />
     <Compile Include="Extensions\TranslationContextExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Statements\BreakStatementSyntaxReactor.cs" />
     <Compile Include="Statements\ContinueStatementSyntaxReactor.cs" />
@@ -111,12 +121,7 @@
       <Name>Stratageme15.Core.Transaltion</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ClassMembers\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

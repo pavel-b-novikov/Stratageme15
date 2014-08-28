@@ -53,7 +53,16 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
                     }
                 }
             }
-
+            if (Is<FieldAccessExpression>(symbol))
+            {
+                if (IdentifierChain == null)
+                {
+                    symbol.Role = "New Target";
+                    IdentifierChain = (FieldAccessExpression) symbol;
+                    symbol.Parent = this;
+                    return;
+                }
+            }
             if (Is<Expression>(symbol))
             {
                 if (IdentifierChain == null)

@@ -58,5 +58,10 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
         {
             return ObjectFields;
         }
+
+        public override string ToString()
+        {
+            return ObjectFields.Count==0?"{}": "{ object }";
+        }
     }
 }

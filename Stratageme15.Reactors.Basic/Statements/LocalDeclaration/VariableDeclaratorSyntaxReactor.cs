@@ -1,5 +1,5 @@
-﻿using System;
-using Roslyn.Compilers.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Transaltion;
 using Stratageme15.Core.Transaltion.Builders;
@@ -10,19 +10,21 @@ namespace Stratageme15.Reactors.Basic.Statements.LocalDeclaration
 {
     public class VariableDeclaratorSyntaxReactor : ReactorBase<VariableDeclaratorSyntax>
     {
-        protected override void HandleNode(VariableDeclaratorSyntax node, TranslationContext context, TranslationResult result)
+        protected override void HandleNode(VariableDeclaratorSyntax node, TranslationContext context,
+                                           TranslationResult result)
         {
-            var lvc = context.CurrentClassContext.CurrentFunction.LocalVariables;
+            VariablesContext lvc = context.CurrentClassContext.CurrentFunction.LocalVariables;
             lvc.DefineVariable(node.Identifier.ValueText);
 
-            if (node.Initializer==null)
+            if (node.Initializer == null)
             {
                 result.Strategy = TranslationStrategy.DontTraverseChildren;
                 context.TranslatedNode.CollectSymbol(node.Identifier.ValueText.Ident());
-            }else
+            }
+            else
             {
                 result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
-                AssignmentStatement a = new AssignmentStatement();
+                var a = new AssignmentStatement();
                 a.CollectSymbol(node.Identifier.ValueText.Ident());
                 context.PushTranslated(a);
                 if (lvc.IsTypePromised)
@@ -35,7 +37,7 @@ namespace Stratageme15.Reactors.Basic.Statements.LocalDeclaration
         public override void OnAfterChildTraversal(TranslationContext context, VariableDeclaratorSyntax originalNode)
         {
             base.OnAfterChildTraversal(context, originalNode);
-            var assignmentStatement = context.TranslatedNode;
+            SyntaxTreeNodeBase assignmentStatement = context.TranslatedNode;
             context.PopTranslated();
             context.TranslatedNode.CollectSymbol(assignmentStatement);
         }

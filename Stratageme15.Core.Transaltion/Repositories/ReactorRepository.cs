@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Roslyn.Compilers.CSharp;
-using Stratageme15.Core.JavascriptCodeDom;
+using Microsoft.CodeAnalysis;
+using Stratageme15.Core.Transaltion.Extensions;
 using Stratageme15.Core.Transaltion.Reactors;
 using Stratageme15.Core.Transaltion.TranslationContexts;
 
@@ -11,50 +11,50 @@ namespace Stratageme15.Core.Transaltion.Repositories
 {
     public class ReactorRepository
     {
+        private readonly Dictionary<Guid, object> _allReactorsInstancesByReactorTypeId;
+        private readonly Dictionary<Guid, LinkedList<IReactor>> _reactorInstances;
+
         /// <summary>
         /// 1 - syntax node
         /// 2 - reactor type
         /// </summary>
-        private readonly Dictionary<Type, Type> _reactors;
-        private readonly Dictionary<Type, List<Type>> _situationReactors;
-        private readonly Dictionary<Guid, IReactor> _reactorInstances;
-        private readonly Dictionary<Guid, List<ISituationReactor>> _situationReactorInstances;
-        private readonly Dictionary<Guid, object> _allReactorsInstancesByReactorTypeId;
+        private readonly Dictionary<Type, LinkedList<Type>> _reactors;
+
+        private readonly Dictionary<Type, object> _reactorsBatchData;
+        private readonly Dictionary<Guid, LinkedList<ISituationReactor>> _situationReactorInstances;
+        private readonly Dictionary<Type, LinkedList<Type>> _situationReactors;
+
         public ReactorRepository()
         {
-            _reactors = new Dictionary<Type, Type>();
-            _situationReactors = new Dictionary<Type, List<Type>>();
-            _reactorInstances = new Dictionary<Guid, IReactor>();
-            _situationReactorInstances = new Dictionary<Guid, List<ISituationReactor>>();
+            _reactors = new Dictionary<Type, LinkedList<Type>>();
+            _situationReactors = new Dictionary<Type, LinkedList<Type>>();
+            _reactorInstances = new Dictionary<Guid, LinkedList<IReactor>>();
+            _situationReactorInstances = new Dictionary<Guid, LinkedList<ISituationReactor>>();
             _allReactorsInstancesByReactorTypeId = new Dictionary<Guid, object>();
+            _reactorsBatchData = new Dictionary<Type, object>();
         }
 
-
         #region Registration API
+
         public void RegisterCommonReactor(Type tNode, Type tReactor)
         {
-            if (!typeof(SyntaxNode).IsAssignableFrom(tNode)) throw new ArgumentException("tNode");
+            if (!typeof (SyntaxNode).IsAssignableFrom(tNode)) throw new ArgumentException("tNode");
 
-            if (typeof(ISituationReactor).IsAssignableFrom(tReactor))
+            if (typeof (ISituationReactor).IsAssignableFrom(tReactor))
             {
-                if (!_situationReactors.ContainsKey(tNode))
-                {
-                    _situationReactors[tNode] = new List<Type>();
-                }
-                _situationReactors[tNode].Add(tReactor);
+                _situationReactors.GetOrCreate(tNode).AddLast(tReactor);
             }
             else
             {
-                if (typeof(IReactor).IsAssignableFrom(tReactor))
+                if (typeof (IReactor).IsAssignableFrom(tReactor))
                 {
-                    _reactors[tNode] = tReactor;
+                    _reactors.GetOrCreate(tNode).AddLast(tReactor);
                 }
                 else
                 {
                     throw new ArgumentException("tReactor");
                 }
             }
-
         }
 
         public void RegisterBatch(ReactorBatchBase batch)
@@ -63,69 +63,103 @@ namespace Stratageme15.Core.Transaltion.Repositories
             {
                 RegisterCommonReactor(reactorType.Item2, reactorType.Item1);
             }
+            if (batch.ReactorBatchData != null)
+            {
+                _reactorsBatchData.Add(batch.GetType(), batch.ReactorBatchData);
+            }
+        }
+
+        public T GetReactorBatchData<T, TReactorBatch>()
+            where T : class
+            where TReactorBatch : ReactorBatchBase
+        {
+            Type t = typeof (TReactorBatch);
+            if (!_reactorsBatchData.ContainsKey(t)) return null;
+            return (T) _reactorsBatchData[t];
         }
 
         #endregion
 
         #region Retrievement API
-        public IReactor GetSituationOrDefault(TranslationContext ctx)
+
+        private static readonly ReadOnlyCollection<IReactor> Empty = new ReadOnlyCollection<IReactor>(new IReactor[0]);
+
+        private static readonly ReadOnlyCollection<ISituationReactor> SituationEmpty =
+            new ReadOnlyCollection<ISituationReactor>(new ISituationReactor[0]);
+
+        public IEnumerable<IReactor> GetAllSituationOrDefault(TranslationContext ctx)
         {
-            var situation = GetSituationReactor(ctx);
-            if (situation != null) return situation;
-            situation = GetReactor(ctx.SourceNode.GetType());
-            return situation;
+            IEnumerable<IReactor> situation = GetSuitableSituationReactors(ctx);
+            IEnumerable<IReactor> baseReactor = GetSimpleReactors(ctx.SourceNode.GetType());
+            return baseReactor.Concat(situation).Reverse();
         }
 
-        public IReactor GetReactor(Type tNodeType)
+        public IEnumerable<IReactor> GetSimpleReactors(Type tNodeType)
         {
             if (!_reactorInstances.ContainsKey(tNodeType.GUID))
             {
-                if (!_reactors.ContainsKey(tNodeType)) return null; //todo exception?
-                var reactor = _reactors[tNodeType];
-
-                var reactorInstance = (IReactor)Activator.CreateInstance(reactor);
-                _reactorInstances[tNodeType.GUID] = reactorInstance;
-                _allReactorsInstancesByReactorTypeId.Add(reactor.GUID, reactorInstance);
+                if (!_reactors.ContainsKey(tNodeType)) return Empty;
+                LinkedList<Type> reactor = _reactors[tNodeType];
+                LinkedList<IReactor> instances = _reactorInstances.GetOrCreate(tNodeType.GUID);
+                foreach (Type type in reactor)
+                {
+                    if (_allReactorsInstancesByReactorTypeId.ContainsKey(type.GUID))
+                    {
+                        instances.AddLast((IReactor) _allReactorsInstancesByReactorTypeId[type.GUID]);
+                    }
+                    else
+                    {
+                        var reactorInstance = (IReactor) Activator.CreateInstance(type);
+                        instances.AddLast(reactorInstance);
+                        _allReactorsInstancesByReactorTypeId.Add(type.GUID, reactorInstance);
+                    }
+                }
             }
             return _reactorInstances[tNodeType.GUID];
         }
 
         public IReactor GetSituationReactor(TranslationContext ctx)
         {
-            var allSituationReactors = GetSituationReactors(ctx);
-            
+            ReadOnlyCollection<ISituationReactor> allSituationReactors = GetSituationReactors(ctx);
+
             return allSituationReactors.FirstOrDefault(allSituationReactor => allSituationReactor.IsAcceptable(ctx));
+        }
+
+        public IEnumerable<IReactor> GetSuitableSituationReactors(TranslationContext ctx)
+        {
+            ReadOnlyCollection<ISituationReactor> allSituationReactors = GetSituationReactors(ctx);
+
+            return allSituationReactors.Where(allSituationReactor => allSituationReactor.IsAcceptable(ctx));
         }
 
         public ReadOnlyCollection<ISituationReactor> GetSituationReactors(TranslationContext ctx)
         {
-            var tNodeType = ctx.SourceNode.GetType();
+            Type tNodeType = ctx.SourceNode.GetType();
 
-            List<ISituationReactor> allSituationReactors;
+            LinkedList<ISituationReactor> allSituationReactors;
             if (!_situationReactorInstances.ContainsKey(tNodeType.GUID))
             {
-                if (!_situationReactors.ContainsKey(tNodeType)) {
-                    allSituationReactors = new List<ISituationReactor>();
-                    return new ReadOnlyCollection<ISituationReactor>(allSituationReactors); 
+                if (!_situationReactors.ContainsKey(tNodeType))
+                {
+                    return SituationEmpty;
                 }
-                var potentiallyAppropriate = _situationReactors[tNodeType];
-                var l = new List<ISituationReactor>();
+                LinkedList<Type> potentiallyAppropriate = _situationReactors[tNodeType];
+                var l = new LinkedList<ISituationReactor>();
 
-                foreach (var type in potentiallyAppropriate)
+                foreach (Type type in potentiallyAppropriate)
                 {
                     ISituationReactor sr;
                     if (_allReactorsInstancesByReactorTypeId.ContainsKey(type.GUID))
                     {
-                        sr = (ISituationReactor)_allReactorsInstancesByReactorTypeId[type.GUID];
+                        sr = (ISituationReactor) _allReactorsInstancesByReactorTypeId[type.GUID];
                     }
                     else
                     {
-                        sr = (ISituationReactor)Activator.CreateInstance(type);
+                        sr = (ISituationReactor) Activator.CreateInstance(type);
                         _allReactorsInstancesByReactorTypeId.Add(type.GUID, sr);
                     }
 
-                    l.Add(sr);
-
+                    l.AddLast(sr);
                 }
                 _situationReactorInstances[tNodeType.GUID] = l;
                 allSituationReactors = l;
@@ -134,9 +168,9 @@ namespace Stratageme15.Core.Transaltion.Repositories
             {
                 allSituationReactors = _situationReactorInstances[tNodeType.GUID];
             }
-            return new ReadOnlyCollection<ISituationReactor>(allSituationReactors);
+            return new ReadOnlyCollection<ISituationReactor>(new List<ISituationReactor>(allSituationReactors));
         }
-        #endregion
 
+        #endregion
     }
 }

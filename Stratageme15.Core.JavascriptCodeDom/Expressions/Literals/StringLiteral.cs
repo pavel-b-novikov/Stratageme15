@@ -23,7 +23,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Literals
 
         public override string ToString()
         {
-            return string.Format("<<STRING>>{0}", String);
+            return string.Format("«{0}»", String);
         }
 
         public override string Literal

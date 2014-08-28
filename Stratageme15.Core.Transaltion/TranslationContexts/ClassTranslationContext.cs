@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Roslyn.Compilers.CSharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom;
+using Stratageme15.Core.JavascriptCodeDom.Expressions;
+using Stratageme15.Core.JavascriptCodeDom.Expressions.Literals.KeywordLiterals;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.Transaltion.Builders;
 
@@ -12,12 +15,16 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
     /// </summary>
     public class ClassTranslationContext
     {
+        private readonly TranslationContext _context;
+        private readonly Dictionary<string, object> _customContextVars = new Dictionary<string, object>();
         private readonly Stack<FunctionTranslationContext> _functionsStack = new Stack<FunctionTranslationContext>();
+        private bool _outOfContext;
 
-        public ClassTranslationContext(ClassDeclarationSyntax originalNode,Type type)
+        public ClassTranslationContext(ClassDeclarationSyntax originalNode, Type type, TranslationContext context)
         {
             OriginalNode = originalNode;
             Type = type;
+            _context = context;
         }
 
         /// <summary>
@@ -39,15 +46,29 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
         /// Class constructor function
         /// </summary>
         public FunctionDefExpression Constructor { get; private set; }
-        
+
         /// <summary>
         /// Code block for fields definitions and initialization
         /// </summary>
         public CodeBlock FieldsDefinitionBlock { get; private set; }
 
+        /// <summary>
+        /// Gets current function translation context
+        /// </summary>
+        public FunctionTranslationContext CurrentFunction
+        {
+            get { return _outOfContext ? null : _functionsStack.Peek(); }
+        }
+
+        public object this[string s]
+        {
+            get { return _customContextVars[s]; }
+            set { _customContextVars[s] = value; }
+        }
+
         public void CreateConstructor(string typeName)
         {
-            var fn = new FunctionDefExpression() {Name = typeName.Ident()};
+            var fn = new FunctionDefExpression {Name = typeName.Ident()};
             var cf = new CodeBlock();
             fn.CollectSymbol(cf);
             FieldsDefinitionBlock = new CodeBlock();
@@ -56,7 +77,6 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
             Constructor = fn;
         }
 
-        private bool _outOfContext = false;
         /// <summary>
         /// Temporary disables access to function context due to going out of method translation
         /// </summary>
@@ -72,24 +92,35 @@ namespace Stratageme15.Core.Transaltion.TranslationContexts
         {
             _outOfContext = false;
         }
-        public FunctionTranslationContext CurrentFunction
+
+        public void PushFunction(SyntaxNode originalNode, string name = null)
         {
-            get { return _outOfContext?null: _functionsStack.Peek(); }
+            _functionsStack.Push(new FunctionTranslationContext(_context, originalNode, name));
         }
 
-        public void PushFunction(SyntaxNode originalNode,string name = null)
+        public void PushFunction(SyntaxNode originalNode, FunctionDefExpression existing)
         {
-            _functionsStack.Push(new FunctionTranslationContext(originalNode,name));
-        }
-
-        public void PushFunction(SyntaxNode originalNode,FunctionDefExpression existing)
-        {
-            _functionsStack.Push(new FunctionTranslationContext(originalNode,existing));
+            _functionsStack.Push(new FunctionTranslationContext(_context, originalNode, existing));
         }
 
         public void PopFunction()
         {
             _functionsStack.Pop();
+        }
+
+        public T GetCustomVariable<T>(string s)
+        {
+            return (T) _customContextVars[s];
+        }
+
+        public bool IsCustomVariableDefined(string s)
+        {
+            return _customContextVars.ContainsKey(s);
+        }
+
+        public void DropCustomVariable(string s)
+        {
+            _customContextVars.Remove(s);
         }
     }
 }

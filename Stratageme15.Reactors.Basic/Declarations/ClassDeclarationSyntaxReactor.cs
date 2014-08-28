@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using Roslyn.Compilers.CSharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Binary;
-using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.Transaltion;
 using Stratageme15.Core.Transaltion.Builders;
 using Stratageme15.Core.Transaltion.Reactors;
@@ -12,40 +15,43 @@ namespace Stratageme15.Reactors.Basic.Declarations
 {
     public class ClassDeclarationSyntaxReactor : ReactorBase<ClassDeclarationSyntax>
     {
-        protected override void HandleNode(ClassDeclarationSyntax node, TranslationContext context, TranslationResult result)
+        protected override void HandleNode(ClassDeclarationSyntax node, TranslationContext context,
+                                           TranslationResult result)
         {
+            if (node.Modifiers.Any(SyntaxKind.StaticKeyword)) throw new Exception("Static classes are not supported");
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
 
-            var className = node.Identifier.Value;
-            var fullTypeName = string.Format("{0}.{1}", context.Namespace, className);
-            var type = context.Assemblies.GetType(fullTypeName);
+            object className = node.Identifier.Value;
+            string fullTypeName = string.Format("{0}.{1}", context.Namespace, className);
+            Type type = context.Assemblies.GetType(fullTypeName);
 
-            context.PushClass(new ClassTranslationContext(node,type));
+            context.PushClass(new ClassTranslationContext(node, type, context));
             result.PrepareForManualPush(context);
-            var members = node.Members.OrderByDescending(c => c is ConstructorDeclarationSyntax).Reverse();
+            IEnumerable<MemberDeclarationSyntax> members =
+                node.Members.OrderByDescending(c => c is ConstructorDeclarationSyntax).Reverse();
 
-            foreach (var memberDeclarationSyntax in members)
+            foreach (MemberDeclarationSyntax memberDeclarationSyntax in members)
             {
                 context.TranslationStack.Push(memberDeclarationSyntax);
             }
 
-            if (!node.Members.Any(c=>c is ConstructorDeclarationSyntax))
+            if (!node.Members.Any(c => c is ConstructorDeclarationSyntax))
             {
                 context.CurrentClassContext.CreateConstructor(type.JavascriptTypeName());
                 context.TranslatedNode.CollectSymbol(context.CurrentClassContext.Constructor);
             }
         }
 
-        public override void OnAfterChildTraversal(TranslationContext context,ClassDeclarationSyntax originalNode)
+        public override void OnAfterChildTraversal(TranslationContext context, ClassDeclarationSyntax originalNode)
         {
-            AssignmentBinaryExpression abe = 
+            AssignmentBinaryExpression abe =
                 context.JavascriptCurrentTypeName()
                     .MemberAccess()
-                        .Field("prototype")
-                        .Field("constructor")
-                        .Build()
+                    .Field("prototype")
+                    .Field("constructor")
+                    .Build()
                     .Assignment(context.JavascriptCurrentTypeName());
-            
+
             context.TranslatedNode.CollectSymbol(abe);
             context.TranslatedNode.EmptyColon();
             context.PopClass();

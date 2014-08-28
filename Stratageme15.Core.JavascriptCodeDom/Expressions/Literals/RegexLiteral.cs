@@ -10,7 +10,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Literals
         }
         public override string ToString()
         {
-            return string.Format("<<REGEXP>>{0}", Literal);
+            return string.Format("®{0}", Literal);
         }
 
         public override string Literal

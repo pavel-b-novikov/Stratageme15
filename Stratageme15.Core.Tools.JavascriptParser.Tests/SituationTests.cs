@@ -468,5 +468,17 @@ var s =""<!--[if gt IE ""+ ++ba+""]><i></i><![endif]--\>"";;
 ";
             var program = Parse(testCase);
         }
+
+        [TestMethod]
+        public void StrangeIfCondition()
+        {
+            const string testCase =
+@"
+if (r) {
+        if (A) return a, i
+    } else if B) return a, i
+";
+            var program = Parse(testCase);
+        }
     }
 }

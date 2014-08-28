@@ -40,5 +40,10 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions
         }
 
         public StatementLabel Label { get; set; }
+
+        public override string ToString()
+        {
+            return "( , , , )";
+        }
     }
 }

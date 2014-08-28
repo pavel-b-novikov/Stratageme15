@@ -65,6 +65,10 @@
       <Project>{1622e786-1c7e-453a-a0ce-2816b29ed4c0}</Project>
       <Name>Stratageme15.Core.Tools.JavascriptParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Stratageme15.Core.Tools.ParsingErrors\Stratageme15.Core.Tools.ParsingErrors.csproj">
+      <Project>{CF7BB1C0-2614-4837-9F79-DF269DE84D84}</Project>
+      <Name>Stratageme15.Core.Tools.ParsingErrors</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Frameworks\cusel.js">

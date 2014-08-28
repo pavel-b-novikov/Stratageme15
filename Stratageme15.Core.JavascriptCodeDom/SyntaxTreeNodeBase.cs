@@ -176,7 +176,6 @@ namespace Stratageme15.Core.JavascriptCodeDom
 
         protected abstract IEnumerable<SyntaxTreeNodeBase> EnumerateChildNodes();
 
-
         public IEnumerable<SyntaxTreeNodeBase> Children { get { return EnumerateChildNodes(); } }
 
         public bool IsScolonNeeded { get; set; }

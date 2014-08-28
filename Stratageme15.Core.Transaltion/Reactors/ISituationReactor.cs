@@ -1,5 +1,4 @@
-﻿using Roslyn.Compilers.CSharp;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+﻿using Stratageme15.Core.Transaltion.TranslationContexts;
 
 namespace Stratageme15.Core.Transaltion.Reactors
 {

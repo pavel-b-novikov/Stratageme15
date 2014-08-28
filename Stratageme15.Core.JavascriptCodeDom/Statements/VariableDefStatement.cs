@@ -42,11 +42,16 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
         {
             foreach (var variable in Variables)
             {
-                yield return variable.Item1;
-                yield return variable.Item3;
+                if (variable.Item1!=null) yield return variable.Item1;
+                if (variable.Item3 != null) yield return variable.Item3;
             }
         }
 
         public StatementLabel Label { get; set; }
+
+        public override string ToString()
+        {
+            return "var ...";
+        }
     }
 }

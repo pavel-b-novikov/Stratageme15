@@ -10,7 +10,7 @@ using Stratageme15.Core.JavascriptCodeDom.Expressions.Literals.KeywordLiterals;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Tools.JavascriptParser;
-
+using Stratageme15.Core.Tools.ParsingErrors;
 namespace Stratageme15.Core.Tools.JavascriptParser {
 
 
@@ -821,11 +821,9 @@ public partial class Parser {
 		case 20: {
 			Get();
 			Push<NewInvokationExpression>();  
-			Push<FieldAccessExpression>(); 
 			if (StartOf(8)) {
 				FieldAccessExpression();
 			}
-			Pop(); 
 			if (la.kind == 79) {
 				Get();
 				if (StartOf(2)) {

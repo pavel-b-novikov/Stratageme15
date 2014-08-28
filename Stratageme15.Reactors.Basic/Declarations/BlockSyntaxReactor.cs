@@ -1,4 +1,4 @@
-using Roslyn.Compilers.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.Transaltion;
 using Stratageme15.Core.Transaltion.Reactors;
 using Stratageme15.Core.Transaltion.TranslationContexts;
@@ -11,7 +11,7 @@ namespace Stratageme15.Reactors.Basic.Declarations
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             context.CurrentClassContext.CurrentFunction.PushBlock();
-            
+
             context.PushTranslated(context.CurrentClassContext.CurrentFunction.CurrentBlock);
         }
 

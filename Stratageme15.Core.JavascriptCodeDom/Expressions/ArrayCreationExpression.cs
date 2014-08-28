@@ -28,5 +28,10 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions
         {
             return ArrayElements;
         }
+
+        public override string ToString()
+        {
+            return ArrayElements.Count==0?"[]":"[...]";
+        }
     }
 }

@@ -1,0 +1,257 @@
+COMPILER IDL
+CHARACTERS
+	tab					= '\u0009'. /*  9 = tabulator */
+	eol					= '\u000a'. /* 10 = line feed */
+	cr					= '\u000d'. /* 13 = carriage return */
+	newLine				= cr + eol. /* Line separator character (U+2028) + Paragraph separator character (U+2029) */
+
+	startLetter			= 'A' .. 'Z' + 'a' .. 'z'.
+	partLetter			= '0' .. '9' + 'A' .. 'Z' + 'a' .. 'z'.
+	digit				= "0123456789".
+	oct					= "01234567".
+	hexDigit			= digit + "ABCDEFabcdef".
+	nonzero				= "123456789".	
+	char				= ANY - '\"' - newLine.
+	notNewLine			= ANY - newLine .
+	ws					= " " + tab + '\u000b' + '\u000c'. /* Any character with Unicode class Zs */  
+	other				= ANY - ws - partLetter.
+TOKENS
+	integer		
+			= ( 
+				["-"] 
+					( "0"	( 
+								{oct}
+								| ( ("x" | "X") (hexDigit | hexDigit {hexDigit}) )
+							)
+					)
+					|( digit | digit {nonzero})
+				). //-?(0([0-7]*|[Xx][0-9A-Fa-f]+)|[1-9][0-9]*)
+	float		
+			= ( 
+				   (
+						"." digit {digit} 				
+						| digit {digit} (	"." [ (digit| digit {digit})])
+							
+				   )
+			   ) [ ("e" | "E" ) ["+" | "-"] digit | digit | {digit}]. //-?(([0-9]+\.[0-9]*|[0-9]*\.[0-9]+)([Ee][+-]?[0-9]+)?|[0-9]+[Ee][+-]?[0-9]+)
+	ident				= startLetter { partLetter }.	
+	string = '\"' { char } '\"'.
+
+COMMENTS FROM "/*" TO "*/"
+COMMENTS FROM "//" TO eol
+
+IGNORE eol + cr + tab + cr
+PRODUCTIONS
+IDL	= Definition { Definition }.
+
+Definition =
+[ ExtendedAttributeList ] 
+	(
+		CallbackOrInterface 
+		| Partial 
+		| Dictionary 
+		| Exception 
+		| Enum 
+		| Typedef 
+		| ImplementsStatement
+	)
+.
+
+CallbackOrInterface	=
+	( "callback" CallbackRestOrInterface )
+	| Interface
+.
+	
+CallbackRestOrInterface	=
+	CallbackRest 
+	| Interface
+.
+	
+Interface =
+	"interface" ident [ Inheritance ] "{" [ InterfaceMembers ] "}" ";"
+.
+
+Partial =
+	"partial"  (  PartialInterface 	| PartialDictionary )
+.
+
+PartialInterface =
+	"interface" ident "{" [ InterfaceMembers ] "}" ";"
+.
+
+InterfaceMembers =
+	InterfaceMember { InterfaceMember }
+.
+
+InterfaceMember	=
+	[ ExtendedAttributeList ]	( Const | AttributeOrOperation ) 
+.
+
+Dictionary =
+	"dictionary" ident [ Inheritance ] "{" [ DictionaryMembers ] "}" ";"
+.
+
+DictionaryMembers =	
+	DictionaryMember { DictionaryMember }
+.
+
+DictionaryMember = 
+	[ ExtendedAttributeList ] Type ident [ Default ] ";"
+.
+
+PartialDictionary =
+	"dictionary" ident "{" [ DictionaryMembers ] "}" ";"
+.
+
+Default	= "=" DefaultValue.
+DefaultValue = ConstValue | string.
+Exception = "exception" ident [ Inheritance ] "{" [ ExceptionMembers ] "}" ";".
+ExceptionMembers = ExceptionMember { ExceptionMember }.
+
+Inheritance = ":" ident.
+
+Enum = "enum" ident "{" [ EnumValueList ] "}" ";" .	
+EnumValueList = string { "," string } .
+
+CallbackRest = ident "=" ReturnType "(" [ ArgumentList ] ")" ";".
+Typedef = "typedef" [ ExtendedAttributeList ] Type ident ";".
+ImplementsStatement = ident "implements" ident ";".
+
+Const = "const" ConstType ident "=" ConstValue ";".
+
+ConstValue =
+	BooleanLiteral 
+	| FloatLiteral 
+	| integer 
+	| "null"
+.
+
+BooleanLiteral = "true" | "false".
+FloatLiteral =
+	float 
+	|  ( "-" "Infinity" )
+	| "Infinity" 
+	| "NaN"
+.
+AttributeOrOperation =
+	( "stringifier" StringifierAttributeOrOperation )
+	| Attribute 
+	| Operation
+.
+
+StringifierAttributeOrOperation	 =	
+	Attribute 
+	| OperationRest 
+	| ";"
+.
+
+Attribute =	[ "inherit" ] [ "readonly" ] "attribute" Type ident ";".
+Operation =	[ Qualifiers ] OperationRest.
+
+Qualifiers = "static" | ( Special { Special } ).
+Special = "getter" | "setter" | "creator" | "deleter" | "legacycaller".
+
+OperationRest = ReturnType [ ident ] "(" [ ArgumentList ] ")" ";".
+
+ArgumentList =	Argument {"," Argument} .
+
+Argument = [ ExtendedAttributeList ] OptionalOrRequiredArgument.
+
+OptionalOrRequiredArgument =
+	  ( "optional" Type ArgumentName [ Default ] )
+	| ( Type [ "..." ] ArgumentName )
+.
+
+ArgumentName =	ArgumentNameKeyword | ident .
+
+ExceptionMember	 =	[ ExtendedAttributeList ]  ( Const | ExceptionField ).
+ExceptionField = Type ident ";".
+ExtendedAttributeList = "[" ExtendedAttribute { "," ExtendedAttribute } "]" .
+
+ExtendedAttribute =
+	  ( "(" [ ExtendedAttributeInner ] ")" [ ExtendedAttribute ] )
+	| ( "[" [ ExtendedAttributeInner ] "]" [ ExtendedAttribute ] )
+	| ( "{" [ ExtendedAttributeInner ] "}" [ ExtendedAttribute ] )
+	| ( Other [ ExtendedAttribute ] )
+.
+
+ExtendedAttributeInner =
+	  ( "(" [ ExtendedAttributeInner ] ")" [ ExtendedAttributeInner ] )
+	| ( "[" [ ExtendedAttributeInner ] "]" [ ExtendedAttributeInner ] )
+	| ( "{" [ ExtendedAttributeInner ] "}" [ ExtendedAttributeInner ] )
+	| ( OtherOrComma [ ExtendedAttributeInner ] )
+.
+Other =
+	integer | float | ident | string 
+	| "-" 	| "." 	| "..." 
+	| ":" 	| ";" 	| "<" 	| "=" 
+	| ">" 	| "?" 	| "Date" | "DOMString" 
+	| "Infinity" 	| "NaN" | "any" 
+	| "boolean" 	| "byte" | "double" 
+	| "false" 		| "float" | "long" 
+	| "null"| "object" | "octet" 
+	| "or" 	| "optional" | "sequence" 
+	| "short" | "true" | "unsigned" | "void" 
+	| ArgumentNameKeyword
+.
+ArgumentNameKeyword	 =
+	"attribute" | "callback" 	| "const" 
+	| "creator" | "deleter" 	| "dictionary" 
+	| "enum" 	| "exception" 	| "getter" 
+	| "implements" | "inherit" 	| "interface" 
+	| "legacycaller" | "partial" | "setter" 
+	| "static" 	| "stringifier" | "typedef" 
+	| "unrestricted"
+.
+
+OtherOrComma =	Other | ",".
+
+Type = NonAnyType |  ( "any" [ "[" "]" [ TypeSuffix ] ] ) | (UnionType [ TypeSuffix ]).
+
+UnionType = "(" UnionMemberType  "or" UnionMemberType { "or" UnionMemberType } ")".
+
+UnionMemberType =
+	NonAnyType 
+	| ( UnionType [ TypeSuffix ] ) 
+	| ( "any" "[" "]" [ TypeSuffix ] )
+.
+NonAnyType =	
+	PrimitiveType [ TypeSuffix ] 
+	| "DOMString" [ TypeSuffix ] 
+	| ident [ TypeSuffix ] 
+	| "sequence" "<" Type ">" [ "?" ] 
+	| "object" [ TypeSuffix ] 
+	| "Date" [ TypeSuffix ]
+.
+
+ConstType =
+	PrimitiveType [ "?" ] | ident [ "?" ]
+.
+
+PrimitiveType =
+	UnsignedIntegerType 
+	| UnrestrictedFloatType 
+	| "boolean" 
+	| "byte" 
+	| "octet"
+.
+
+UnrestrictedFloatType = ("unrestricted" FloatType) | FloatType.
+FloatType = "float" | "double".
+
+UnsignedIntegerType = ( "unsigned" IntegerType ) | IntegerType.
+IntegerType = "short" |  ( "long" ["long"] ).
+
+TypeSuffix=	
+	("[" "]" [ TypeSuffix ] )
+	| ("?" [ "[" "]" [ TypeSuffix ] ])
+.
+
+ReturnType = Type | "void".
+/*
+ExtendedAttributeNoArgs		 	=	ident .
+ExtendedAttributeArgList		=	ident "(" [ ArgumentList ] ")".
+ExtendedAttributeIdent			=	ident "=" ident .
+ExtendedAttributeNamedArgList	=	ident "=" ident "(" [ ArgumentList ] ")".
+*/
+END IDL.

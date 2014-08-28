@@ -219,7 +219,6 @@ namespace Stratageme15.Core.Tools.JavascriptParser
         {
             if (la.kind == _scolon) Get();
         }
-        #endregion
 
         void FixUpRegexLookahead()
         {
@@ -228,6 +227,9 @@ namespace Stratageme15.Core.Tools.JavascriptParser
                 la = scanner.WarrantyReturnRegexl(la);
             }
         }
+        #endregion
+
+        
 
         private const int maxTerminals = 160;
         private static BitArray keywordOrIdent = NewSet(new int[] { _ident, _break, _case, _catch, _continue, _debugger, _default, _delete, _do, _else, _finally, _for, _function, _if, _in, _instanceof, _new, _of, _return, _switch, _this, _throw, _try, _typeof, _var, _void, _while, _with });

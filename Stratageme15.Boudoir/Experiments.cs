@@ -6,7 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Roslyn.Compilers.CSharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.CSharp;
 using Stratageme15.Core.Compiler;
 using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.Transaltion;
@@ -80,7 +82,7 @@ namespace Stratageme15.Boudoir
         [TestMethod]
         public void TestRoslyn()
         {
-            SyntaxTree tree = SyntaxTree.ParseFile(@".\Test.cs");
+            SyntaxTree tree = (@".\Test.cs").ParseToSyntax();
             var root = tree.GetRoot();
             TraverseRoot(root);
         }
@@ -109,8 +111,8 @@ namespace Stratageme15.Boudoir
             ReactorRepository rep = new ReactorRepository();
             rep.RegisterBatch(new BasicReactorBatch());
             AssemblyRepository arep = new AssemblyRepository();
-            Translator tr = new Translator(rep,arep);
-            SyntaxTree tree = SyntaxTree.ParseFile(@".\Test.cs");
+            Translator tr = new Translator(rep,arep,new ConsoleTranslationLogger());
+            SyntaxTree tree = (@".\Test.cs").ParseToSyntax();
 
             JsProgram program = tr.Translate(tree);
 
@@ -140,7 +142,7 @@ namespace Stratageme15.Boudoir
         public void RoslynConstruction()
         {
             var allPrimitive = typeof (object).Assembly.GetTypes().Where(c => c.IsPrimitive);
-            var tree = SyntaxTree.ParseText("class C { public string Property {get;set;} }");
+            var tree = ("class C { public string Property {get;set;} }").ParseTextToSyntax();
             var root = tree.GetRoot();
             TraverseRoot(root, typeof(AccessorDeclarationSyntax));
         }
@@ -149,7 +151,7 @@ namespace Stratageme15.Boudoir
         [TestMethod]
         public void TraverseTypesHierarchy()
         {
-            TraverseChildrenTypes(typeof(SyntaxNode),0);
+            TraverseChildrenTypes(typeof(CSharpSyntaxNode),0);
         }
         private string Tabulate(string s,int tabLevel)
         {

@@ -24,7 +24,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            WrapIfStatement(ref symbol);
+            
 
             if (Is<ParenthesisExpression>(symbol))
             {
@@ -37,7 +37,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
                 _cache = (ParenthesisExpression)symbol;
                 return;
             }
-
+            WrapIfStatement(ref symbol);
             if (Is<CodeBlock>(symbol))
             {
                 if (TrueCodeBlock==null)
@@ -66,6 +66,8 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
         protected override IEnumerable<SyntaxTreeNodeBase> EnumerateChildNodes()
         {
             if (Condition != null) yield return Condition;
+            if (TrueCodeBlock != null) yield return TrueCodeBlock;
+            
             if (ElseIfs!=null)
             {
                 foreach (var elseIf in ElseIfs)

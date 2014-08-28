@@ -1,4 +1,4 @@
-﻿using Roslyn.Compilers.CSharp;
+﻿using Microsoft.CodeAnalysis;
 using Stratageme15.Core.Transaltion.Reactors;
 
 namespace Stratageme15.Core.Transaltion
@@ -15,6 +15,5 @@ namespace Stratageme15.Core.Transaltion
         public int StackPosition { get; private set; }
         public IReactor Promisee { get; private set; }
         public SyntaxNode OriginalNode { get; private set; }
-
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using Roslyn.Compilers.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Transaltion;
 using Stratageme15.Core.Transaltion.Reactors;
@@ -15,10 +15,11 @@ namespace Stratageme15.Reactors.Basic.Statements
             context.PopTranslated();
         }
 
-        protected override void HandleNode(ThrowStatementSyntax node, TranslationContext context, TranslationResult result)
+        protected override void HandleNode(ThrowStatementSyntax node, TranslationContext context,
+                                           TranslationResult result)
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
-            if (node.Expression==null) throw new Exception("Exception rethrown is not supported");
+            if (node.Expression == null) throw new Exception("Exception rethrown is not supported");
             var thr = new ThrowStatement();
             context.TranslatedNode.CollectSymbol(thr);
             context.PushTranslated(thr);

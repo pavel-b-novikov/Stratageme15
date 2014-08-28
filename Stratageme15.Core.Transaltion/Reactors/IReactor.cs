@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using Roslyn.Compilers.CSharp;
-using Stratageme15.Core.JavascriptCodeDom;
+using Microsoft.CodeAnalysis;
 using Stratageme15.Core.Transaltion.TranslationContexts;
 
 namespace Stratageme15.Core.Transaltion.Reactors
@@ -10,6 +8,6 @@ namespace Stratageme15.Core.Transaltion.Reactors
     {
         Type ReactedNodeType { get; }
         TranslationResult OnNode(TranslationContext context);
-        void OnPromise(TranslationContext context,SyntaxNode originalNode);
+        void OnPromise(TranslationContext context, SyntaxNode originalNode);
     }
 }

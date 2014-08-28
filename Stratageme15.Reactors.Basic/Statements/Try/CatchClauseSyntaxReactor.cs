@@ -1,4 +1,7 @@
-﻿using Roslyn.Compilers.CSharp;
+﻿using System;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Transaltion;
 using Stratageme15.Core.Transaltion.Builders;
@@ -13,19 +16,19 @@ namespace Stratageme15.Reactors.Basic.Statements.Try
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             result.PrepareForManualPush(context);
-            
-            CatchClause ctch = new CatchClause();
+
+            var ctch = new CatchClause();
             context.TranslatedNode.CollectSymbol(ctch);
-            if(node.Declaration!=null)
+            if (node.Declaration != null)
             {
-                if (node.Declaration.Identifier.Kind != SyntaxKind.None)
+                if (node.Declaration.Identifier.CSharpKind() != SyntaxKind.None)
                 {
                     ctch.Identifier = node.Declaration.Identifier.ValueText.Ident();
                     context.CurrentClassContext.CurrentFunction.LocalVariables.PushContext();
-                    var exctype = TypeInferer.GetTypeFromContext(node.Declaration.Type,context);
-                    context.CurrentClassContext.CurrentFunction.LocalVariables.DefineVariable(node.Declaration.Identifier.ValueText,exctype);
+                    Type exctype = TypeInferer.GetTypeFromContext(node.Declaration.Type, context);
+                    context.CurrentClassContext.CurrentFunction.LocalVariables.DefineVariable(
+                        node.Declaration.Identifier.ValueText, exctype);
                 }
-
             }
             context.PushTranslated(ctch);
             context.TranslationStack.Push(node.Block);
@@ -35,7 +38,7 @@ namespace Stratageme15.Reactors.Basic.Statements.Try
         {
             base.OnAfterChildTraversal(context, originalNode);
             context.PopTranslated();
-            if (originalNode.Declaration!=null)
+            if (originalNode.Declaration != null)
             {
                 context.CurrentClassContext.CurrentFunction.LocalVariables.PopContext();
             }

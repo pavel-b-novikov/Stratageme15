@@ -1,6 +1,7 @@
-﻿using System;
-using System.Linq;
-using Roslyn.Compilers.CSharp;
+﻿using System.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Transaltion;
@@ -15,10 +16,11 @@ namespace Stratageme15.Reactors.Basic.Statements.Switch
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             SyntaxTreeNodeBase snb = null;
-            if (node.CaseOrDefaultKeyword.Kind==SyntaxKind.CaseKeyword)
+            if (node.CaseOrDefaultKeyword.CSharpKind() == SyntaxKind.CaseKeyword)
             {
                 snb = new CaseClause();
-            }else
+            }
+            else
             {
                 snb = new DefaultClause();
             }
@@ -26,14 +28,14 @@ namespace Stratageme15.Reactors.Basic.Statements.Switch
             context.PushTranslated(snb);
 
             var parent = (SwitchSectionSyntax) node.Parent;
-            if (node==parent.Labels.Last())
+            if (node == parent.Labels.Last())
             {
                 result.PrepareForManualPush(context);
-                foreach (var statement in parent.Statements.Reverse())
+                foreach (StatementSyntax statement in parent.Statements.Reverse())
                 {
-                    context.TranslationStack.Push(statement);    
+                    context.TranslationStack.Push(statement);
                 }
-                if (node.Value!=null) context.TranslationStack.Push(node.Value);
+                if (node.Value != null) context.TranslationStack.Push(node.Value);
             }
         }
 

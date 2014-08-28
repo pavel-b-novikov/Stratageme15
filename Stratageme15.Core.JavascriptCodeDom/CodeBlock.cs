@@ -138,5 +138,10 @@ namespace Stratageme15.Core.JavascriptCodeDom
         {
             CollectSymbolInner(symbol,true);
         }
+
+        public override string ToString()
+        {
+            return "{ ... }";
+        }
     }
 }

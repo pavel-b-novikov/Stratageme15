@@ -24,7 +24,7 @@ namespace Stratageme15.Core.Transaltion.Builders
 
         public static AssignmentBinaryExpression IdentifiersAssignment(string leftIdent, string rightIdent)
         {
-            AssignmentBinaryExpression abe = new AssignmentBinaryExpression();
+            var abe = new AssignmentBinaryExpression();
             abe.CollectOperator(AssignmentOperator.Set);
             abe.CollectSymbol(Ident(leftIdent));
             abe.CollectSymbol(Ident(rightIdent));
@@ -33,7 +33,7 @@ namespace Stratageme15.Core.Transaltion.Builders
 
         public static AssignmentBinaryExpression Assignment(this Expression leftPart, Expression rightPart)
         {
-            AssignmentBinaryExpression abe = new AssignmentBinaryExpression();
+            var abe = new AssignmentBinaryExpression();
             abe.CollectOperator(AssignmentOperator.Set);
             abe.CollectSymbol(leftPart);
             abe.CollectSymbol(rightPart);
@@ -75,7 +75,5 @@ namespace Stratageme15.Core.Transaltion.Builders
         {
             return FunctionDefExpressionBuilder.Function(s);
         }
-
-
     }
 }

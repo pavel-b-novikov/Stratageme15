@@ -1,5 +1,5 @@
 ﻿using System;
-using Roslyn.Compilers.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Transaltion;
 using Stratageme15.Core.Transaltion.Reactors;
@@ -11,9 +11,9 @@ namespace Stratageme15.Reactors.Basic.Statements.Try
     {
         protected override void HandleNode(TryStatementSyntax node, TranslationContext context, TranslationResult result)
         {
-            if (node.Catches!=null)
+            if (node.Catches != null)
             {
-                if (node.Catches.Count>1) throw new Exception("Javascript dos not supports multiple catches");
+                if (node.Catches.Count > 1) throw new Exception("Javascript dos not supports multiple catches");
             }
 
             var tfb = new TryCatchFinallyStatement();
@@ -21,8 +21,8 @@ namespace Stratageme15.Reactors.Basic.Statements.Try
             context.TranslatedNode.CollectSymbol(tfb);
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             result.PrepareForManualPush(context);
-            
-            if (node.Finally!=null)
+
+            if (node.Finally != null)
             {
                 context.TranslationStack.Push(node.Finally);
             }
