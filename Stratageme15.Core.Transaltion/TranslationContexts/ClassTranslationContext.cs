@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom;
-using Stratageme15.Core.JavascriptCodeDom.Expressions;
-using Stratageme15.Core.JavascriptCodeDom.Expressions.Literals.KeywordLiterals;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
-using Stratageme15.Core.Transaltion.Builders;
+using Stratageme15.Core.Translation.Builders;
 
-namespace Stratageme15.Core.Transaltion.TranslationContexts
+namespace Stratageme15.Core.Translation.TranslationContexts
 {
     /// <summary>
     /// Holds information for class being translated

@@ -5,12 +5,12 @@ using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Stratageme15.Core.Transaltion.Logging;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+using Stratageme15.Core.Translation.Logging;
+using Stratageme15.Core.Translation.TranslationContexts;
 
 // ReSharper disable CanBeReplacedWithTryCastAndCheckForNull
 
-namespace Stratageme15.Core.Transaltion
+namespace Stratageme15.Core.Translation
 {
     public class AnonymousType
     {

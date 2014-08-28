@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
-using Stratageme15.Core.Transaltion;
-using Stratageme15.Core.Transaltion.Builders;
-using Stratageme15.Core.Transaltion.Reactors;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+using Stratageme15.Core.Translation;
+using Stratageme15.Core.Translation.Builders;
+using Stratageme15.Core.Translation.Reactors;
+using Stratageme15.Core.Translation.TranslationContexts;
 
 namespace Stratageme15.ExtensionsPack.Prototyping
 {

@@ -11,8 +11,8 @@ using Stratageme15.Core.Compiler.Exceptions;
 using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.Tools.JavascriptParser;
 using Stratageme15.Core.Tools.ParsingErrors;
-using Stratageme15.Core.Transaltion;
-using Stratageme15.Core.Transaltion.Repositories;
+using Stratageme15.Core.Translation;
+using Stratageme15.Core.Translation.Repositories;
 using Stratageme15.Reactors.Basic;
 
 namespace Stratageme15.Boudoir

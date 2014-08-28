@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Stratageme15.Core.Transaltion.Extensions;
-using Stratageme15.Core.Transaltion.Reactors;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+using Stratageme15.Core.Translation.Extensions;
+using Stratageme15.Core.Translation.Reactors;
+using Stratageme15.Core.Translation.TranslationContexts;
 
-namespace Stratageme15.Core.Transaltion.Repositories
+namespace Stratageme15.Core.Translation.Repositories
 {
     public class ReactorRepository
     {

@@ -2,12 +2,12 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Stratageme15.Core.JavascriptCodeDom;
-using Stratageme15.Core.Transaltion.Logging;
-using Stratageme15.Core.Transaltion.Reactors;
-using Stratageme15.Core.Transaltion.Repositories;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+using Stratageme15.Core.Translation.Logging;
+using Stratageme15.Core.Translation.Reactors;
+using Stratageme15.Core.Translation.Repositories;
+using Stratageme15.Core.Translation.TranslationContexts;
 
-namespace Stratageme15.Core.Transaltion
+namespace Stratageme15.Core.Translation
 {
     public class Translator
     {

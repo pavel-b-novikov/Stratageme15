@@ -98,9 +98,9 @@
       <Project>{CF7BB1C0-2614-4837-9F79-DF269DE84D84}</Project>
       <Name>Stratageme15.Core.Tools.ParsingErrors</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Stratageme15.Core.Transaltion\Stratageme15.Core.Transaltion.csproj">
+    <ProjectReference Include="..\Stratageme15.Core.Transaltion\Stratageme15.Core.Translation.csproj">
       <Project>{A9742331-00A6-4599-91C5-313423843619}</Project>
-      <Name>Stratageme15.Core.Transaltion</Name>
+      <Name>Stratageme15.Core.Translation</Name>
     </ProjectReference>
     <ProjectReference Include="..\Stratageme15.Reactors.Basic\Stratageme15.Reactors.Basic.csproj">
       <Project>{E98EF953-11D3-4E67-9B25-F9ED42E98115}</Project>

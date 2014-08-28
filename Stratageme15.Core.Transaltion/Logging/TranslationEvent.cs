@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.CodeAnalysis;
 
-namespace Stratageme15.Core.Transaltion.Logging
+namespace Stratageme15.Core.Translation.Logging
 {
     /// <summary>
     /// Describes loggable event ovvured during translation process

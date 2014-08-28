@@ -1,4 +1,4 @@
-﻿namespace Stratageme15.Core.Transaltion.Logging
+﻿namespace Stratageme15.Core.Translation.Logging
 {
     /// <summary>
     /// Describes type of event occured during translation process

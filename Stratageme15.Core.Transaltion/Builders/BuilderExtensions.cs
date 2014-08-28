@@ -5,10 +5,10 @@ using Stratageme15.Core.JavascriptCodeDom.Expressions;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Binary;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
-using Stratageme15.Core.Transaltion.Builders.Expressions;
-using Stratageme15.Core.Transaltion.Builders.Function;
+using Stratageme15.Core.Translation.Builders.Expressions;
+using Stratageme15.Core.Translation.Builders.Function;
 
-namespace Stratageme15.Core.Transaltion.Builders
+namespace Stratageme15.Core.Translation.Builders
 {
     public static class BuilderExtensions
     {

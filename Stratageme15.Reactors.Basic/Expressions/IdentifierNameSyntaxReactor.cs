@@ -7,11 +7,11 @@ using Stratageme15.Core.JavascriptCodeDom.Expressions;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Literals.KeywordLiterals;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.JavascriptCodeDom.Markers;
-using Stratageme15.Core.Transaltion;
-using Stratageme15.Core.Transaltion.Builders;
-using Stratageme15.Core.Transaltion.Logging;
-using Stratageme15.Core.Transaltion.Reactors;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+using Stratageme15.Core.Translation;
+using Stratageme15.Core.Translation.Builders;
+using Stratageme15.Core.Translation.Logging;
+using Stratageme15.Core.Translation.Reactors;
+using Stratageme15.Core.Translation.TranslationContexts;
 using Stratageme15.Reactors.Basic.Extensions;
 
 namespace Stratageme15.Reactors.Basic.Expressions

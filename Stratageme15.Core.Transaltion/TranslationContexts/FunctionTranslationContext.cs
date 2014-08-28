@@ -8,9 +8,9 @@ using Stratageme15.Core.JavascriptCodeDom.Expressions;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Literals.KeywordLiterals;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
-using Stratageme15.Core.Transaltion.Builders;
+using Stratageme15.Core.Translation.Builders;
 
-namespace Stratageme15.Core.Transaltion.TranslationContexts
+namespace Stratageme15.Core.Translation.TranslationContexts
 {
     public class FunctionTranslationContext
     {

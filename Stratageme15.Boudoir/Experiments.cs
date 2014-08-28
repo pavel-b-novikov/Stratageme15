@@ -11,8 +11,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using Stratageme15.Core.Compiler;
 using Stratageme15.Core.JavascriptCodeDom;
-using Stratageme15.Core.Transaltion;
-using Stratageme15.Core.Transaltion.Repositories;
+using Stratageme15.Core.Translation;
+using Stratageme15.Core.Translation.Repositories;
 using Stratageme15.Reactors.Basic;
 
 namespace Stratageme15.Boudoir

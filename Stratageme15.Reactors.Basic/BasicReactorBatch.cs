@@ -1,5 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Stratageme15.Core.Transaltion.Reactors;
+using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Reactors.Basic.Declarations;
 using Stratageme15.Reactors.Basic.Declarations.Field;
 using Stratageme15.Reactors.Basic.Declarations.Property;

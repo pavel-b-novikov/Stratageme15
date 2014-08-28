@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
-using Stratageme15.Core.Transaltion.Reactors;
+using Stratageme15.Core.Translation.Reactors;
 
-namespace Stratageme15.Core.Transaltion
+namespace Stratageme15.Core.Translation
 {
     internal class ChildrenTraversalPromise
     {

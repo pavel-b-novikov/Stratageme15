@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
-using Stratageme15.Core.Transaltion.Reactors;
+using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.ExtensionsPack.Prototyping;
 using Stratageme15.ExtensionsPack.Tactics;
 

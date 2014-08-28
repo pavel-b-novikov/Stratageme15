@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
-using Stratageme15.Core.Transaltion;
-using Stratageme15.Core.Transaltion.Reactors;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+using Stratageme15.Core.Translation;
+using Stratageme15.Core.Translation.Reactors;
+using Stratageme15.Core.Translation.TranslationContexts;
 
 namespace Stratageme15.Reactors.Basic.Statements
 {

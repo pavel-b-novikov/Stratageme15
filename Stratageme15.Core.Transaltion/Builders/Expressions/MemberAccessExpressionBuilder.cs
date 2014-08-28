@@ -3,7 +3,7 @@ using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.JavascriptCodeDom.Expressions;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 
-namespace Stratageme15.Core.Transaltion.Builders.Expressions
+namespace Stratageme15.Core.Translation.Builders.Expressions
 {
     public class MemberAccessExpressionBuilder : ISyntaxBuilder<Expression>
     {

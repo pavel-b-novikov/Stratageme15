@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Stratageme15.Core.Transaltion;
+using Stratageme15.Core.Translation;
 
 namespace Stratageme15.Reactors.Basic.Extensions
 {

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Stratageme15.Core.JavascriptCodeDom;
-using Stratageme15.Core.Transaltion.Logging;
-using Stratageme15.Core.Transaltion.Repositories;
+using Stratageme15.Core.Translation.Logging;
+using Stratageme15.Core.Translation.Repositories;
 
-namespace Stratageme15.Core.Transaltion.TranslationContexts
+namespace Stratageme15.Core.Translation.TranslationContexts
 {
     /// <summary>
     /// Performes access for temporary translation data.

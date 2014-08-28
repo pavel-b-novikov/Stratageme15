@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Stratageme15.Core.Transaltion.Repositories
+namespace Stratageme15.Core.Translation.Repositories
 {
     public class AssemblyRepository
     {

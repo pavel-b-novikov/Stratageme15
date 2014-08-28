@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
-namespace Stratageme15.Core.Transaltion.Reactors
+namespace Stratageme15.Core.Translation.Reactors
 {
     public abstract class ReactorBatchBase
     {

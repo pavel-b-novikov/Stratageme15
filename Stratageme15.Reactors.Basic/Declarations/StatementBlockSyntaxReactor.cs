@@ -3,9 +3,9 @@ using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.JavascriptCodeDom.Markers;
 using Stratageme15.Core.JavascriptCodeDom.Statements;
-using Stratageme15.Core.Transaltion;
-using Stratageme15.Core.Transaltion.Reactors;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+using Stratageme15.Core.Translation;
+using Stratageme15.Core.Translation.Reactors;
+using Stratageme15.Core.Translation.TranslationContexts;
 
 namespace Stratageme15.Reactors.Basic.Declarations
 {

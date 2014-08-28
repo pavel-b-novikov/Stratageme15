@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+using Stratageme15.Core.Translation.TranslationContexts;
 using Stratageme15.ExtensionsPack.Tactics;
 
 namespace Stratageme15.ExtensionsPack.Extensions

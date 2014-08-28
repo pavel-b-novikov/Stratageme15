@@ -1,4 +1,4 @@
-﻿using Stratageme15.Core.Transaltion.TranslationContexts;
+﻿using Stratageme15.Core.Translation.TranslationContexts;
 
 namespace Stratageme15.ExtensionsPack.Tactics
 {

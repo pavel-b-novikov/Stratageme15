@@ -42,9 +42,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Stratageme15.Core.Transaltion\Stratageme15.Core.Transaltion.csproj">
+    <ProjectReference Include="..\Stratageme15.Core.Transaltion\Stratageme15.Core.Translation.csproj">
       <Project>{A9742331-00A6-4599-91C5-313423843619}</Project>
-      <Name>Stratageme15.Core.Transaltion</Name>
+      <Name>Stratageme15.Core.Translation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

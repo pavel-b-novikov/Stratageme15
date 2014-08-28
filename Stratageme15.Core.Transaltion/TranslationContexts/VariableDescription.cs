@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stratageme15.Core.Transaltion.TranslationContexts
+namespace Stratageme15.Core.Translation.TranslationContexts
 {
     public class VariableDescription
     {

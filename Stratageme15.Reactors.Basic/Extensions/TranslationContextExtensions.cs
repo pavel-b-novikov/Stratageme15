@@ -1,6 +1,7 @@
 ﻿using System;
-using Stratageme15.Core.Transaltion.TranslationContexts;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Stratageme15.Core.Translation.TranslationContexts;
+
 namespace Stratageme15.Reactors.Basic.Extensions
 {
     public static class TranslationContextExtensions

@@ -1,8 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Stratageme15.Core.JavascriptCodeDom;
-using Stratageme15.Core.Transaltion;
-using Stratageme15.Core.Transaltion.Reactors;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+using Stratageme15.Core.Translation;
+using Stratageme15.Core.Translation.Reactors;
+using Stratageme15.Core.Translation.TranslationContexts;
 
 namespace Stratageme15.Reactors.Basic.Expressions
 {

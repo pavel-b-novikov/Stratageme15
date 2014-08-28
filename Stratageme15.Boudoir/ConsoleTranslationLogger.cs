@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Stratageme15.Core.Transaltion.Logging;
+using Stratageme15.Core.Translation.Logging;
 
 namespace Stratageme15.Boudoir
 {

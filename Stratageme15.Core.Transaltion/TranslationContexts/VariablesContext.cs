@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Stratageme15.Core.Transaltion.Logging;
+using Stratageme15.Core.Translation.Logging;
 
-namespace Stratageme15.Core.Transaltion.TranslationContexts
+namespace Stratageme15.Core.Translation.TranslationContexts
 {
     public class VariablesContext
     {

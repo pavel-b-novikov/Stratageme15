@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Stratageme15.Core.Transaltion.Extensions;
 using Stratageme15.ExtensionsPack.Tactics.Base;
 
 namespace Stratageme15.ExtensionsPack.Tactics

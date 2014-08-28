@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Stratageme15.Core.Transaltion.Extensions
+namespace Stratageme15.Core.Translation.Extensions
 {
     public static class DictionaryExtensions
     {

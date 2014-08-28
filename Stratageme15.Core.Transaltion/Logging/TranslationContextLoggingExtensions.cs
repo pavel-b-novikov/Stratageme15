@@ -1,6 +1,6 @@
-﻿using Stratageme15.Core.Transaltion.TranslationContexts;
+﻿using Stratageme15.Core.Translation.TranslationContexts;
 
-namespace Stratageme15.Core.Transaltion.Logging
+namespace Stratageme15.Core.Translation.Logging
 {
     /// <summary>
     /// Shortcuts for error logging

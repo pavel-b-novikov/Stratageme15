@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stratageme15.Core.Javascrip
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stratageme15.Core.Tools.JavascriptParser", "Stratageme15.Core.Tools.JavascriptParser\Stratageme15.Core.Tools.JavascriptParser.csproj", "{1622E786-1C7E-453A-A0CE-2816B29ED4C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stratageme15.Core.Transaltion", "Stratageme15.Core.Transaltion\Stratageme15.Core.Transaltion.csproj", "{A9742331-00A6-4599-91C5-313423843619}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stratageme15.Core.Translation", "Stratageme15.Core.Transaltion\Stratageme15.Core.Translation.csproj", "{A9742331-00A6-4599-91C5-313423843619}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stratageme15.Reactors.Basic", "Stratageme15.Reactors.Basic\Stratageme15.Reactors.Basic.csproj", "{E98EF953-11D3-4E67-9B25-F9ED42E98115}"
 EndProject

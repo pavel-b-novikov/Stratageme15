@@ -1,7 +1,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom;
-using Stratageme15.Core.Transaltion;
-using Stratageme15.Core.Transaltion.TranslationContexts;
+using Stratageme15.Core.Translation;
+using Stratageme15.Core.Translation.TranslationContexts;
 using Stratageme15.Reactors.Basic.Expressions;
 
 namespace Stratageme15.Reactors.Basic.Declarations

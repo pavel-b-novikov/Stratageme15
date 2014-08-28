@@ -116,9 +116,9 @@
       <Project>{826D2CC0-01FF-46EB-94F0-92CEE9679DBE}</Project>
       <Name>Stratageme15.Core.JavascriptCodeDom</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Stratageme15.Core.Transaltion\Stratageme15.Core.Transaltion.csproj">
+    <ProjectReference Include="..\Stratageme15.Core.Transaltion\Stratageme15.Core.Translation.csproj">
       <Project>{A9742331-00A6-4599-91C5-313423843619}</Project>
-      <Name>Stratageme15.Core.Transaltion</Name>
+      <Name>Stratageme15.Core.Translation</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
