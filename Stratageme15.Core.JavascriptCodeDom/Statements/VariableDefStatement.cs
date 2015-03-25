@@ -11,7 +11,7 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
     {
         public IList<Tuple<IdentExpression, AssignmentOperator, Expression>> Variables { get; set; }
 
-        private IList<IdentExpression> _pendingIdents;
+        private readonly IList<IdentExpression> _pendingIdents;
 
         public VariableDefStatement()
         {
@@ -35,6 +35,16 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
                 return;
             }
 
+            if (symbol is Expression)
+            {
+                var a = (Expression) symbol;
+                var tuple = Variables[Variables.Count - 1];
+                var t = new Tuple<IdentExpression, AssignmentOperator, Expression>(tuple.Item1, tuple.Item2, a);
+                Variables.Remove(tuple);
+                Variables.Add(t);
+                return;
+            }
+            
             throw new UnexpectedException(symbol,this);
         }
 

@@ -36,19 +36,20 @@ namespace Stratageme15.Core.Compiler.DefaultNodeCompilers
             }
             if (node.Statements.Count == 0)
             {
-                output.Write("{ }"); return;
+                if (node.IsEnclosed) output.Write("{ }"); 
+                return;
             }
 
             var stm = node.Statements.First.Value;
             if (node.Statements.Count == 1 && NeedColon(stm))
             {
                 
-                output.Write("{ ");
+                if (node.IsEnclosed) output.Write("{ ");
                 CompileStatement(output, node.Statements.First.Value,false);
-                output.Write(" }");
+                if (node.IsEnclosed) output.Write(" }");
                 return;
             }
-            output.Write("{");
+            if (node.IsEnclosed)  output.Write("{");
             IncTab(output);
             foreach (var statement in node.Statements)
             {
@@ -56,7 +57,7 @@ namespace Stratageme15.Core.Compiler.DefaultNodeCompilers
             }
             DecTab(output);
             NewLine(output);
-            output.Write("}");
+            if (node.IsEnclosed)  output.Write("}");
         }
     }
 }

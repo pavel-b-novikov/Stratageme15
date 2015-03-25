@@ -4,7 +4,7 @@ using Stratageme15.Core.JavascriptCodeDom.Markers;
 
 namespace Stratageme15.Core.JavascriptCodeDom.Statements
 {
-    public class ReturnStatement : SyntaxTreeNodeBase, IStatement, IRootStatement
+    public class ReturnStatement : SyntaxTreeNodeBase, IRootStatement
     {
         public Expression ReturnExpression { get; set; }
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)

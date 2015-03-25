@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
-using Stratageme15.Core.JavascriptCodeDom.Extensions;
 using Stratageme15.Core.JavascriptCodeDom.Markers;
 
 namespace Stratageme15.Core.JavascriptCodeDom.Statements
 {
-    public class WhileStatement : SyntaxTreeNodeBase, IRootStatement, IStatement
+    public class WhileStatement : SyntaxTreeNodeBase, IRootStatement
     {
         public ParenthesisExpression WhileCondition { get; set; }
 
@@ -13,8 +12,8 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
+            if (CollectExact<WhileStatement, ParenthesisExpression>(c => c.WhileCondition, symbol)) return;
             WrapIfStatement(ref symbol);
-            if (CollectExact<WhileStatement,ParenthesisExpression>(c=>c.WhileCondition,symbol)) return;
             if (CollectExact<WhileStatement, CodeBlock>(c => c.WhileBlock, symbol)) return;
 
             base.CollectSymbol(symbol);

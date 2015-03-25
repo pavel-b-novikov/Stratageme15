@@ -4,7 +4,7 @@ using Stratageme15.Core.JavascriptCodeDom.Markers;
 
 namespace Stratageme15.Core.JavascriptCodeDom.Statements
 {
-    public class ForInStatement : SyntaxTreeNodeBase, IRootStatement, IStatement
+    public class ForInStatement : SyntaxTreeNodeBase, IRootStatement
     {
         public Expression IterationExpression { get; set; }
 

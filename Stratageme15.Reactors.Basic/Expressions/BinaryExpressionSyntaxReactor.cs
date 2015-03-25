@@ -7,13 +7,13 @@ using Stratageme15.Core.JavascriptCodeDom.Expressions;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Binary;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.TranslationContexts;
-using Stratageme15.Reactors.Basic.Extensions;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Expressions
 {
     public class BinaryExpressionSyntaxReactor : ExpressionReactorBase<BinaryExpressionSyntax, Expression>
     {
-        public override Expression TranslateNodeInner(BinaryExpressionSyntax node, TranslationContext context,
+        public override Expression TranslateNodeInner(BinaryExpressionSyntax node, TranslationContextWrapper context,
                                                       TranslationResult res)
         {
             res.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
@@ -77,7 +77,7 @@ namespace Stratageme15.Reactors.Basic.Expressions
         }
 
         public AssignmentBinaryExpression ConstructAssignmentExpression(BinaryExpressionSyntax node,
-                                                                        TranslationContext context,
+                                                                        TranslationContextWrapper context,
                                                                         TranslationResult res)
         {
             bool isSetterRequired = false;
@@ -95,16 +95,16 @@ namespace Stratageme15.Reactors.Basic.Expressions
 
             if (mae != null)
             {
-                Type type = TypeInferer.InferTypeFromExpression(mae.Expression, context);
+                TypeInfo type = context.Context.SemanticModel.GetTypeInfo(mae.Expression);
                 propName = mae.Name.Identifier.ValueText;
-                if (type.IsProperty(propName))
+                if (type.ConvertedType.IsProperty(propName))
                 {
                     isSetterRequired = true;
                 }
             }
             if (isSetterRequired)
             {
-                res.PrepareForManualPush(context);
+                res.PrepareForManualPush(context.Context);
                 ExpressionSyntax baseExpression = null;
                 if (ident != null) baseExpression = SyntaxFactory.ThisExpression();
                 if (mae != null)
@@ -160,7 +160,7 @@ namespace Stratageme15.Reactors.Basic.Expressions
                                                                                          SyntaxFactory.SeparatedList(
                                                                                              new[] {arg})));
 
-                context.TranslationStack.Push(call);
+                context.Context.TranslationStack.Push(call);
                 return null;
             }
             return ConstructBinaryExpression<AssignmentBinaryExpression, AssignmentOperator>(node);

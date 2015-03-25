@@ -16,8 +16,9 @@ namespace Stratageme15.ExtensionsPack.Tactics
     {
         public static MemberInfo GetMember(MemberAccessExpressionSyntax node, TranslationContext ctx)
         {
-            var accessedType = TypeInferer.InferTypeFromExpression(node.Expression, ctx);
-            return TypeInferer.GetMember(accessedType, node.Name.Identifier.ValueText);
+            //var accessedType = TypeInferer.InferTypeFromExpression(node.Expression, ctx);
+            //return TypeInferer.GetMember(accessedType, node.Name.Identifier.ValueText);
+            return null;
         }
     }
 }

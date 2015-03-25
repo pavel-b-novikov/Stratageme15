@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.Translation.Logging;
 using Stratageme15.Core.Translation.Repositories;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Stratageme15.Core.Translation.TranslationContexts
 {
@@ -13,7 +14,7 @@ namespace Stratageme15.Core.Translation.TranslationContexts
     public class TranslationContext
     {
         private readonly ITranslationLogger _logger;
-        private SyntaxTreeNodeBase _backup;
+        private Stack<SyntaxTreeNodeBase> _backupStack = new Stack<SyntaxTreeNodeBase>();
 
         /// <summary>
         /// Constructs new translation context.
@@ -36,13 +37,31 @@ namespace Stratageme15.Core.Translation.TranslationContexts
             TranslationRoot = translationRoot;
             FileName = fileName;
             Root = root;
-            TranslatedNode = root;
+            TargetNode = root;
             Reactors = reactors;
-            Usings = new List<string>();
-            NamespaceUsings = new List<string>();
-            _classContextsStack = new Stack<ClassTranslationContext>();
             Assemblies = arep;
+            CreateSemanticModel();
         }
+
+        private void CreateSemanticModel()
+        {
+            CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+
+            CSharpCompilation comp = CSharpCompilation.Create("todo", new[] {TranslationRoot},
+                                                              Assemblies.GetMetadataReferences(), compilationOptions);
+            Compilation = comp;
+            SemanticModel = comp.GetSemanticModel(TranslationRoot);
+        }
+
+        /// <summary>
+        /// Reference to Compilation object
+        /// </summary>
+        public CSharpCompilation Compilation { get; private set; }
+
+        /// <summary>
+        /// Semantic model of code being translated
+        /// </summary>
+        public SemanticModel SemanticModel { get; private set; }
 
         /// <summary>
         /// The assemblies repository holding assemblies used during translation process for type lookup
@@ -55,19 +74,50 @@ namespace Stratageme15.Core.Translation.TranslationContexts
         public ReactorRepository Reactors { get; private set; }
 
         /// <summary>
-        /// Current namespace specified by namespace directive
+        /// Custom translation context variables
         /// </summary>
+        private readonly Dictionary<string, object> _customContextVars = new Dictionary<string, object>();
+
+        public object this[string s]
+        {
+            get { return _customContextVars[s]; }
+            set { _customContextVars[s] = value; }
+        }
+
+        public T GetCustomVariable<T>(string s)
+        {
+            if (!_customContextVars.ContainsKey(s)) return default(T);
+            return (T)_customContextVars[s];
+        }
+
+        public T GetOrCreateCustomVariable<T>(string s) where T: new()
+        {
+            if (!IsCustomVariableDefined(s))
+            {
+                var e = new T();
+                SetCustomVariable(e,s);
+                return e;
+            }
+            return (T)_customContextVars[s];
+        }
+
+        public void SetCustomVariable<T>(T value,string s)
+        {
+            _customContextVars[s] = value;
+        }
+
+        public bool IsCustomVariableDefined(string s)
+        {
+            return _customContextVars.ContainsKey(s);
+        }
+
+        public void DropCustomVariable(string s)
+        {
+            _customContextVars.Remove(s);
+        }
+
         public string Namespace { get; set; }
-
-        /// <summary>
-        /// Root program usings specified outside of currant namespace
-        /// </summary>
-        public List<string> Usings { get; private set; }
-
-        /// <summary>
-        /// Namespace usings specified inside of current namespace
-        /// </summary>
-        public List<string> NamespaceUsings { get; private set; }
+        
 
         /// <summary>
         /// Target program syntax tree root
@@ -94,7 +144,7 @@ namespace Stratageme15.Core.Translation.TranslationContexts
         /// All child nodes should be placed inside current translated node via TranslatedNode.CollectSymbol method
         /// To change current translated node use Push/PopTranslated or Set/RestorTranslated
         /// </summary>
-        public SyntaxTreeNodeBase TranslatedNode { get; private set; }
+        public SyntaxTreeNodeBase TargetNode { get; private set; }
 
         public SyntaxNode SourceNode { get; internal set; }
 
@@ -106,58 +156,22 @@ namespace Stratageme15.Core.Translation.TranslationContexts
             get { return _logger; }
         }
 
-        #region Type context services
-
-        private readonly Stack<ClassTranslationContext> _classContextsStack;
-
-
-        private string _currentTypeName;
-
-        public ClassTranslationContext CurrentClassContext
-        {
-            get { return _classContextsStack.Peek(); }
-        }
-
-        public string CurrentTypeName
-        {
-            get { return _currentTypeName; }
-        }
-
-        public void PushClass(ClassTranslationContext ctc)
-        {
-            _currentTypeName = ctc.Type.Name;
-            if (_classContextsStack.Count > 0) ctc.Parent = _classContextsStack.Peek();
-            _classContextsStack.Push(ctc);
-        }
-
-        public void PopClass()
-        {
-            _classContextsStack.Pop();
-            _currentTypeName = null;
-            if (_classContextsStack.Count > 0)
-            {
-                _currentTypeName = _classContextsStack.Peek().Type.Name;
-            }
-        }
-
-        #endregion
-
         /// <summary>
         /// Preserves current translated node state and sets the Translated node to passed argument
         /// </summary>
         /// <param name="node">New translated node</param>
-        public void SetTranslated(SyntaxTreeNodeBase node)
+        public void PushContextNode(SyntaxTreeNodeBase node)
         {
-            _backup = TranslatedNode;
-            TranslatedNode = node;
+            _backupStack.Push(TargetNode);
+            TargetNode = node;
         }
 
         /// <summary>
         /// Restores current translated node from backup after SetTranslatedNode call
         /// </summary>
-        public void RestoreTranslated()
+        public void PopContextNode()
         {
-            TranslatedNode = _backup;
+            TargetNode = _backupStack.Pop();
         }
 
         /// <summary>
@@ -168,14 +182,14 @@ namespace Stratageme15.Core.Translation.TranslationContexts
         /// <param name="node">New current translation node</param>
         public void PushTranslated(SyntaxTreeNodeBase node)
         {
-            node.Parent = TranslatedNode;
-            TranslatedNode = node;
+            node.Parent = TargetNode;
+            TargetNode = node;
         }
 
 
         public void PopTranslated()
         {
-            TranslatedNode = TranslatedNode.Parent;
+            TargetNode = TargetNode.Parent;
         }
 
     }

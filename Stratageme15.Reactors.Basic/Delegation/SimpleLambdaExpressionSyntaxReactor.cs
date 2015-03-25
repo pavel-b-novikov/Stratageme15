@@ -1,45 +1,40 @@
 ﻿using System;
 using Stratageme15.Core.JavascriptCodeDom;
-using Stratageme15.Core.JavascriptCodeDom.Expressions;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.Translation;
-using Stratageme15.Core.Translation.Builders;
-using Stratageme15.Core.Translation.Reactors;
-using Stratageme15.Core.Translation.TranslationContexts;
-using Stratageme15.Reactors.Basic.Expressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Stratageme15.Reactors.Basic.Extensions;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Delegation
 {
-    class SimpleLambdaExpressionSyntaxReactor : ReactorBase<SimpleLambdaExpressionSyntax>
+    class SimpleLambdaExpressionSyntaxReactor : BasicReactorBase<SimpleLambdaExpressionSyntax>
     {
-        protected override void HandleNode(SimpleLambdaExpressionSyntax node, TranslationContext context, TranslationResult result)
+        protected override void HandleNode(SimpleLambdaExpressionSyntax node, TranslationContextWrapper context, TranslationResult result)
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
-            result.PrepareForManualPush(context);
+            result.PrepareForManualPush(context.Context);
 
             FunctionDefExpression fde = new FunctionDefExpression();
             fde.Parameters = new FormalParametersList();
-            fde.Parameters.CollectSymbol(node.Parameter.Identifier.ValueText.Ident());
+            fde.Parameters.CollectSymbol(node.Parameter.Identifier.ValueText.ToIdent());
             Type argType = null;
             if (node.Parameter.Type!=null)
             {
-                argType = TypeInferer.GetTypeFromContext(node.Parameter.Type, context);
+                //argType = TypeInferer.GetTypeFromContext(node.Parameter.Type, context);
             }else
             {
                 
             }
 
-            context.EnterClosureContext();
+            //context.CurrentClassContext.EnterClosureContext();
 
-            context.PushTranslated(fde);
+            context.Context.PushTranslated(fde);
         }
 
-        public override void OnAfterChildTraversal(TranslationContext context, SimpleLambdaExpressionSyntax originalNode)
+        public override void OnAfterChildTraversal(TranslationContextWrapper context, SimpleLambdaExpressionSyntax originalNode)
         {
-            context.PopTranslated();
-            context.ExitClosureContext();
+            context.Context.PopTranslated();
+            //context.ExitClosureContext();
         }
     }
 }

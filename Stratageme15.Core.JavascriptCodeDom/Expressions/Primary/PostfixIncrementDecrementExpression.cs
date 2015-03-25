@@ -4,7 +4,7 @@ using Stratageme15.Core.JavascriptCodeDom.Statements;
 
 namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
 {
-    public class PostfixIncrementDecrementExpression : PrimaryExpression,IRootStatement, IStatement
+    public class PostfixIncrementDecrementExpression : PrimaryExpression,IRootStatement
     {
         public Expression Callee { get; set; }
 
@@ -14,8 +14,6 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
         {
             yield return Callee;
         }
-
-        public StatementLabel Label { get; set; }
 
         public override void CollectOperator(IndrementDecrementOperator op)
         {

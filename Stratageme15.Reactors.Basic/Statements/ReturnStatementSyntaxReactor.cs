@@ -3,31 +3,32 @@ using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Statements
 {
-    public class ReturnStatementSyntaxReactor : ReactorBase<ReturnStatementSyntax>
+    public class ReturnStatementSyntaxReactor : BasicReactorBase<ReturnStatementSyntax>
     {
-        protected override void HandleNode(ReturnStatementSyntax node, TranslationContext context,
+        protected override void HandleNode(ReturnStatementSyntax node, TranslationContextWrapper context,
                                            TranslationResult result)
         {
             if (node.Expression == null)
             {
                 result.Strategy = TranslationStrategy.DontTraverseChildren;
-                context.TranslatedNode.CollectSymbol(new ReturnStatement());
+                context.Context.TargetNode.CollectSymbol(new ReturnStatement());
                 return;
             }
 
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             var rs = new ReturnStatement();
-            context.TranslatedNode.CollectSymbol(rs);
-            context.PushTranslated(rs);
+            context.Context.TargetNode.CollectSymbol(rs);
+            context.Context.PushTranslated(rs);
         }
 
-        public override void OnAfterChildTraversal(TranslationContext context, ReturnStatementSyntax originalNode)
+        public override void OnAfterChildTraversal(TranslationContextWrapper context, ReturnStatementSyntax originalNode)
         {
             base.OnAfterChildTraversal(context, originalNode);
-            context.PopTranslated();
+            context.Context.PopTranslated();
         }
     }
 }

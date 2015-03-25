@@ -77,7 +77,7 @@
       <Name>Stratageme15.Core.JavascriptCodeDom</Name>
     </ProjectReference>
     <ProjectReference Include="..\Stratageme15.Core.Transaltion\Stratageme15.Core.Translation.csproj">
-      <Project>{A9742331-00A6-4599-91C5-313423843619}</Project>
+      <Project>{a9742331-00a6-4599-91c5-313423843619}</Project>
       <Name>Stratageme15.Core.Translation</Name>
     </ProjectReference>
   </ItemGroup>

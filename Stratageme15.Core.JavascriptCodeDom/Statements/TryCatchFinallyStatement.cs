@@ -4,7 +4,7 @@ using Stratageme15.Core.JavascriptCodeDom.Markers;
 
 namespace Stratageme15.Core.JavascriptCodeDom.Statements
 {
-    public class TryCatchFinallyStatement : SyntaxTreeNodeBase, IRootStatement, IStatement
+    public class TryCatchFinallyStatement : SyntaxTreeNodeBase, IRootStatement
     {
         public CodeBlock TryBlock { get; set; }
 

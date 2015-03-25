@@ -13,20 +13,22 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
-            if (Is<IStatement>(symbol))
-            {
-                symbol = symbol.WrapInCodeBlock();
-            }
-
             if (Is<IdentExpression>(symbol))
             {
-                if (Identifier==null)
+                if (Identifier == null)
                 {
                     Identifier = (IdentExpression)symbol;
                     symbol.Parent = this;
                     return;
                 }
             }
+
+            if (Is<IStatement>(symbol))
+            {
+                symbol = symbol.WrapInCodeBlock();
+            }
+
+            
 
             if (Is<CodeBlock>(symbol))
             {

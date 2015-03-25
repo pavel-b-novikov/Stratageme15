@@ -5,7 +5,7 @@ using Stratageme15.Core.JavascriptCodeDom.Markers;
 
 namespace Stratageme15.Core.JavascriptCodeDom.Statements
 {
-    public class DeleteStatement: PrimaryExpression,IStatement
+    public class DeleteStatement: PrimaryExpression
     {
         public Expression ExpressionToDelete { get; set; }
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
@@ -20,6 +20,5 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
             if (ExpressionToDelete != null) yield return ExpressionToDelete;
         }
 
-        public StatementLabel Label { get; set; }
     }
 }

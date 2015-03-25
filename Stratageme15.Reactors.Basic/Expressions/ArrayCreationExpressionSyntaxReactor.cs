@@ -2,6 +2,7 @@
 using Stratageme15.Core.JavascriptCodeDom.Expressions;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Expressions
 {
@@ -9,13 +10,13 @@ namespace Stratageme15.Reactors.Basic.Expressions
         ExpressionReactorBase<ArrayCreationExpressionSyntax, ArrayCreationExpression>
     {
         public override ArrayCreationExpression TranslateNodeInner(ArrayCreationExpressionSyntax node,
-                                                                   TranslationContext context, TranslationResult result)
+                                                                   TranslationContextWrapper context, TranslationResult result)
         {
             result.Strategy = TranslationStrategy.TraverseChildren;
-            result.PrepareForManualPush(context);
+            result.PrepareForManualPush(context.Context);
             if (node.Initializer != null)
             {
-                context.TranslationStack.Push(node.Initializer);
+                context.Context.TranslationStack.Push(node.Initializer);
             }
             return new ArrayCreationExpression();
         }

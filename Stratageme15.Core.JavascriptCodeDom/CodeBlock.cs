@@ -12,6 +12,8 @@ namespace Stratageme15.Core.JavascriptCodeDom
     /// </summary>
     public class CodeBlock : SyntaxTreeNodeBase, IStatement, IRootCodeElement, IOrderedCollector
     {
+        public bool IsEnclosed { get; set; }
+
         /// <summary>
         /// Statements in corresponding order
         /// </summary>
@@ -28,6 +30,7 @@ namespace Stratageme15.Core.JavascriptCodeDom
         /// </summary>
         public CodeBlock()
         {
+            IsEnclosed = true;
             Statements = new LinkedList<IStatement>();
             StrangeIdents = new List<Tuple<IStatement, IdentExpression>>();
         }
@@ -55,6 +58,19 @@ namespace Stratageme15.Core.JavascriptCodeDom
 
         private void CollectSymbolInner(SyntaxTreeNodeBase symbol,bool addFirst = false)
         {
+            if (Is<StringLiteral>(symbol))
+            {
+                var sl = (StringLiteral)symbol;
+                if (sl.String.Trim('\'') == "use strict")
+                {
+                    UseStrict us = new UseStrict();
+                    us.Parent = this;
+                    us.Role = "UseStrictDirective";
+                    Add(us, addFirst);
+                    symbol.Parent = this;
+                    return;
+                }
+            }
             if (Is<IStatement>(symbol))
             {
                 symbol.Role = "Statement";
@@ -96,19 +112,7 @@ namespace Stratageme15.Core.JavascriptCodeDom
                 return;
             }
 
-            if (Is<StringLiteral>(symbol))
-            {
-                var sl = (StringLiteral)symbol;
-                if (sl.String.Trim('\'') == "use strict")
-                {
-                    UseStrict us = new UseStrict();
-                    us.Parent = this;
-                    us.Role = "UseStrictDirective";
-                    Add(us,addFirst);
-                    symbol.Parent = this;
-                    return;
-                }
-            }
+           
             base.CollectSymbol(symbol);
         }
 

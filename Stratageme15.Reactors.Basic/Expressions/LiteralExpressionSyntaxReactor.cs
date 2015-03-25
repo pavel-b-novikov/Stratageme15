@@ -6,12 +6,13 @@ using Stratageme15.Core.JavascriptCodeDom.Expressions.Literals;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Literals.KeywordLiterals;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Expressions
 {
     public class LiteralExpressionSyntaxReactor : ExpressionReactorBase<LiteralExpressionSyntax, LiteralExpression>
     {
-        public override LiteralExpression TranslateNodeInner(LiteralExpressionSyntax node, TranslationContext context,
+        public override LiteralExpression TranslateNodeInner(LiteralExpressionSyntax node, TranslationContextWrapper context,
                                                              TranslationResult res)
         {
             res.Strategy = TranslationStrategy.DontTraverseChildren;
@@ -23,7 +24,7 @@ namespace Stratageme15.Reactors.Basic.Expressions
 
             if (literal.CSharpKind() == SyntaxKind.NumericLiteralToken)
             {
-                return new NumberLiteral(decimal.Parse(literal.ValueText));
+                return new NumberLiteral(literal.ValueText);
             }
 
             if (literal.CSharpKind() == SyntaxKind.NullKeyword)

@@ -5,10 +5,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Declarations.Field
 {
-    internal class FieldVariableDeclarationSyntaxReactor : ReactorBase<VariableDeclarationSyntax>, ISituationReactor
+    internal class FieldVariableDeclarationSyntaxReactor : BasicReactorBase<VariableDeclarationSyntax>, ISituationReactor
     {
         #region ISituationReactor Members
 
@@ -19,12 +20,12 @@ namespace Stratageme15.Reactors.Basic.Declarations.Field
 
         #endregion
 
-        protected override void HandleNode(VariableDeclarationSyntax node, TranslationContext context,
+        protected override void HandleNode(VariableDeclarationSyntax node, TranslationContextWrapper context,
                                            TranslationResult result)
         {
-            Type type = TypeInferer.GetTypeFromContext(node.Type, context); //no cases when here will be var
+            TypeInfo type = context.Context.SemanticModel.GetTypeInfo(node.Type); //no cases when here will be var //todo
             result.Strategy = TranslationStrategy.TraverseChildren;
-            result.PrepareForManualPush(context);
+            result.PrepareForManualPush(context.Context);
             LiteralExpressionSyntax def = type.GetDefaultValueSyntax();
 
             foreach (VariableDeclaratorSyntax variableDeclaratorSyntax in node.Variables)
@@ -50,7 +51,7 @@ namespace Stratageme15.Reactors.Basic.Declarations.Field
                             SyntaxFactory.IdentifierName(variableDeclaratorSyntax.Identifier)),
                         def);
                 }
-                context.TranslationStack.Push(toPush);
+                context.Context.TranslationStack.Push(toPush);
             }
         }
     }

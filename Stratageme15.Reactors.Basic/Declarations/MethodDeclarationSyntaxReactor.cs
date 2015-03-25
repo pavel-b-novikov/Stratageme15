@@ -1,31 +1,28 @@
-using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Stratageme15.Core.JavascriptCodeDom.Expressions;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Binary;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.Translation;
-using Stratageme15.Core.Translation.Builders;
-using Stratageme15.Core.Translation.Reactors;
-using Stratageme15.Core.Translation.TranslationContexts;
-using Stratageme15.Reactors.Basic.Extensions;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Declarations
 {
-    public class MethodDeclarationSyntaxReactor : ReactorBase<MethodDeclarationSyntax>
+    public class MethodDeclarationSyntaxReactor : BasicReactorBase<MethodDeclarationSyntax>
     {
-        protected override void HandleNode(MethodDeclarationSyntax node, TranslationContext context,
+        protected override void HandleNode(MethodDeclarationSyntax node, TranslationContextWrapper context,
                                            TranslationResult result)
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             context.CurrentClassContext.PushFunction(node, node.Identifier.ValueText);
-            context.PushTranslated(context.CurrentClassContext.CurrentFunction.Function);
-            result.PrepareForManualPush(context);
-            context.TranslationStack.Push(node.Body);
-            context.TranslationStack.Push(node.ParameterList);
+            context.Context.PushTranslated(context.CurrentClassContext.CurrentFunction.Function);
+            result.PrepareForManualPush(context.Context);
+            context.Context.TranslationStack.Push(node.Body);
+            context.Context.TranslationStack.Push(node.ParameterList);
         }
 
-        public override void OnAfterChildTraversal(TranslationContext context, MethodDeclarationSyntax originalNode)
+        public override void OnAfterChildTraversal(TranslationContextWrapper context, MethodDeclarationSyntax originalNode)
         {
             base.OnAfterChildTraversal(context, originalNode);
             FunctionDefExpression fn = context.CurrentClassContext.CurrentFunction.Function;
@@ -33,20 +30,17 @@ namespace Stratageme15.Reactors.Basic.Declarations
             fn.Name = null;
 
             context.CurrentClassContext.PopFunction();
-            context.PopTranslated();
+            context.Context.PopTranslated();
 
-            AssignmentBinaryExpression abe = null;
-            var a = context.JavascriptCurrentTypeName()
-                    .MemberAccess();
+            
+            Expression a = context.JavascriptCurrentTypeName().ToIdent();
             if (!originalNode.Modifiers.Any(SyntaxKind.StaticKeyword))
             {
-                a = a.Field("prototype");
+                a = a.Member("prototype");
             }
-            a = a.Field(name);
-            var b = a.Build();
-            abe = b.Assignment(fn);
+            AssignmentBinaryExpression abe = a.Member(name).Assignment(fn);
 
-            context.TranslatedNode.CollectSymbol(abe);
+            context.Context.TargetNode.CollectSymbol(abe);
         }
     }
 }

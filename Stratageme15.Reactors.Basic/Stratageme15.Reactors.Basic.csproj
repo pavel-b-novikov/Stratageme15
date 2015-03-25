@@ -51,7 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicReactorBase.cs" />
     <Compile Include="BasicReactorBatch.cs" />
+    <Compile Include="Contexts\ClassTranslationContext.cs" />
+    <Compile Include="Contexts\FunctionTranslationContext.cs" />
+    <Compile Include="Contexts\VariableDescription.cs" />
+    <Compile Include="Contexts\VariablesContext.cs" />
     <Compile Include="Declarations\ArgumentListSyntaxReactor.cs" />
     <Compile Include="Declarations\BlockSyntaxReactor.cs" />
     <Compile Include="Declarations\ClassDeclarationSyntaxReactor.cs" />
@@ -85,9 +90,14 @@
     <Compile Include="Expressions\PostfixUnaryExpressionSyntaxReactor.cs" />
     <Compile Include="Expressions\PrefixUnaryExpressionSyntaxReactor.cs" />
     <Compile Include="Expressions\ThisExpressionSyntaxReactor.cs" />
-    <Compile Include="Extensions\SyntaxKindExtensions.cs" />
-    <Compile Include="Extensions\TranslationContextExtensions.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Utility\JavascriptHelper.cs" />
+    <Compile Include="Utility\Naming.cs" />
+    <Compile Include="Utility\Polymorphism.cs" />
+    <Compile Include="Utility\PolymorphMethod.cs" />
+    <Compile Include="Utility\TranslationContextWrapper.cs" />
+    <Compile Include="Utility\SyntaxKindExtensions.cs" />
+    <Compile Include="Utility\TranslationContextExtensions.cs" />
+    <Compile Include="Utility\TypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Statements\BreakStatementSyntaxReactor.cs" />
     <Compile Include="Statements\ContinueStatementSyntaxReactor.cs" />
@@ -110,6 +120,8 @@
     <Compile Include="Statements\Try\FinallyClauseSyntaxReactor.cs" />
     <Compile Include="Statements\Try\TryStatementSyntaxReactor.cs" />
     <Compile Include="Statements\WhileStatementSyntaxReactor.cs" />
+    <Compile Include="JavascriptElements.cs" />
+    <Compile Include="TypeInferer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stratageme15.Core.JavascriptCodeDom\Stratageme15.Core.JavascriptCodeDom.csproj">
@@ -117,11 +129,13 @@
       <Name>Stratageme15.Core.JavascriptCodeDom</Name>
     </ProjectReference>
     <ProjectReference Include="..\Stratageme15.Core.Transaltion\Stratageme15.Core.Translation.csproj">
-      <Project>{A9742331-00A6-4599-91C5-313423843619}</Project>
+      <Project>{a9742331-00a6-4599-91c5-313423843619}</Project>
       <Name>Stratageme15.Core.Translation</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="stratageme.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

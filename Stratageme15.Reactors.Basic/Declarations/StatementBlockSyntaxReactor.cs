@@ -6,42 +6,43 @@ using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Declarations
 {
-    internal class StatementBlockSyntaxReactor : ReactorBase<BlockSyntax>, ISituationReactor
+    internal class StatementBlockSyntaxReactor : BasicReactorBase<BlockSyntax>, ISituationReactor
     {
         #region ISituationReactor Members
 
         public bool IsAcceptable(TranslationContext context)
         {
             return (
-                       (context.TranslatedNode is IStatement)
-                       || (context.TranslatedNode is CatchClause)
-                       || (context.TranslatedNode is FinallyClause)
+                       (context.TargetNode is IStatement)
+                       || (context.TargetNode is CatchClause)
+                       || (context.TargetNode is FinallyClause)
                    )
-                   && (!(context.TranslatedNode is CodeBlock))
-                   && (!(context.TranslatedNode is FunctionDefExpression))
+                   && (!(context.TargetNode is CodeBlock))
+                   && (!(context.TargetNode is FunctionDefExpression))
                 ;
         }
 
         #endregion
 
-        protected override void HandleNode(BlockSyntax node, TranslationContext context, TranslationResult result)
+        protected override void HandleNode(BlockSyntax node, TranslationContextWrapper context, TranslationResult result)
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             var code = new CodeBlock();
-            context.TranslatedNode.CollectSymbol(code);
-            context.PushTranslated(code);
+            context.Context.TargetNode.CollectSymbol(code);
+            context.Context.PushTranslated(code);
 
             context.CurrentClassContext.CurrentFunction.LocalVariables.PushContext();
         }
 
-        public override void OnAfterChildTraversal(TranslationContext context, BlockSyntax originalNode)
+        public override void OnAfterChildTraversal(TranslationContextWrapper context, BlockSyntax originalNode)
         {
             base.OnAfterChildTraversal(context, originalNode);
             context.CurrentClassContext.CurrentFunction.LocalVariables.PopContext();
-            context.PopTranslated();
+            context.Context.PopTranslated();
         }
     }
 }

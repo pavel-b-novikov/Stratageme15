@@ -5,33 +5,34 @@ using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Statements.Switch
 {
-    public class SwitchStatementSyntaxReactor : ReactorBase<SwitchStatementSyntax>
+    public class SwitchStatementSyntaxReactor : BasicReactorBase<SwitchStatementSyntax>
     {
-        protected override void HandleNode(SwitchStatementSyntax node, TranslationContext context,
+        protected override void HandleNode(SwitchStatementSyntax node, TranslationContextWrapper context,
                                            TranslationResult result)
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
-            result.PrepareForManualPush(context);
+            result.PrepareForManualPush(context.Context);
             var sw = new SwitchStatement();
-            context.TranslatedNode.CollectSymbol(sw);
-            context.PushTranslated(sw);
+            context.Context.TargetNode.CollectSymbol(sw);
+            context.Context.PushTranslated(sw);
             if (node.Sections != null)
             {
                 foreach (SwitchSectionSyntax source in node.Sections.Reverse())
                 {
-                    context.TranslationStack.Push(source);
+                    context.Context.TranslationStack.Push(source);
                 }
             }
-            context.TranslationStack.Push(SyntaxFactory.ParenthesizedExpression(node.Expression));
+            context.Context.TranslationStack.Push(SyntaxFactory.ParenthesizedExpression(node.Expression));
         }
 
-        public override void OnAfterChildTraversal(TranslationContext context, SwitchStatementSyntax originalNode)
+        public override void OnAfterChildTraversal(TranslationContextWrapper context, SwitchStatementSyntax originalNode)
         {
             base.OnAfterChildTraversal(context, originalNode);
-            context.PopTranslated();
+            context.Context.PopTranslated();
         }
     }
 }

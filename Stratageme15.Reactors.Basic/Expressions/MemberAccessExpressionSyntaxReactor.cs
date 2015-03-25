@@ -4,7 +4,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.TranslationContexts;
-using Stratageme15.Reactors.Basic.Extensions;
+using Stratageme15.Reactors.Basic.Utility;
+using TypeInfo = Microsoft.CodeAnalysis.TypeInfo;
 
 namespace Stratageme15.Reactors.Basic.Expressions
 {
@@ -12,18 +13,18 @@ namespace Stratageme15.Reactors.Basic.Expressions
         ExpressionReactorBase<MemberAccessExpressionSyntax, FieldAccessExpression>
     {
         public override FieldAccessExpression TranslateNodeInner(MemberAccessExpressionSyntax node,
-                                                                 TranslationContext context, TranslationResult result)
+                                                                 TranslationContextWrapper context, TranslationResult result)
         {
             result.Strategy = TranslationStrategy.TraverseChildren;
             string memberName = node.Name.Identifier.ValueText;
-            Type accesseeType = TypeInferer.InferTypeFromExpression(node.Expression, context);
-            if (accesseeType.IsProperty(memberName))
+            TypeInfo accesseeType = context.Context.SemanticModel.GetTypeInfo(node.Expression);
+            if (accesseeType.ConvertedType.IsProperty(memberName))
             {
-                result.PrepareForManualPush(context);
+                result.PrepareForManualPush(context.Context);
                 string getter = string.Format("get{0}", memberName);
                 MemberAccessExpressionSyntax modified = node.WithName(SyntaxFactory.IdentifierName(getter));
                 InvocationExpressionSyntax invokation = SyntaxFactory.InvocationExpression(modified);
-                context.TranslationStack.Push(invokation);
+                context.Context.TranslationStack.Push(invokation);
                 return null;
             }
             var fae = new FieldAccessExpression();

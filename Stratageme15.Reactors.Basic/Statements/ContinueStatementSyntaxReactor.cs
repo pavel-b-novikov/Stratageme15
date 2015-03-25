@@ -3,16 +3,17 @@ using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Statements
 {
-    internal class ContinueStatementSyntaxReactor : ReactorBase<ContinueStatementSyntax>
+    internal class ContinueStatementSyntaxReactor : BasicReactorBase<ContinueStatementSyntax>
     {
-        protected override void HandleNode(ContinueStatementSyntax node, TranslationContext context,
+        protected override void HandleNode(ContinueStatementSyntax node, TranslationContextWrapper context,
                                            TranslationResult result)
         {
             result.Strategy = TranslationStrategy.DontTraverseChildren;
-            context.TranslatedNode.CollectSymbol(new ContinueStatement());
+            context.Context.TargetNode.CollectSymbol(new ContinueStatement());
         }
     }
 }

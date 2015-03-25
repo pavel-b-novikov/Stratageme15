@@ -2,22 +2,22 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.Translation;
-using Stratageme15.Core.Translation.Builders;
 using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Declarations
 {
-    internal class ParameterListSyntaxReactor : ReactorBase<ParameterListSyntax>
+    internal class ParameterListSyntaxReactor : BasicReactorBase<ParameterListSyntax>
     {
-        protected override void HandleNode(ParameterListSyntax node, TranslationContext context,
+        protected override void HandleNode(ParameterListSyntax node, TranslationContextWrapper context,
                                            TranslationResult result)
         {
             result.Strategy = TranslationStrategy.DontTraverseChildren;
-            context.TranslatedNode.CollectSymbol(TranslateNode(node, context));
+            context.Context.TargetNode.CollectSymbol(TranslateNode(node, context));
         }
 
-        public SyntaxTreeNodeBase TranslateNode(SyntaxNode nd, TranslationContext context)
+        public SyntaxTreeNodeBase TranslateNode(SyntaxNode nd, TranslationContextWrapper context)
         {
             var node = (ParameterListSyntax) nd;
             var fpl = new FormalParametersList();
@@ -25,13 +25,14 @@ namespace Stratageme15.Reactors.Basic.Declarations
             foreach (ParameterSyntax parameterSyntax in node.Parameters)
             {
                 string parameterName = parameterSyntax.Identifier.ToString();
-                fpl.CollectSymbol(parameterName.Ident());
+                fpl.CollectSymbol(parameterName.ToIdent());
 
-                context.CurrentClassContext.CurrentFunction.LocalVariables.PushMethodParameter(parameterName,
-                                                                                               TypeInferer.
-                                                                                                   GetTypeFromContext(
-                                                                                                       parameterSyntax.
-                                                                                                           Type, context));
+                context.CurrentClassContext
+                    .CurrentFunction
+                    .LocalVariables
+                    .PushMethodParameter(parameterName,
+                                        context.Context.SemanticModel.GetTypeInfo(parameterSyntax)
+                                        );
             }
             return fpl;
         }

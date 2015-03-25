@@ -256,7 +256,6 @@ public partial class Parser {
 	}
 
 	void FormalParameterList() {
-		Push<FormalParametersList>(); 
 		Expect(1);
 		Ident(); 
 		while (la.kind == 74) {
@@ -264,7 +263,6 @@ public partial class Parser {
 			Expect(1);
 			Ident(); 
 		}
-		Pop(); 
 	}
 
 	void VariableDef() {
@@ -861,9 +859,11 @@ public partial class Parser {
 			Ident(); 
 		}
 		Expect(79);
+		Push<FormalParametersList>(); 
 		if (la.kind == 1) {
 			FormalParameterList();
 		}
+		Pop(); 
 		Expect(82);
 		Block();
 		NeedScolon(); Pop(); 

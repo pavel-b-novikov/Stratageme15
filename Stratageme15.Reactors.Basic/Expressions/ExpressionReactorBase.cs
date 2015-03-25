@@ -3,15 +3,16 @@ using Stratageme15.Core.JavascriptCodeDom;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Expressions
 {
     public abstract class ExpressionReactorBase<TExpressionSyntax, TOutput>
-        : ReactorBase<TExpressionSyntax>
+        : BasicReactorBase<TExpressionSyntax>
         where TExpressionSyntax : SyntaxNode
         where TOutput : SyntaxTreeNodeBase
     {
-        protected override void HandleNode(TExpressionSyntax node, TranslationContext context, TranslationResult result)
+        protected override void HandleNode(TExpressionSyntax node, TranslationContextWrapper context, TranslationResult result)
         {
             result.Strategy = TranslationStrategy.DontTraverseChildren;
             TOutput translatedNode = TranslateNodeInner(node, context, result);
@@ -27,24 +28,24 @@ namespace Stratageme15.Reactors.Basic.Expressions
             else
             {
                 result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
-                context.PushTranslated(translatedNode);
+                context.Context.PushTranslated(translatedNode);
             }
         }
 
-        private void Collect(SyntaxTreeNodeBase translatedNode, TranslationContext context)
+        private void Collect(SyntaxTreeNodeBase translatedNode, TranslationContextWrapper context)
         {
-            context.TranslatedNode.CollectSymbol(translatedNode);
+            context.Context.TargetNode.CollectSymbol(translatedNode);
         }
 
-        public override void OnAfterChildTraversal(TranslationContext context, TExpressionSyntax originalNode)
+        public override void OnAfterChildTraversal(TranslationContextWrapper context, TExpressionSyntax originalNode)
         {
             base.OnAfterChildTraversal(context, originalNode);
-            SyntaxTreeNodeBase translated = context.TranslatedNode;
-            context.PopTranslated();
+            SyntaxTreeNodeBase translated = context.Context.TargetNode;
+            context.Context.PopTranslated();
             Collect(translated, context);
         }
 
-        public abstract TOutput TranslateNodeInner(TExpressionSyntax node, TranslationContext context,
+        public abstract TOutput TranslateNodeInner(TExpressionSyntax node, TranslationContextWrapper context,
                                                    TranslationResult result);
     }
 }

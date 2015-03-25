@@ -44,8 +44,6 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
             if (ThenExpression != null) yield return ThenExpression;
             if (Else != null) yield return (SyntaxTreeNodeBase) Else;
             if (ElseExpression != null) yield return ElseExpression;
-        }
-
-        public StatementLabel Label { get; set; }
+        }      
     }
 }

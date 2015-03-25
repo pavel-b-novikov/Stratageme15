@@ -3,24 +3,25 @@ using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Statements.Try
 {
-    public class FinallyClauseSyntaxReactor : ReactorBase<FinallyClauseSyntax>
+    public class FinallyClauseSyntaxReactor : BasicReactorBase<FinallyClauseSyntax>
     {
-        protected override void HandleNode(FinallyClauseSyntax node, TranslationContext context,
+        protected override void HandleNode(FinallyClauseSyntax node, TranslationContextWrapper context,
                                            TranslationResult result)
         {
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
             var fb = new FinallyClause();
-            context.TranslatedNode.CollectSymbol(fb);
-            context.PushTranslated(fb);
+            context.Context.TargetNode.CollectSymbol(fb);
+            context.Context.PushTranslated(fb);
         }
 
-        public override void OnAfterChildTraversal(TranslationContext context, FinallyClauseSyntax originalNode)
+        public override void OnAfterChildTraversal(TranslationContextWrapper context, FinallyClauseSyntax originalNode)
         {
             base.OnAfterChildTraversal(context, originalNode);
-            context.PopTranslated();
+            context.Context.PopTranslated();
         }
     }
 }

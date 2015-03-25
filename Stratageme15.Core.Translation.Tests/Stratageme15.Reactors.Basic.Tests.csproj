@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D3E84E82-C217-4B9D-ABC3-0F942358AA3E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stratageme15.Reactors.Basic.Tests</RootNamespace>
+    <AssemblyName>Stratageme15.Reactors.Basic.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>J:\Work\gitrepo\Stratageme15\lib\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>J:\Work\gitrepo\Stratageme15\lib\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.20.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>J:\Work\gitrepo\Stratageme15\Stratageme15.Boudoir\bin\Debug\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="BasicBatchTestBase.cs" />
+    <Compile Include="Experiments.cs" />
+    <Compile Include="NodesComparing\NodeComparerFactory.cs" />
+    <Compile Include="NodesComparing\SyntaxNodeComparerBase.cs" />
+    <Compile Include="NodesComparing\SyntaxNodeComparers\BinaryExpression.cs" />
+    <Compile Include="NodesComparing\SyntaxNodeComparers\CodeBlockNodeComparer.cs" />
+    <Compile Include="NodesComparing\SyntaxNodeComparers\DefaultSyntaxNodeComparer.cs" />
+    <Compile Include="NodesComparing\SyntaxNodeComparers\IdentExpressionNodeComparer.cs" />
+    <Compile Include="NodesComparing\SyntaxNodeComparers\IncDec.cs" />
+    <Compile Include="NodesComparing\SyntaxNodeComparers\LiteralExpressionNodeComparer.cs" />
+    <Compile Include="NodesComparing\SyntaxNodeComparers\VarLetModifierNodeComparer.cs" />
+    <Compile Include="StratagemeTestBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="NodesComparing\ISyntaxNodeComparer.cs" />
+    <Compile Include="TranslationTests\ClassDeclaration.cs" />
+    <Compile Include="TranslationTests\Constructors.cs" />
+    <Compile Include="TranslationTests\ExpressionsAndOperations.cs" />
+    <Compile Include="TranslationTests\FieldsDeclaration.cs" />
+    <Compile Include="TranslationTests\LambdaAndClosures.cs" />
+    <Compile Include="TranslationTests\MethodsDeclaration.cs" />
+    <Compile Include="TranslationTests\Polymorphism.cs" />
+    <Compile Include="TranslationTests\PropertiesDeclaration.cs" />
+    <Compile Include="TranslationTests\Statements.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="J:\Work\gitrepo\Stratageme15\Stratageme15.Core.Compiler\Stratageme15.Core.Tools.Compiler.csproj">
+      <Project>{B9BBCBC5-1256-4A58-9999-2EB80A1D3EBA}</Project>
+      <Name>Stratageme15.Core.Tools.Compiler</Name>
+    </ProjectReference>
+    <ProjectReference Include="J:\Work\gitrepo\Stratageme15\Stratageme15.Core.JavascriptCodeDom\Stratageme15.Core.JavascriptCodeDom.csproj">
+      <Project>{826D2CC0-01FF-46EB-94F0-92CEE9679DBE}</Project>
+      <Name>Stratageme15.Core.JavascriptCodeDom</Name>
+    </ProjectReference>
+    <ProjectReference Include="J:\Work\gitrepo\Stratageme15\Stratageme15.Core.Tools.JavascriptParser\Stratageme15.Core.Tools.JavascriptParser.csproj">
+      <Project>{1622E786-1C7E-453A-A0CE-2816B29ED4C0}</Project>
+      <Name>Stratageme15.Core.Tools.JavascriptParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="J:\Work\gitrepo\Stratageme15\Stratageme15.Core.Transaltion\Stratageme15.Core.Translation.csproj">
+      <Project>{A9742331-00A6-4599-91C5-313423843619}</Project>
+      <Name>Stratageme15.Core.Translation</Name>
+    </ProjectReference>
+    <ProjectReference Include="J:\Work\gitrepo\Stratageme15\Stratageme15.Reactors.Basic\Stratageme15.Reactors.Basic.csproj">
+      <Project>{E98EF953-11D3-4E67-9B25-F9ED42E98115}</Project>
+      <Name>Stratageme15.Reactors.Basic</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

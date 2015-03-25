@@ -17,9 +17,9 @@ namespace Stratageme15.Core.JavascriptCodeDom.Statements
 
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
+            if (CollectExact<DoWhileStatement, ParenthesisExpression>(c => c.WhileExpression, symbol)) return;
             WrapIfStatement(ref symbol);
             if (CollectExact<DoWhileStatement, CodeBlock>(c => c.CodeBlock, symbol)) return;
-            if (CollectExact<DoWhileStatement, ParenthesisExpression>(c => c.WhileExpression, symbol)) return;
             base.CollectSymbol(symbol);
         }
 

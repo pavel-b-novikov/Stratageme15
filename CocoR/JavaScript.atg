@@ -233,9 +233,9 @@ ParenthesisExpression
 ")" (. Pop(); .)
 .
 
-FormalParameterList (. Push<FormalParametersList>(); .)
+FormalParameterList 
 =  ident (. Ident(); .)	{"," ident (. Ident(); .) }
-(. Pop(); .).
+.
 
 /* variable definition*/
 VariableDef (. Push<VariableDefStatement>(); .)
@@ -371,7 +371,10 @@ Unary (. Push<UnaryExpression>(); .)
 FunctionDef (. Push<FunctionDefExpression>(); .)
 =
 	"function" [ident (. Ident(); .)] 
-	"(" [FormalParameterList] ")" 
+	"(" (. Push<FormalParametersList>(); .)
+		[FormalParameterList] 
+		(. Pop(); .)
+	")" 
 	Block		
 	(. NeedScolon(); Pop(); .) 
 .

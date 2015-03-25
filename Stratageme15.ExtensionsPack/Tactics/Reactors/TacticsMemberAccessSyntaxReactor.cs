@@ -10,28 +10,28 @@ namespace Stratageme15.ExtensionsPack.Tactics.Reactors
     {
         protected override void HandleNode(MemberAccessExpressionSyntax node, TranslationContext context, TranslationResult result)
         {
-            //step 1 - determine expression type
-            var t = TypeInferer.InferTypeFromExpression(node.Expression, context);
-            //step 2 - determine member type
-            /*
-             * Possible values are:
-             * event
-             * property
-             * field
-             */
+            ////step 1 - determine expression type
+            //var t = TypeInferer.InferTypeFromExpression(node.Expression, context);
+            ////step 2 - determine member type
+            ///*
+            // * Possible values are:
+            // * event
+            // * property
+            // * field
+            // */
 
-            var member = TypeInferer.GetMember(t, node.Name.Identifier.ValueText);
-            var tacticsRepo = context.GetTacticsRepository();
-            var tactics = tacticsRepo.GetAppropriateTactics(t);
-            foreach (var tc in tactics)
-            {
-                switch (member.MemberType)
-                {
-                    case MemberTypes.Property:
-                        tc.ImperativeInstancePropertyAccess(node, context);
-                        break;
-                }    
-            }
+            //var member = TypeInferer.GetMember(t, node.Name.Identifier.ValueText);
+            //var tacticsRepo = context.GetTacticsRepository();
+            //var tactics = tacticsRepo.GetAppropriateTactics(t);
+            //foreach (var tc in tactics)
+            //{
+            //    switch (member.MemberType)
+            //    {
+            //        case MemberTypes.Property:
+            //            tc.ImperativeInstancePropertyAccess(node, context);
+            //            break;
+            //    }    
+            //}
             
 
         }

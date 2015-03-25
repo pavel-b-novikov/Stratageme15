@@ -53,12 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\BuilderExtensions.cs" />
-    <Compile Include="Builders\Expressions\MemberAccessExpressionBuilder.cs" />
-    <Compile Include="Builders\Function\FunctionDefExpressionBuilder.cs" />
-    <Compile Include="Builders\ISyntaxBuilder.cs" />
     <Compile Include="ChildrenTraversalPromise.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Logging\ConsoleTranslationLogger.cs" />
     <Compile Include="Logging\ITranslationLogger.cs" />
     <Compile Include="Logging\TranslationContextLoggingExtensions.cs" />
     <Compile Include="Logging\TranslationEvent.cs" />
@@ -70,14 +67,9 @@
     <Compile Include="Reactors\ReactorBatchBase.cs" />
     <Compile Include="Repositories\AssemblyRepository.cs" />
     <Compile Include="Repositories\ReactorRepository.cs" />
-    <Compile Include="TranslationContexts\ClassTranslationContext.cs" />
-    <Compile Include="TranslationContexts\FunctionTranslationContext.cs" />
     <Compile Include="TranslationContexts\TranslationContext.cs" />
-    <Compile Include="TranslationContexts\VariableDescription.cs" />
-    <Compile Include="TranslationContexts\VariablesContext.cs" />
     <Compile Include="TranslationResult.cs" />
     <Compile Include="Translator.cs" />
-    <Compile Include="TypeInferer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stratageme15.Core.JavascriptCodeDom\Stratageme15.Core.JavascriptCodeDom.csproj">
@@ -85,6 +77,7 @@
       <Name>Stratageme15.Core.JavascriptCodeDom</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -21,6 +21,11 @@ namespace Stratageme15.Core.Translation
         private JsProgram _root;
         private TranslationContext _translationContext;
 
+        public TranslationContext TranslationContext
+        {
+            get { return _translationContext; }
+        }
+
         public Translator(ReactorRepository reactorRepository, AssemblyRepository assemblyRepository,
                           ITranslationLogger logger)
         {
@@ -51,6 +56,13 @@ namespace Stratageme15.Core.Translation
             _currentPromise = new ChildrenTraversalPromise(currentStackpos, reactor, cnode);
         }
 
+        public void CreateTranslationContext(SyntaxTree synTree)
+        {
+            if (_translationContext!=null) return;
+            _translationContext = new TranslationContext(_reactorRepository, _assemblyRepository, _root,
+                                                         _translationStack, _logger, FileNameBeingTranslated, synTree);
+        }
+
         public JsProgram Translate(SyntaxTree synTree)
         {
             _root = new JsProgram();
@@ -59,8 +71,8 @@ namespace Stratageme15.Core.Translation
             _translationStack.Clear();
             _translationStack.Push(root);
             _traversalPromises.Clear();
-            _translationContext = new TranslationContext(_reactorRepository, _assemblyRepository, _root,
-                                                         _translationStack, _logger, FileNameBeingTranslated, synTree);
+            CreateTranslationContext(synTree);
+
             _currentPromise = null;
 
             while (_translationStack.Count > 0)

@@ -6,18 +6,19 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Declarations.Property
 {
-    public class PropertyDeclarationSyntaxReactor : ReactorBase<PropertyDeclarationSyntax>
+    public class PropertyDeclarationSyntaxReactor : BasicReactorBase<PropertyDeclarationSyntax>
     {
-        protected override void HandleNode(PropertyDeclarationSyntax node, TranslationContext context,
+        protected override void HandleNode(PropertyDeclarationSyntax node, TranslationContextWrapper context,
                                            TranslationResult result)
         {
             if (node.Modifiers.Any(SyntaxKind.StaticKeyword))
                 throw new Exception("Static properties are not supported");
             result.Strategy = TranslationStrategy.TraverseChildren;
-            result.PrepareForManualPush(context);
+            result.PrepareForManualPush(context.Context);
             bool isAuto = node.AccessorList.Accessors.All(c => c.Body == null);
             MemberAccessExpressionSyntax backingAccessor = SyntaxFactory.MemberAccessExpression(
                 SyntaxKind.SimpleMemberAccessExpression,
@@ -81,7 +82,7 @@ namespace Stratageme15.Reactors.Basic.Declarations.Property
                     }
                 }
 
-                context.TranslationStack.Push(method);
+                context.Context.TranslationStack.Push(method);
             }
 
             if (isAuto)
@@ -101,7 +102,7 @@ namespace Stratageme15.Reactors.Basic.Declarations.Property
                                                             })))
                     .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PrivateKeyword)));
 
-                context.TranslationStack.Push(bf);
+                context.Context.TranslationStack.Push(bf);
             }
         }
     }

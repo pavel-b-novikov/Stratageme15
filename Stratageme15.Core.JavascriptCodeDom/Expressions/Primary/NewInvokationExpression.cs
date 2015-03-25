@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Stratageme15.Core.JavascriptCodeDom.Expressions.Literals.KeywordLiterals;
 using Stratageme15.Core.JavascriptCodeDom.Markers;
-using Stratageme15.Core.JavascriptCodeDom.Statements;
 
 namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
 {
@@ -82,7 +80,5 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
             }
             base.CollectSymbol(symbol);
         }
-
-        public StatementLabel Label { get; set; }
     }
 }

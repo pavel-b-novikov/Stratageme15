@@ -1,18 +1,20 @@
+using System.Collections.Generic;
 using Stratageme15.Core.JavascriptCodeDom.Expressions.Primary;
-using Stratageme15.Core.JavascriptCodeDom.Markers;
 
 namespace Stratageme15.Core.JavascriptCodeDom.Statements
 {
-    public class BreakStatement : PrimaryExpression, IStatement
+    public class BreakStatement : PrimaryExpression
     {
         public IdentExpression BreakLabel { get; set; }
         public override void CollectSymbol(SyntaxTreeNodeBase symbol)
         {
             if (CollectExact<BreakStatement, IdentExpression>(c => c.BreakLabel, symbol)) return;
             base.CollectSymbol(symbol);
-
         }
 
-        public StatementLabel Label { get; set; }
+        protected override IEnumerable<SyntaxTreeNodeBase> EnumerateChildNodes()
+        {
+            if (BreakLabel != null) yield return BreakLabel;
+        }
     }
 }

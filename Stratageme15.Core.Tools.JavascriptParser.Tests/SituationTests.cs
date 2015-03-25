@@ -476,7 +476,7 @@ var s =""<!--[if gt IE ""+ ++ba+""]><i></i><![endif]--\>"";;
 @"
 if (r) {
         if (A) return a, i
-    } else if B) return a, i
+    } else if (B) return a, i
 ";
             var program = Parse(testCase);
         }

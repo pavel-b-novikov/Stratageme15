@@ -4,12 +4,13 @@ using Stratageme15.Core.JavascriptCodeDom.Statements;
 using Stratageme15.Core.Translation;
 using Stratageme15.Core.Translation.Reactors;
 using Stratageme15.Core.Translation.TranslationContexts;
+using Stratageme15.Reactors.Basic.Utility;
 
 namespace Stratageme15.Reactors.Basic.Statements.Try
 {
-    public class TryStatementSyntaxReactor : ReactorBase<TryStatementSyntax>
+    public class TryStatementSyntaxReactor : BasicReactorBase<TryStatementSyntax>
     {
-        protected override void HandleNode(TryStatementSyntax node, TranslationContext context, TranslationResult result)
+        protected override void HandleNode(TryStatementSyntax node, TranslationContextWrapper context, TranslationResult result)
         {
             if (node.Catches != null)
             {
@@ -18,26 +19,26 @@ namespace Stratageme15.Reactors.Basic.Statements.Try
 
             var tfb = new TryCatchFinallyStatement();
 
-            context.TranslatedNode.CollectSymbol(tfb);
+            context.Context.TargetNode.CollectSymbol(tfb);
             result.Strategy = TranslationStrategy.TraverseChildrenAndNotifyMe;
-            result.PrepareForManualPush(context);
+            result.PrepareForManualPush(context.Context);
 
             if (node.Finally != null)
             {
-                context.TranslationStack.Push(node.Finally);
+                context.Context.TranslationStack.Push(node.Finally);
             }
             if (node.Catches != null && node.Catches.Count == 1)
             {
-                context.TranslationStack.Push(node.Catches[0]);
+                context.Context.TranslationStack.Push(node.Catches[0]);
             }
-            context.TranslationStack.Push(node.Block);
-            context.PushTranslated(tfb);
+            context.Context.TranslationStack.Push(node.Block);
+            context.Context.PushTranslated(tfb);
         }
 
-        public override void OnAfterChildTraversal(TranslationContext context, TryStatementSyntax originalNode)
+        public override void OnAfterChildTraversal(TranslationContextWrapper context, TryStatementSyntax originalNode)
         {
             base.OnAfterChildTraversal(context, originalNode);
-            context.PopTranslated();
+            context.Context.PopTranslated();
         }
     }
 }

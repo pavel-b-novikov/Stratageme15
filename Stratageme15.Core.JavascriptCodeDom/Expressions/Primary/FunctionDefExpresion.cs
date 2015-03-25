@@ -4,7 +4,7 @@ using Stratageme15.Core.JavascriptCodeDom.Statements;
 
 namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
 {
-    public class FunctionDefExpression : PrimaryExpression, IRootStatement, IStatement
+    public class FunctionDefExpression : PrimaryExpression, IRootStatement
     {
         public IdentExpression Name { get; set; }
 
@@ -23,16 +23,14 @@ namespace Stratageme15.Core.JavascriptCodeDom.Expressions.Primary
 
         protected override IEnumerable<SyntaxTreeNodeBase> EnumerateChildNodes()
         {
-            if (Name != null) yield return Name;
-            if (Parameters != null) yield return Parameters;
-            if (Code != null) yield return Code;
+            yield return Name;
+            yield return Parameters;
+            yield return Code;
         }
 
         public override string ToString()
         {
             return string.Format("function {0}", Name);
         }
-
-        public StatementLabel Label { get; set; }
     }
 }
