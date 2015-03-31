@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="BasicBatchTestBase.cs" />
     <Compile Include="Experiments.cs" />
+    <Compile Include="J.cs" />
     <Compile Include="NodesComparing\NodeComparerFactory.cs" />
     <Compile Include="NodesComparing\SyntaxNodeComparerBase.cs" />
     <Compile Include="NodesComparing\SyntaxNodeComparers\BinaryExpression.cs" />
@@ -85,19 +86,23 @@
     <Compile Include="TranslationTests\Statements.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="J:\Work\gitrepo\Stratageme15\Stratageme15.Core.Compiler\Stratageme15.Core.Tools.Compiler.csproj">
+    <ProjectReference Include="..\Stratageme15.Core.Translation\Stratageme15.Core.Translation.csproj">
+      <Project>{a9742331-00a6-4599-91c5-313423843619}</Project>
+      <Name>Stratageme15.Core.Translation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stratageme15.Core.Compiler\Stratageme15.Core.Tools.Compiler.csproj">
       <Project>{B9BBCBC5-1256-4A58-9999-2EB80A1D3EBA}</Project>
       <Name>Stratageme15.Core.Tools.Compiler</Name>
     </ProjectReference>
-    <ProjectReference Include="J:\Work\gitrepo\Stratageme15\Stratageme15.Core.JavascriptCodeDom\Stratageme15.Core.JavascriptCodeDom.csproj">
+    <ProjectReference Include="..\Stratageme15.Core.JavascriptCodeDom\Stratageme15.Core.JavascriptCodeDom.csproj">
       <Project>{826D2CC0-01FF-46EB-94F0-92CEE9679DBE}</Project>
       <Name>Stratageme15.Core.JavascriptCodeDom</Name>
     </ProjectReference>
-    <ProjectReference Include="J:\Work\gitrepo\Stratageme15\Stratageme15.Core.Tools.JavascriptParser\Stratageme15.Core.Tools.JavascriptParser.csproj">
+    <ProjectReference Include="..\Stratageme15.Core.Tools.JavascriptParser\Stratageme15.Core.Tools.JavascriptParser.csproj">
       <Project>{1622E786-1C7E-453A-A0CE-2816B29ED4C0}</Project>
       <Name>Stratageme15.Core.Tools.JavascriptParser</Name>
     </ProjectReference>
-    <ProjectReference Include="J:\Work\gitrepo\Stratageme15\Stratageme15.Reactors.Basic\Stratageme15.Reactors.Basic.csproj">
+    <ProjectReference Include="..\Stratageme15.Reactors.Basic\Stratageme15.Reactors.Basic.csproj">
       <Project>{E98EF953-11D3-4E67-9B25-F9ED42E98115}</Project>
       <Name>Stratageme15.Reactors.Basic</Name>
     </ProjectReference>

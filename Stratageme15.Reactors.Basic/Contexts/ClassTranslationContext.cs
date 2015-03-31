@@ -30,7 +30,7 @@ namespace Stratageme15.Reactors.Basic.Contexts
             ClassScope = JavascriptHelper.CreateEmptyFunction();
             Constructor = JavascriptHelper.CreateEmptyFunction(originalNode.Identifier.ValueText);
             FieldsDefinitionBlock = new CodeBlock();
-            _context.Context.PushContextNode(ClassScope);
+            _context.Context.PushContextNode(ClassScope.Code);
         }
         private void AppendTypeHelpers(CodeBlock block,ClassDeclarationSyntax originalNode)
         {
@@ -54,6 +54,7 @@ namespace Stratageme15.Reactors.Basic.Contexts
             block.CollectSymbol(fullQualifiedType);
             block.CollectSymbol(nsFuncType);
         }
+
         public SyntaxTreeNodeBase EmitClassDeclaration()
         {
             var ns = OriginalNode.FullNamespace();
@@ -63,7 +64,7 @@ namespace Stratageme15.Reactors.Basic.Contexts
             {
                 Constructor.Code.CollectSymbolAtStart(FieldsDefinitionBlock);
             }
-            ClassScope.Code.CollectSymbol(Constructor);
+            ClassScope.Code.CollectSymbolAtStart(Constructor);
             foreach (var assignmentBinaryExpression in _nestedClassesAssignments)
             {
                 ClassScope.Code.CollectSymbol(assignmentBinaryExpression);

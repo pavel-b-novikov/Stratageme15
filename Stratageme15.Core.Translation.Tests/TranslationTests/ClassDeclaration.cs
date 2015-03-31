@@ -7,7 +7,7 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
     [TestClass]
     public class ClassDeclaration : BasicBatchTestBase
     {
-        private const string TestClassName = "MyClass";
+       
         
         [TestMethod]
         public void SimpleClassDeclaration()
@@ -17,8 +17,7 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
             public class MyClass {
 
             }
-            ",
-                Class(TestClassName, Constructor(TestClassName)).Colon()
+            ", J.Class(TestClassName, J.Constructor(TestClassName)).Colon()
             );
         }
 
@@ -32,8 +31,7 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
 
                 }
             }
-            ",
-             NsClass(TestClassName, "MyCompany", Constructor(TestClassName)).Colon()
+            ", J.NsClass(TestClassName, "MyCompany", J.Constructor(TestClassName)).Colon()
             );
         }
 
@@ -47,8 +45,7 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
 
                 }
             }
-            ",
-            NsClass(TestClassName, "MyCompany.MyTechnology", Constructor(TestClassName)).Colon()
+            ", J.NsClass(TestClassName, "MyCompany.MyTechnology", J.Constructor(TestClassName)).Colon()
            );
         }
 
@@ -64,8 +61,7 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
                     }
                 }
             }
-            ",
-            NsClass(TestClassName, "MyCompany.MyTechnology", Constructor(TestClassName)).Colon()
+            ", J.NsClass(TestClassName, "MyCompany.MyTechnology", J.Constructor(TestClassName)).Colon()
             );
         }
 
@@ -79,12 +75,10 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
 
                 }
             }
-            ",
-             Class(TestClassName,
-                Constructor("MyNestedClass")
-                    .With(SystemMethods("MyNestedClass", null,TestClassName))
-                    .With(Constructor(TestClassName)
-                        .With(Nesting(TestClassName, "MyNestedClass")))
+            ", J.Class(TestClassName, J.Constructor("MyNestedClass")
+                    .With(J.SystemMethods("MyNestedClass", null,TestClassName))
+                    .With(J.Constructor(TestClassName)
+                        .With(J.Nesting(TestClassName, "MyNestedClass")))
                   ).Colon()
             );
         }
@@ -101,12 +95,10 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
                     }
                 }
             }
-            ",
-             NsClass(TestClassName, "MyCompany",
-                Constructor("MyNestedClass")
-                    .With(SystemMethods("MyNestedClass", "MyCompany", TestClassName))
-                    .With(Constructor(TestClassName)
-                    .With(Nesting(TestClassName, "MyNestedClass")))
+            ", J.NsClass(TestClassName, "MyCompany", J.Constructor("MyNestedClass")
+                    .With(J.SystemMethods("MyNestedClass", "MyCompany", TestClassName))
+                    .With(J.Constructor(TestClassName)
+                    .With(J.Nesting(TestClassName, "MyNestedClass")))
                   ).Colon()
            );
         }
@@ -125,12 +117,10 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
                     }
                 }
             }
-            ",
-              NsClass(TestClassName, "MyCompany.MyTechnology",
-                Constructor("MyNestedClass")
-                    .With(SystemMethods("MyNestedClass", "MyCompany.MyTechnology", TestClassName))
-                    .With(Constructor(TestClassName)
-                    .With(Nesting(TestClassName, "MyNestedClass")))
+            ", J.NsClass(TestClassName, "MyCompany.MyTechnology", J.Constructor("MyNestedClass")
+                    .With(J.SystemMethods("MyNestedClass", "MyCompany.MyTechnology", TestClassName))
+                    .With(J.Constructor(TestClassName)
+                    .With(J.Nesting(TestClassName, "MyNestedClass")))
                   ).Colon()
             );
         }

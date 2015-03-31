@@ -33,7 +33,7 @@ namespace Stratageme15.Reactors.Basic.Declarations
 
                 result.PrepareForManualPush(context.Context);
                 IEnumerable<MemberDeclarationSyntax> members =
-                    node.Members.OrderBy(
+                    node.Members.OrderByDescending(
                     c => (c is ClassDeclarationSyntax) ? 0 
                         : (c is ConstructorDeclarationSyntax) ? 1 
                         : 2)

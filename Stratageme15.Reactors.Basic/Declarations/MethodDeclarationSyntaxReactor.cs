@@ -32,15 +32,24 @@ namespace Stratageme15.Reactors.Basic.Declarations
             context.CurrentClassContext.PopFunction();
             context.Context.PopTranslated();
 
-            
-            Expression a = context.JavascriptCurrentTypeName().ToIdent();
-            if (!originalNode.Modifiers.Any(SyntaxKind.StaticKeyword))
+            if (!originalNode.Modifiers.Any(SyntaxKind.PrivateKeyword))
             {
-                a = a.Member("prototype");
+                // public methods are being translated to Class.prototype.fun = function(...){ ... }
+                Expression a = context.JavascriptCurrentTypeName().ToIdent();
+                if (!originalNode.Modifiers.Any(SyntaxKind.StaticKeyword))
+                {
+                    a = a.Member("prototype");
+                }
+                AssignmentBinaryExpression abe = a.Member(name).Assignment(fn);
+                context.Context.TargetNode.CollectSymbol(abe);
             }
-            AssignmentBinaryExpression abe = a.Member(name).Assignment(fn);
-
-            context.Context.TargetNode.CollectSymbol(abe);
+            else
+            {
+                // public methods are being translated to function fun(...){ ... }
+                fn.CollectSymbol(name.ToIdent());
+                context.Context.TargetNode.CollectSymbol(fn);
+            }
+            
         }
     }
 }
