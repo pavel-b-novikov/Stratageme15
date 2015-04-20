@@ -14,5 +14,6 @@ namespace Stratageme15.Reactors.Basic
         public const string GetFullQualifiedNameFunction = "__getFullQualifiedName";
         public const string Prototype = "prototype";
         public const string MatchArgumentsFunction = "__matchArguments";
+        public const string LengthField = "length";
     }
 }

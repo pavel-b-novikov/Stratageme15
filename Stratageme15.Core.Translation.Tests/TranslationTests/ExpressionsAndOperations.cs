@@ -8,12 +8,42 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
 {
     [TestClass]
-    public class ExpressionsAndOperations: BasicBatchTestBase
+    public class ExpressionsAndOperations : MethodBodyTestBase
     {
+        
         [TestMethod]
         public void MathOperations()
         {
-            Assert.Inconclusive("Not verified");
+            AssertBodyTranslated(
+                "int a = 1 + 2;",
+                "var a = 1 + 2;",
+                "+ operation"
+                );
+            AssertBodyTranslated(
+                "int a = 1 * 2;",
+                "var a = 1 * 2;",
+                "* operation"
+                );
+            AssertBodyTranslated(
+                "int a = 1 / 2;",
+                "var a = 1 / 2;",
+                "/ operation"
+                );
+            AssertBodyTranslated(
+                "int a = 1 - 2;",
+                "var a = 1 - 2;",
+                "- operation"
+                );
+            AssertBodyTranslated(
+                "int a = (1 + 2)*2;",
+                "var a = (1 + 2)*2;",
+                "() operation"
+                );
+            AssertBodyTranslated(
+                "int a = (1 + 2)*(2 + 3);",
+                "var a = (1 + 2)*(2 + 3);",
+                "() operation"
+                );
         }
 
         [TestMethod]
@@ -25,13 +55,27 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
         [TestMethod]
         public void UnaryExpressions()
         {
-            Assert.Inconclusive("Not verified");
+            AssertBodyTranslated(
+                "int a = -1;",
+                "var a = -1;",
+                "unary - operation"
+                );
+            AssertBodyTranslated(
+                "int a = -1 + 2;",
+                "var a = -1 + 2;",
+                "unary () - operation"
+                );
         }
 
         [TestMethod]
         public void ThisExpression()
         {
-            Assert.Inconclusive("Not verified");
+            // todo CallExpression/CallStatement conflict
+            AssertBodyTranslated(
+                "this.ToString();",
+                "this.ToString();",
+                "this call operation"
+                );
         }
 
         [TestMethod]
@@ -39,7 +83,7 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
         {
             Assert.Inconclusive("Not verified");
         }
-        
+
         [TestMethod]
         public void MemberAccess()
         {

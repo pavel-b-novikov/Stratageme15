@@ -86,6 +86,7 @@ namespace Stratageme15.Reactors.Basic
 
             RegisterReactor<StatementBlockSyntaxReactor, BlockSyntax>();
             RegisterReactor<MethodDeclarationSyntaxReactor, MethodDeclarationSyntax>();
+            RegisterReactor<PolymorphicMethodDeclaration, MethodDeclarationSyntax>();
             RegisterReactor<ReturnStatementSyntaxReactor, ReturnStatementSyntax>();
             RegisterReactor<EmptyStatementSyntaxReactor, EmptyStatementSyntax>();
             RegisterReactor<LabeledStatementSyntaxReactor, LabeledStatementSyntax>();

@@ -23,7 +23,7 @@ namespace Stratageme15.Reactors.Basic.Tests.NodesComparing.SyntaxNodeComparers
     {
         protected override bool NodesEquals(UnaryExpression actual, UnaryExpression expected)
         {
-            return actual.Operand == expected.Operand;
+            return actual.FirstOperator == expected.FirstOperator;
         }
     }
 }

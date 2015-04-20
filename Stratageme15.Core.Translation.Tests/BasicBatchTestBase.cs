@@ -18,7 +18,7 @@ namespace Stratageme15.Reactors.Basic.Tests
         protected const string TestClassName = "MyClass";
 
         [TestInitialize]
-        public void Init()
+        public new void Init()
         {
             base.Init();
         }
@@ -30,23 +30,24 @@ namespace Stratageme15.Reactors.Basic.Tests
             return Translate(code, new BasicReactorBatch());
         }
 
-        public Translator InitializeTranslator(string code,out SyntaxTree synTree)
+        public Translator InitializeTranslator(string code, out SyntaxTree synTree)
         {
             return InitializeTranslatorWithContext(code, out synTree, new BasicReactorBatch());
         }
 
-        protected void AssertTranslated(string csCodeSource, string jsCodeExpected)
+        protected void AssertTranslated(string csCodeSource, string jsCodeExpected, string message = null)
         {
             var expected = Parse(jsCodeExpected);
             var actual = Translate(csCodeSource);
             CurrentCode = Code(actual);
+            actual = Parse(CurrentCode);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine();
             sb.AppendLine("EXPECTED:");
             sb.AppendLine(jsCodeExpected);
             sb.AppendLine("ACTUAL:");
             sb.AppendLine(CurrentCode);
-            Assert.IsTrue(Compare(actual, expected),sb.ToString());
+            Assert.IsTrue(Compare(actual, expected), string.Format("{0}\n{1}", message, sb.ToString()));
         }
 
     }

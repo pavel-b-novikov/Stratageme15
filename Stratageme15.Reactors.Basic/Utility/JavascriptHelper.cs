@@ -83,6 +83,15 @@ namespace Stratageme15.Reactors.Basic.Utility
             return ce;
         }
 
+        public static CallExpression Call(this Expression ex, FactParameterList parameters)
+        {
+            var ce = new CallExpression();
+            ce.CollectSymbol(ex);
+            parameters.Parent = ce;
+            ce.Parameters = parameters;
+            return ce;
+        }
+
         #region Variable definition
         public static VariableDefStatement Variable(this string varName,Expression initializer = null)
         {

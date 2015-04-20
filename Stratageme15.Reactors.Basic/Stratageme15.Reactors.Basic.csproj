@@ -66,6 +66,7 @@
     <Compile Include="Declarations\MethodDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\NamespaceDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\ParameterListSyntaxReactor.cs" />
+    <Compile Include="Declarations\PolymorphicMethodDeclaration.cs" />
     <Compile Include="Declarations\Property\PropertyDeclarationSyntaxReactor.cs" />
     <Compile Include="Declarations\StatementBlockSyntaxReactor.cs" />
     <Compile Include="Declarations\UsingDirectiveSyntaxReactor.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Expressions\PostfixUnaryExpressionSyntaxReactor.cs" />
     <Compile Include="Expressions\PrefixUnaryExpressionSyntaxReactor.cs" />
     <Compile Include="Expressions\ThisExpressionSyntaxReactor.cs" />
+    <Compile Include="SituationalBasicReactorBase.cs" />
     <Compile Include="Utility\JavascriptHelper.cs" />
     <Compile Include="Utility\Naming.cs" />
     <Compile Include="Utility\Polymorphism.cs" />

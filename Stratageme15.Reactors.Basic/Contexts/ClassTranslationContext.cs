@@ -31,7 +31,11 @@ namespace Stratageme15.Reactors.Basic.Contexts
             Constructor = JavascriptHelper.CreateEmptyFunction(originalNode.Identifier.ValueText);
             FieldsDefinitionBlock = new CodeBlock();
             _context.Context.PushContextNode(ClassScope.Code);
+            Polymorphism = new Polymorphism();
         }
+
+        public Polymorphism Polymorphism { get; private set; }
+
         private void AppendTypeHelpers(CodeBlock block,ClassDeclarationSyntax originalNode)
         {
             var ns = originalNode.FullNamespace();
@@ -69,6 +73,7 @@ namespace Stratageme15.Reactors.Basic.Contexts
             {
                 ClassScope.Code.CollectSymbol(assignmentBinaryExpression);
             }
+            Polymorphism.EmitPolymorphicMethods(OriginalNode.Identifier.ValueText);
             AppendTypeHelpers(ClassScope.Code,OriginalNode);
             ClassScope.Code.CollectSymbol(OriginalNode.Identifier.ValueText.ReturnIt());
             if (string.IsNullOrEmpty(ns))

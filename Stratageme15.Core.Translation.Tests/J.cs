@@ -13,9 +13,8 @@ var {0} = (function () {{
         {0}.__getFullQualifiedName = function () {{ return ""{0}""; }};
         {0}.__getNamespace = function () {{ return """"; }};
         return {0};
-    }})();
+    }})();";
 
-";
         public const string NamespaceClassDeclaration = @"
 __namespace(""{1}"", (function () {{        
 		{2}
@@ -25,8 +24,8 @@ __namespace(""{1}"", (function () {{
         {0}.__getNamespace = function () {{ return ""{1}""; }};
         return {0};
     }})()
-	);
-";
+	);";
+
         public const string SystemJsFunctionsWithNesting = @"
         {0}.prototype.__getFullQualifiedName = function () {{ return ""{1}.{0}""; }};
         {0}.prototype.__getNamespace = function () {{ return ""{1}""; }};
@@ -40,9 +39,7 @@ __namespace(""{1}"", (function () {{
         {0}.__getNamespace = function () {{ return ""{1}""; }};
 ";
         public const string ConstructorTemplate = @"
-        function {0}({1}) {{
-	        {2}
-        }}
+        function {0}({1}) {{ {2} }}
 ";
         public const string MethodTemplate = @"
         {0}.prototype.{1} = function ({2}) {{ {3} }}

@@ -10,9 +10,12 @@ namespace Stratageme15.Reactors.Basic.Utility
 {
     /// <summary>
     /// Interopability for translation context
+    /// It's just behavioral wrapper. It does not contain any data.
+    /// It should not contain any data because Wrapper is re-created every time node converted
     /// </summary>
     public class TranslationContextWrapper
     {
+        #region Logging
         public void Info(string message, params object[] args)
         {
             _context.Info(message, args);
@@ -63,6 +66,7 @@ namespace Stratageme15.Reactors.Basic.Utility
         {
             _context.Crit(message, args);
         }
+        #endregion
 
         private readonly TranslationContext _context;
 
@@ -78,16 +82,11 @@ namespace Stratageme15.Reactors.Basic.Utility
         /// </summary>
         public SemanticModel SemanticModel { get { return _context.SemanticModel; } }
 
-        /// <summary>
-        /// Class-scope polymorphism controller
-        /// </summary>
-        public Polymorphism Polymorphism { get; private set; }
 
         public TranslationContextWrapper(TranslationContext context)
         {
             _context = context;
             NamespaceSymbol = context.SemanticModel.Compilation.GlobalNamespace;
-            Polymorphism = new Polymorphism(this);
         }
 
         private const string NamespaceKey = "__Namespace";
@@ -131,7 +130,7 @@ namespace Stratageme15.Reactors.Basic.Utility
         }
 
         private const string NamespaceSymbolKey = "__NamespaceSymbol";
-        public INamespaceSymbol _namespaceSymbolCache = null;
+        private INamespaceSymbol _namespaceSymbolCache = null;
         public INamespaceSymbol NamespaceSymbol
         {
             get
@@ -185,31 +184,6 @@ namespace Stratageme15.Reactors.Basic.Utility
             }
         }
 
-        //public string CurrentTypeName
-        //{
-        //    get { return _currentTypeName; }
-        //}
-
-        //public void PushClass(ClassTranslationContext ctc)
-        //{
-        //    _currentTypeName = ctc.Type.Name;
-        //    if (_classContextsStack.Count > 0) ctc.Parent = _classContextsStack.Peek();
-        //    _classContextsStack.Push(ctc);
-        //}
-
-        //public void PopClass()
-        //{
-        //    _classContextsStack.Pop();
-        //    _currentTypeName = null;
-        //    if (_classContextsStack.Count > 0)
-        //    {
-        //        _currentTypeName = _classContextsStack.Peek().Type.Name;
-        //    }
-        //}
-
-        public ITypeSymbol LookupTypeSymbol(TypeSyntax typeSyntax)
-        {
-            return null;
-        }
+       
     }
 }

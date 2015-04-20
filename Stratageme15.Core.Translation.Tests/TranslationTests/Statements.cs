@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
 {
     [TestClass]
-    public class Statements : BasicBatchTestBase
+    public class Statements : MethodBodyTestBase
     {
         [TestMethod]
         public void If()

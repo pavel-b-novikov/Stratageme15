@@ -46,6 +46,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>J:\Work\gitrepo\Stratageme15\Stratageme15.Boudoir\bin\Debug\System.Collections.Immutable.dll</HintPath>
     </Reference>
+    <Reference Include="System.Reflection.Metadata">
+      <HintPath>..\lib\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -63,6 +66,7 @@
     <Compile Include="BasicBatchTestBase.cs" />
     <Compile Include="Experiments.cs" />
     <Compile Include="J.cs" />
+    <Compile Include="MethodBodyTestBase.cs" />
     <Compile Include="NodesComparing\NodeComparerFactory.cs" />
     <Compile Include="NodesComparing\SyntaxNodeComparerBase.cs" />
     <Compile Include="NodesComparing\SyntaxNodeComparers\BinaryExpression.cs" />

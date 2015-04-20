@@ -13,7 +13,32 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
         [TestMethod]
         public void SimplePolymorphism()
         {
-            Assert.Inconclusive("Not verified");
+            AssertTranslated(
+    @"
+            public class MyClass {
+                public int DoSomething(){
+                    return 0;
+                }
+                public string DoSomething(string str){
+                    return str.ToLower();
+                }
+            }
+            ", J.Class(TestClassName, J.Constructor(TestClassName)
+             .With(J.Method(TestClassName, "DoSomething",
+
+             body:
+@"
+	    if (__matchArguments(arguments)){
+		    return 0;
+	    } else if (__matchArguments(arguments,""string"")){
+		    var str = arguments[0];
+				
+		    return str.ToLower();
+	    }
+"
+             ))
+                ).Colon()
+            );
         }
 
         [TestMethod]

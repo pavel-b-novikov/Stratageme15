@@ -11,7 +11,7 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
             AssertTranslated(
              @"
             public class MyClass {
-                public Myclass(){
+                public MyClass(){
 
                 }
             }
@@ -31,7 +31,32 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
         [TestMethod]
         public void StaticConstructor()
         {
-           Assert.Inconclusive("Not verified");
+            AssertTranslated(
+              @"
+            public class MyClass {
+                public MyClass(){
+                    static MyClass(){
+                        int i = 0;
+                    }
+                }
+            }
+            ",
+              @"
+            var MyClass = (function(){
+               function MyClass() {
+
+               }
+
+                (function(_cls){ 
+                    var i = 0;
+                })(MyClass);
+
+               return MyClass;
+            })();
+            ;
+            ");
         }
+
+        
     }
 }

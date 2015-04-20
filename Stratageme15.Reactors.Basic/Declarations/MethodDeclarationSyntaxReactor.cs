@@ -18,13 +18,16 @@ namespace Stratageme15.Reactors.Basic.Declarations
             context.CurrentClassContext.PushFunction(node, node.Identifier.ValueText);
             context.Context.PushTranslated(context.CurrentClassContext.CurrentFunction.Function);
             result.PrepareForManualPush(context.Context);
+
             context.Context.TranslationStack.Push(node.Body);
             context.Context.TranslationStack.Push(node.ParameterList);
+
         }
 
         public override void OnAfterChildTraversal(TranslationContextWrapper context, MethodDeclarationSyntax originalNode)
         {
             base.OnAfterChildTraversal(context, originalNode);
+
             FunctionDefExpression fn = context.CurrentClassContext.CurrentFunction.Function;
             string name = fn.Name.Identifier;
             fn.Name = null;
@@ -49,7 +52,6 @@ namespace Stratageme15.Reactors.Basic.Declarations
                 fn.CollectSymbol(name.ToIdent());
                 context.Context.TargetNode.CollectSymbol(fn);
             }
-            
         }
     }
 }

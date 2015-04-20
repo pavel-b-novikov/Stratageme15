@@ -12,12 +12,12 @@ namespace Stratageme15.Reactors.Basic
     /// <typeparam name="TNode"></typeparam>
     public abstract class BasicReactorBase<TNode> : ReactorBase<TNode> where TNode : SyntaxNode
     {
-        protected override void HandleNode(TNode node, TranslationContext context, TranslationResult result)
+        protected override sealed void HandleNode(TNode node, TranslationContext context, TranslationResult result)
         {
             HandleNode(node,new TranslationContextWrapper(context), result );
         }
 
-        public override void OnAfterChildTraversal(TranslationContext context, TNode originalNode)
+        public override sealed void OnAfterChildTraversal(TranslationContext context, TNode originalNode)
         {
             OnAfterChildTraversal(new TranslationContextWrapper(context), originalNode );
         }

@@ -53,13 +53,24 @@ namespace Stratageme15.Reactors.Basic.Declarations
 
         private void RegisterPolymorphs(ClassDeclarationSyntax cDecl, TranslationContextWrapper context)
         {
+            // here we're separately registering static and instance polymorph methods
             var methods = cDecl.Members.Where(c => c is MethodDeclarationSyntax).Cast<MethodDeclarationSyntax>();
             var polymorphs = methods
                 .GroupBy(c => c.Identifier.ValueText)
                 .Where(c => c.Count() > 1).Select(c => c.Key);
+            
+            var staticPolymorphs = methods.Where(c => c.Modifiers.Any(SyntaxKind.StaticKeyword))
+                .GroupBy(c => c.Identifier.ValueText)
+                .Where(c => c.Count() > 1).Select(c => c.Key);
+
             foreach (var polymorph in polymorphs)
             {
-                context.Polymorphism.RegisterPolymorphism(polymorph);
+                context.CurrentClassContext.Polymorphism.RegisterPolymorphism(polymorph,false,context.Context);
+            }
+
+            foreach (var staticPolymorph in staticPolymorphs)
+            {
+                context.CurrentClassContext.Polymorphism.RegisterPolymorphism(staticPolymorph, true, context.Context);
             }
         }
 

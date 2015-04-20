@@ -10,7 +10,7 @@ namespace Stratageme15.Reactors.Basic.Utility
 {
     public class PolymorphMethod
     {
-        private const string _argumentsVal = "arguments";
+        private const string ArgumentsVal = "arguments";
         private readonly string _methodName;
 
         public string MethodName
@@ -19,17 +19,16 @@ namespace Stratageme15.Reactors.Basic.Utility
         }
 
         private readonly IfStatement _polymorphIfStatement;
-        private readonly TranslationContextWrapper _context;
-        
+        private readonly SemanticModel _semanticModel;
         public IfStatement PolymorphIfStatement
         {
             get { return _polymorphIfStatement; }
         }
 
-        public PolymorphMethod(string methodName, TranslationContextWrapper context)
+        public PolymorphMethod(string methodName, SemanticModel semanticModel)
         {
             _methodName = methodName;
-            _context = context;
+            _semanticModel = semanticModel;
             _polymorphIfStatement = new IfStatement();
         }
 
@@ -48,7 +47,7 @@ namespace Stratageme15.Reactors.Basic.Utility
             int i = 0;
             foreach (var parameterSyntax in parameters.Parameters)
             {
-                var vbl = parameterSyntax.Identifier.ValueText.Variable(_argumentsVal.ToIdent().Index(i));
+                var vbl = parameterSyntax.Identifier.ValueText.Variable(ArgumentsVal.ToIdent().Index(i));
                 cb.CollectSymbol(vbl);
                 i++;
             }
@@ -56,26 +55,18 @@ namespace Stratageme15.Reactors.Basic.Utility
 
         private ParenthesisExpression BuildTypeCondition(ParameterListSyntax parameters)
         {
-            ParenthesisExpression current = null;
-            int i = 0;
+            FactParameterList argumentsMathParams = new FactParameterList();
+            argumentsMathParams.CollectSymbol(ArgumentsVal.ToIdent());
+            
             foreach (var parameterSyntax in parameters.Parameters)
             {
-                var left = _argumentsVal.ToIdent().Index(i).CallMember(JavascriptElements.GetFullQualifiedNameFunction);
-                var symbolInfo = CSharpExtensions.GetSymbolInfo(_context.SemanticModel,parameterSyntax.Type);
+                var symbolInfo = CSharpExtensions.GetSymbolInfo(_semanticModel,parameterSyntax.Type);
                 var type = (ITypeSymbol) symbolInfo.Symbol;
                 var name = type.FullQualifiedName().Literal();
-                var parentEx = left.Comparison(ComparisonOperator.Equal, name).Parenthesize();
-                if (current != null)
-                {
-                    current = current.Logical(LogicalOperator.Or, parentEx).Parenthesize();
-                }
-                else
-                {
-                    current = parentEx;
-                }
+                argumentsMathParams.CollectSymbol(name);
             }
-            if (current==null) return new ParenthesisExpression();
-            return current;
+            var condition = JavascriptElements.MatchArgumentsFunction.ToIdent().Call(argumentsMathParams).Parenthesize();
+            return condition;
         }
     }
 }

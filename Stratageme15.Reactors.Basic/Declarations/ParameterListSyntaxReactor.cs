@@ -17,7 +17,7 @@ namespace Stratageme15.Reactors.Basic.Declarations
             context.Context.TargetNode.CollectSymbol(TranslateNode(node, context));
         }
 
-        public SyntaxTreeNodeBase TranslateNode(SyntaxNode nd, TranslationContextWrapper context)
+        public static SyntaxTreeNodeBase TranslateNode(SyntaxNode nd, TranslationContextWrapper context)
         {
             var node = (ParameterListSyntax) nd;
             var fpl = new FormalParametersList();

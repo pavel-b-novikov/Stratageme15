@@ -116,14 +116,18 @@ namespace Stratageme15.Reactors.Basic.Tests
             {
                 var a = actualStack.Pop();
                 var e = expectedStack.Pop();
-                if (actualStack.Count != expectedStack.Count) return false;
+                if (actualStack.Count != expectedStack.Count) 
+                    return false;
                 if (a==null&&e==null) continue;
                 var childrenA = a.Children.ToList();
                 var childrenE = e.Children.ToList();
-                if (childrenA.Count != childrenE.Count) return false;
-                if (a.GetType() != e.GetType()) return false;
+                if (childrenA.Count != childrenE.Count) 
+                    return false;
+                if (a.GetType() != e.GetType()) 
+                    return false;
                 var comparer = NodeComparerFactory.GetComparerFor(a.GetType());
-                if (!comparer.EqualsExceptChildren(a, e)) return false;
+                if (!comparer.EqualsExceptChildren(a, e)) 
+                    return false;
                 childrenA.ForEach(actualStack.Push);
                 childrenE.ForEach(expectedStack.Push);
             }
