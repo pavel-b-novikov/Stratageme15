@@ -5,10 +5,8 @@ using Stratageme15.Core.JavascriptCodeDom;
 namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
 {
     [TestClass]
-    public class ClassDeclaration : BasicBatchTestBase
+    public class ClassDeclaration : MethodBodyTestBase
     {
-       
-        
         [TestMethod]
         public void SimpleClassDeclaration()
         {
@@ -75,10 +73,10 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
 
                 }
             }
-            ", J.Class(TestClassName, J.Constructor("MyNestedClass")
-                    .With(J.SystemMethods("MyNestedClass", null,TestClassName))
-                    .With(J.Constructor(TestClassName)
-                        .With(J.Nesting(TestClassName, "MyNestedClass")))
+            ", J.Class(TestClassName, J.Constructor(TestClassName)
+                    .With(J.Constructor("MyNestedClass")       
+                    .With(J.SystemMethods("MyNestedClass", null, TestClassName))
+                    .With(J.Nesting(TestClassName, "MyNestedClass")))
                   ).Colon()
             );
         }
@@ -95,10 +93,11 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
                     }
                 }
             }
-            ", J.NsClass(TestClassName, "MyCompany", J.Constructor("MyNestedClass")
+            ", J.NsClass(TestClassName, "MyCompany",
+             J.Constructor(TestClassName)
+                    .With(J.Constructor("MyNestedClass"))
                     .With(J.SystemMethods("MyNestedClass", "MyCompany", TestClassName))
-                    .With(J.Constructor(TestClassName)
-                    .With(J.Nesting(TestClassName, "MyNestedClass")))
+                    .With(J.Nesting(TestClassName, "MyNestedClass"))
                   ).Colon()
            );
         }
@@ -117,10 +116,11 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
                     }
                 }
             }
-            ", J.NsClass(TestClassName, "MyCompany.MyTechnology", J.Constructor("MyNestedClass")
+            ", J.NsClass(TestClassName, "MyCompany.MyTechnology",
+                    J.Constructor(TestClassName)
+                    .With(J.Constructor("MyNestedClass"))
                     .With(J.SystemMethods("MyNestedClass", "MyCompany.MyTechnology", TestClassName))
-                    .With(J.Constructor(TestClassName)
-                    .With(J.Nesting(TestClassName, "MyNestedClass")))
+                    .With(J.Nesting(TestClassName, "MyNestedClass"))
                   ).Colon()
             );
         }
@@ -128,7 +128,11 @@ namespace Stratageme15.Reactors.Basic.Tests.TranslationTests
         [TestMethod]
         public void AnonymousClass()
         {
-            Assert.Inconclusive("Not verified");
+            AssertBodyTranslated(
+                @"var a = new { FirstName = ""Vasiliy"",Age = 15, IsMarried = false}",
+                @"var a = { FirstName : ""Vasiliy"", Age : 15, IsMarried : false}",
+                "anonymous object creation"
+                );
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 
 namespace Stratageme15.Reactors.Basic.Tests
 {
@@ -27,9 +28,9 @@ __namespace(""{1}"", (function () {{
 	);";
 
         public const string SystemJsFunctionsWithNesting = @"
-        {0}.prototype.__getFullQualifiedName = function () {{ return ""{1}.{0}""; }};
+        {0}.prototype.__getFullQualifiedName = function () {{ return ""{2}""; }};
         {0}.prototype.__getNamespace = function () {{ return ""{1}""; }};
-        {0}.__getFullQualifiedName = function () {{ return ""{1}.{0}""; }};
+        {0}.__getFullQualifiedName = function () {{ return ""{2}""; }};
         {0}.__getNamespace = function () {{ return ""{1}""; }};
 ";
         public const string SystemJsFunctions = @"
@@ -101,7 +102,9 @@ __namespace(""{1}"", (function () {{
 
         public static string SystemMethods(string className, string ns,string nester)
         {
-            return String.Format(SystemJsFunctionsWithNesting, className, ns, nester);
+            string fullQualifiedWithNester = string.Format("{0}.{1}.{2}", ns, nester, className);
+            fullQualifiedWithNester = fullQualifiedWithNester.Trim('.');
+            return String.Format(SystemJsFunctionsWithNesting, className, ns, fullQualifiedWithNester);
         }
 
         public static string Colon(this string s)
